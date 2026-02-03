@@ -7,20 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		11111111111111111111111A /* DeenLearnApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111111B /* DeenLearnApp.swift */; };
-		11111111111111111111111C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111111D /* ContentView.swift */; };
-		11111111111111111111111E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111111F /* Assets.xcassets */; };
-		111111111111111111111120 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111121 /* Preview Assets.xcassets */; };
-		111111111111111111111122 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111123 /* AppState.swift */; };
-		111111111111111111111124 /* LearningModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111125 /* LearningModule.swift */; };
-		111111111111111111111126 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111127 /* WelcomeView.swift */; };
-		111111111111111111111128 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111129 /* MainTabView.swift */; };
-		11111111111111111111112A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111112B /* HomeView.swift */; };
-		11111111111111111111112C /* ModulesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111112D /* ModulesView.swift */; };
-		11111111111111111111112E /* LessonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111112F /* LessonView.swift */; };
-		111111111111111111111130 /* QuranView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111131 /* QuranView.swift */; };
-		111111111111111111111132 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111133 /* ProgressView.swift */; };
-		111111111111111111111134 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111135 /* SettingsView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA01 /* DeenLearnApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111111B /* DeenLearnApp.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA02 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111111D /* ContentView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111111F /* Assets.xcassets */; };
+		AAAAAAAAAAAAAAAAAAAAAA04 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111121 /* Preview Assets.xcassets */; };
+		AAAAAAAAAAAAAAAAAAAAAA05 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111123 /* AppState.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA06 /* LearningModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111125 /* LearningModule.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA07 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111127 /* WelcomeView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA08 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111129 /* MainTabView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA09 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111112B /* HomeView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA10 /* ModulesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111112D /* ModulesView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA11 /* LessonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111112F /* LessonView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA12 /* QuranView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111131 /* QuranView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA13 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111133 /* ProgressView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA14 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111135 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -172,8 +172,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				111111111111111111111120 /* Preview Assets.xcassets in Resources */,
-				11111111111111111111111E /* Assets.xcassets in Resources */,
+				AAAAAAAAAAAAAAAAAAAAAA04 /* Preview Assets.xcassets in Resources */,
+				AAAAAAAAAAAAAAAAAAAAAA03 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,18 +184,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11111111111111111111111C /* ContentView.swift in Sources */,
-				11111111111111111111111A /* DeenLearnApp.swift in Sources */,
-				111111111111111111111122 /* AppState.swift in Sources */,
-				111111111111111111111124 /* LearningModule.swift in Sources */,
-				111111111111111111111126 /* WelcomeView.swift in Sources */,
-				111111111111111111111128 /* MainTabView.swift in Sources */,
-				11111111111111111111112A /* HomeView.swift in Sources */,
-				11111111111111111111112C /* ModulesView.swift in Sources */,
-				11111111111111111111112E /* LessonView.swift in Sources */,
-				111111111111111111111130 /* QuranView.swift in Sources */,
-				111111111111111111111132 /* ProgressView.swift in Sources */,
-				111111111111111111111134 /* SettingsView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA02 /* ContentView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA01 /* DeenLearnApp.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA05 /* AppState.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA06 /* LearningModule.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA07 /* WelcomeView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA08 /* MainTabView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA09 /* HomeView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA10 /* ModulesView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA11 /* LessonView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA12 /* QuranView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA13 /* ProgressView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA14 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
