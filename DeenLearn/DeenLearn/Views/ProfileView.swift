@@ -22,6 +22,7 @@ struct ProfileView: View {
     @State private var showingAddChild = false
     @State private var showingAddGoal = false
     @State private var selectedChild: ChildProfile?
+    @State private var selectedAchievementCategory: AchievementCategory?
     
     var body: some View {
         NavigationView {
@@ -587,8 +588,6 @@ struct ProfileView: View {
         }
     }
     
-    @State private var selectedAchievementCategory: AchievementCategory?
-    
     private func achievementCategoryButton(_ category: AchievementCategory?, label: String) -> some View {
         Button(action: { selectedAchievementCategory = category }) {
             Text(label)
@@ -867,6 +866,8 @@ struct AddChildSheet: View {
     @State private var name = ""
     @State private var age = 6
     @State private var avatar = "👦"
+    @State private var dailyGoal = 15
+    @State private var screenTimeLimit = 30
     
     var body: some View {
         NavigationView {
@@ -895,13 +896,13 @@ struct AddChildSheet: View {
                 }
                 
                 Section("Settings") {
-                    Picker("Daily Goal", selection: .constant(15)) {
+                    Picker("Daily Goal", selection: $dailyGoal) {
                         ForEach([10, 15, 20, 30], id: \.self) { mins in
                             Text("\(mins) minutes").tag(mins)
                         }
                     }
                     
-                    Picker("Screen Time Limit", selection: .constant(30)) {
+                    Picker("Screen Time Limit", selection: $screenTimeLimit) {
                         ForEach([15, 20, 30, 45, 60], id: \.self) { mins in
                             Text("\(mins) minutes/day").tag(mins)
                         }
@@ -916,7 +917,31 @@ struct AddChildSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add") {
-                        // Add child logic
+                        let newChild = ChildProfile(
+                            id: UUID(),
+                            name: name,
+                            avatarEmoji: avatar,
+                            age: age,
+                            createdAt: Date(),
+                            totalLearningMinutes: 0,
+                            currentStreak: 0,
+                            longestStreak: 0,
+                            surahsMemorized: 0,
+                            arabicLettersLearned: 0,
+                            pillarsCompleted: 0,
+                            prayerStepsLearned: 0,
+                            dailyGoalMinutes: dailyGoal,
+                            weeklyGoalMinutes: dailyGoal * 7,
+                            todayMinutes: 0,
+                            weekMinutes: 0,
+                            screenTimeLimit: screenTimeLimit,
+                            allowedCategories: [.quran, .arabic, .pillars, .prayer],
+                            parentalControlsEnabled: true,
+                            totalStars: 0,
+                            totalBadges: 0,
+                            achievements: []
+                        )
+                        children.append(newChild)
                         dismiss()
                     }
                     .disabled(name.isEmpty)
