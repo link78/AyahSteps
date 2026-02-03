@@ -23,29 +23,35 @@ struct MainTabView: View {
                 }
                 .tag(0)
             
+            PillarsView()
+                .tabItem {
+                    Label("Pillars", systemImage: "building.columns.fill")
+                }
+                .tag(1)
+            
             ModulesView()
                 .tabItem {
                     Label("Learn", systemImage: "book.fill")
                 }
-                .tag(1)
+                .tag(2)
             
             QuranView()
                 .tabItem {
                     Label("Quran", systemImage: "text.book.closed.fill")
                 }
-                .tag(2)
+                .tag(3)
             
             ProgressView()
                 .tabItem {
                     Label("Progress", systemImage: isKidsMode ? "star.fill" : "chart.bar.fill")
                 }
-                .tag(3)
+                .tag(4)
             
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")
                 }
-                .tag(4)
+                .tag(5)
         }
         .tint(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
     }
