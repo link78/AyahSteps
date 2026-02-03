@@ -478,79 +478,162 @@ struct WordDetailView: View {
     let isKidsMode: Bool
     
     @Environment(\.dismiss) var dismiss
+    @State private var isPlayingAudio = false
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                // Word display
-                VStack(spacing: 16) {
-                    Text(word.arabic)
-                        .font(.system(size: 60))
-                    
-                    Text(word.transliteration)
-                        .font(.title2)
-                        .foregroundColor(.blue)
-                    
-                    Text(word.translation)
-                        .font(.title3)
-                        .foregroundColor(.secondary)
-                }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color(hex: "6B5B95").opacity(0.1))
-                .cornerRadius(20)
-                
-                // Audio button placeholder
-                Button(action: { /* TODO: Play word audio */ }) {
-                    HStack {
-                        Image(systemName: "speaker.wave.2.fill")
-                        Text(isKidsMode ? "Hear Pronunciation" : "Play Audio")
-                    }
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color(hex: "6B5B95"))
-                    .cornerRadius(16)
-                }
-                .disabled(true)
-                .opacity(0.5)
-                
-                Text("Audio coming soon")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                
-                // Tajweed rules for this word
-                if !word.tajweedRules.isEmpty {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Tajweed Rules Applied")
-                            .font(.headline)
+            ScrollView {
+                VStack(spacing: 24) {
+                    // Word display
+                    VStack(spacing: 16) {
+                        Text(word.arabic)
+                            .font(.system(size: isKidsMode ? 72 : 60))
                         
-                        ForEach(word.tajweedRules) { rule in
-                            HStack(spacing: 12) {
-                                Circle()
-                                    .fill(Color(hex: rule.color))
-                                    .frame(width: 16, height: 16)
-                                
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(rule.name)
-                                        .font(.subheadline.bold())
-                                    Text(rule.description)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
+                        Text(word.transliteration)
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                        
+                        Text(word.translation)
+                            .font(.title3)
+                            .foregroundColor(.secondary)
+                        
+                        if isKidsMode {
+                            Text("✨ Tap the button to hear how it sounds! ✨")
+                                .font(.caption)
+                                .foregroundColor(.purple)
                         }
                     }
                     .padding()
-                    .background(Color(.systemBackground))
-                    .cornerRadius(16)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(hex: "6B5B95").opacity(0.1))
+                    .cornerRadius(20)
+                    
+                    // Audio button
+                    Button(action: {
+                        // Toggle play state (placeholder for audio)
+                        withAnimation {
+                            isPlayingAudio.toggle()
+                        }
+                        // Auto-stop after 1.5 seconds
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            isPlayingAudio = false
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: isPlayingAudio ? "speaker.wave.3.fill" : "speaker.wave.2.fill")
+                                .symbolEffect(.bounce, value: isPlayingAudio)
+                            Text(isKidsMode ? "🔊 Hear Pronunciation" : "Play Pronunciation")
+                        }
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(isPlayingAudio ? Color.green : Color(hex: "6B5B95"))
+                        .cornerRadius(16)
+                    }
+                    
+                    Text(isPlayingAudio ? "Playing..." : "Tap to hear")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    // Root word section
+                    if let rootWord = word.rootWord, let rootMeaning = word.rootMeaning {
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack {
+                                Image(systemName: "tree")
+                                    .foregroundColor(Color(hex: "6B5B95"))
+                                Text(isKidsMode ? "🌱 Word Root" : "Root Word (جذر)")
+                                    .font(.headline)
+                            }
+                            
+                            HStack(spacing: 20) {
+                                VStack(spacing: 4) {
+                                    Text("Root")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text(rootWord)
+                                        .font(.title2)
+                                        .foregroundColor(Color(hex: "6B5B95"))
+                                }
+                                
+                                Divider()
+                                    .frame(height: 40)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Meaning")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text(rootMeaning)
+                                        .font(.body)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            
+                            if isKidsMode {
+                                Text("💡 Learning the root helps you understand many related words!")
+                                    .font(.caption)
+                                    .foregroundColor(.purple)
+                                    .padding(.top, 8)
+                            }
+                        }
+                        .padding()
+                        .background(Color(.systemBackground))
+                        .cornerRadius(16)
+                        .shadow(color: .black.opacity(0.05), radius: 5)
+                    }
+                    
+                    // Tajweed rules for this word
+                    if !word.tajweedRules.isEmpty {
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack {
+                                Image(systemName: "paintpalette")
+                                    .foregroundColor(Color(hex: "6B5B95"))
+                                Text(isKidsMode ? "🎨 Tajweed Colors" : "Tajweed Rules Applied")
+                                    .font(.headline)
+                            }
+                            
+                            ForEach(word.tajweedRules) { rule in
+                                HStack(spacing: 12) {
+                                    Circle()
+                                        .fill(Color(hex: rule.color))
+                                        .frame(width: 20, height: 20)
+                                    
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        HStack {
+                                            Text(rule.name)
+                                                .font(.subheadline.bold())
+                                            Text("(\(rule.nameArabic))")
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        }
+                                        Text(rule.description)
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                }
+                                .padding(8)
+                                .background(Color(hex: rule.color).opacity(0.1))
+                                .cornerRadius(8)
+                            }
+                            
+                            if isKidsMode {
+                                Text("🌈 Colors help you remember how to recite beautifully!")
+                                    .font(.caption)
+                                    .foregroundColor(.purple)
+                                    .padding(.top, 8)
+                            }
+                        }
+                        .padding()
+                        .background(Color(.systemBackground))
+                        .cornerRadius(16)
+                        .shadow(color: .black.opacity(0.05), radius: 5)
+                    }
+                    
+                    Spacer(minLength: 40)
                 }
-                
-                Spacer()
+                .padding()
             }
-            .padding()
-            .navigationTitle("Word Detail")
+            .navigationTitle(isKidsMode ? "📖 Word Details" : "Word Detail")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

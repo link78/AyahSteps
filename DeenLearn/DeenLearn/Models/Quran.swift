@@ -76,6 +76,8 @@ struct QuranWord: Identifiable, Codable {
     let arabic: String
     let transliteration: String
     let translation: String
+    let rootWord: String? // Arabic root word (e.g., ح-م-د for الحمد)
+    let rootMeaning: String? // Root meaning in English
     let tajweedRules: [TajweedRule]
     let audioFileName: String?
 }
@@ -202,10 +204,10 @@ extension Ayah {
             transliteration: "Bismillahir Rahmanir Raheem",
             translation: "In the name of Allah, the Most Gracious, the Most Merciful",
             words: [
-                QuranWord(id: "1:1:1", arabic: "بِسْمِ", transliteration: "bismi", translation: "In the name", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:1:2", arabic: "اللَّهِ", transliteration: "Allahi", translation: "of Allah", tajweedRules: [TajweedRule.lafzatullahFull], audioFileName: nil),
-                QuranWord(id: "1:1:3", arabic: "الرَّحْمَٰنِ", transliteration: "ar-Rahmani", translation: "the Most Gracious", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:1:4", arabic: "الرَّحِيمِ", transliteration: "ar-Raheem", translation: "the Most Merciful", tajweedRules: [TajweedRule.madd2], audioFileName: nil)
+                QuranWord(id: "1:1:1", arabic: "بِسْمِ", transliteration: "bismi", translation: "In the name", rootWord: "س-م-و", rootMeaning: "name, to name", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:1:2", arabic: "اللَّهِ", transliteration: "Allahi", translation: "of Allah", rootWord: "إ-ل-ه", rootMeaning: "God, deity", tajweedRules: [TajweedRule.lafzatullahFull], audioFileName: nil),
+                QuranWord(id: "1:1:3", arabic: "الرَّحْمَٰنِ", transliteration: "ar-Rahmani", translation: "the Most Gracious", rootWord: "ر-ح-م", rootMeaning: "mercy, compassion", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:1:4", arabic: "الرَّحِيمِ", transliteration: "ar-Raheem", translation: "the Most Merciful", rootWord: "ر-ح-م", rootMeaning: "mercy, compassion", tajweedRules: [TajweedRule.madd2], audioFileName: nil)
             ],
             sajdahType: nil,
             juz: 1,
@@ -220,10 +222,10 @@ extension Ayah {
             transliteration: "Alhamdu lillahi Rabbil 'aalameen",
             translation: "All praise is due to Allah, Lord of the worlds",
             words: [
-                QuranWord(id: "1:2:1", arabic: "الْحَمْدُ", transliteration: "alhamdu", translation: "All praise", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:2:2", arabic: "لِلَّهِ", transliteration: "lillahi", translation: "is due to Allah", tajweedRules: [TajweedRule.lafzatullahFull], audioFileName: nil),
-                QuranWord(id: "1:2:3", arabic: "رَبِّ", transliteration: "Rabbi", translation: "Lord", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:2:4", arabic: "الْعَالَمِينَ", transliteration: "al-'aalameen", translation: "of the worlds", tajweedRules: [TajweedRule.madd2], audioFileName: nil)
+                QuranWord(id: "1:2:1", arabic: "الْحَمْدُ", transliteration: "alhamdu", translation: "All praise", rootWord: "ح-م-د", rootMeaning: "praise, thankfulness", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:2:2", arabic: "لِلَّهِ", transliteration: "lillahi", translation: "is due to Allah", rootWord: "إ-ل-ه", rootMeaning: "God, deity", tajweedRules: [TajweedRule.lafzatullahFull], audioFileName: nil),
+                QuranWord(id: "1:2:3", arabic: "رَبِّ", transliteration: "Rabbi", translation: "Lord", rootWord: "ر-ب-ب", rootMeaning: "Lord, master, nurturer", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:2:4", arabic: "الْعَالَمِينَ", transliteration: "al-'aalameen", translation: "of the worlds", rootWord: "ع-ل-م", rootMeaning: "to know, worlds", tajweedRules: [TajweedRule.madd2], audioFileName: nil)
             ],
             sajdahType: nil,
             juz: 1,
@@ -238,8 +240,8 @@ extension Ayah {
             transliteration: "Ar-Rahmanir-Raheem",
             translation: "The Most Gracious, the Most Merciful",
             words: [
-                QuranWord(id: "1:3:1", arabic: "الرَّحْمَٰنِ", transliteration: "ar-Rahmani", translation: "The Most Gracious", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:3:2", arabic: "الرَّحِيمِ", transliteration: "ar-Raheem", translation: "the Most Merciful", tajweedRules: [TajweedRule.madd2], audioFileName: nil)
+                QuranWord(id: "1:3:1", arabic: "الرَّحْمَٰنِ", transliteration: "ar-Rahmani", translation: "The Most Gracious", rootWord: "ر-ح-م", rootMeaning: "mercy, compassion", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:3:2", arabic: "الرَّحِيمِ", transliteration: "ar-Raheem", translation: "the Most Merciful", rootWord: "ر-ح-م", rootMeaning: "mercy, compassion", tajweedRules: [TajweedRule.madd2], audioFileName: nil)
             ],
             sajdahType: nil,
             juz: 1,
@@ -254,9 +256,9 @@ extension Ayah {
             transliteration: "Maliki yawmid-Deen",
             translation: "Master of the Day of Judgment",
             words: [
-                QuranWord(id: "1:4:1", arabic: "مَالِكِ", transliteration: "Maliki", translation: "Master", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:4:2", arabic: "يَوْمِ", transliteration: "yawmi", translation: "of the Day", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:4:3", arabic: "الدِّينِ", transliteration: "ad-Deen", translation: "of Judgment", tajweedRules: [TajweedRule.madd2], audioFileName: nil)
+                QuranWord(id: "1:4:1", arabic: "مَالِكِ", transliteration: "Maliki", translation: "Master", rootWord: "م-ل-ك", rootMeaning: "to own, possess, rule", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:4:2", arabic: "يَوْمِ", transliteration: "yawmi", translation: "of the Day", rootWord: "ي-و-م", rootMeaning: "day", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:4:3", arabic: "الدِّينِ", transliteration: "ad-Deen", translation: "of Judgment", rootWord: "د-ي-ن", rootMeaning: "religion, recompense", tajweedRules: [TajweedRule.madd2], audioFileName: nil)
             ],
             sajdahType: nil,
             juz: 1,
@@ -271,10 +273,10 @@ extension Ayah {
             transliteration: "Iyyaka na'budu wa iyyaka nasta'een",
             translation: "You alone we worship, and You alone we ask for help",
             words: [
-                QuranWord(id: "1:5:1", arabic: "إِيَّاكَ", transliteration: "Iyyaka", translation: "You alone", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:5:2", arabic: "نَعْبُدُ", transliteration: "na'budu", translation: "we worship", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:5:3", arabic: "وَإِيَّاكَ", transliteration: "wa iyyaka", translation: "and You alone", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:5:4", arabic: "نَسْتَعِينُ", transliteration: "nasta'een", translation: "we ask for help", tajweedRules: [TajweedRule.madd2], audioFileName: nil)
+                QuranWord(id: "1:5:1", arabic: "إِيَّاكَ", transliteration: "Iyyaka", translation: "You alone", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:5:2", arabic: "نَعْبُدُ", transliteration: "na'budu", translation: "we worship", rootWord: "ع-ب-د", rootMeaning: "to worship, serve", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:5:3", arabic: "وَإِيَّاكَ", transliteration: "wa iyyaka", translation: "and You alone", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:5:4", arabic: "نَسْتَعِينُ", transliteration: "nasta'een", translation: "we ask for help", rootWord: "ع-و-ن", rootMeaning: "help, assistance", tajweedRules: [TajweedRule.madd2], audioFileName: nil)
             ],
             sajdahType: nil,
             juz: 1,
@@ -289,9 +291,9 @@ extension Ayah {
             transliteration: "Ihdinas-Siratal-Mustaqeem",
             translation: "Guide us to the straight path",
             words: [
-                QuranWord(id: "1:6:1", arabic: "اهْدِنَا", transliteration: "Ihdina", translation: "Guide us", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:6:2", arabic: "الصِّرَاطَ", transliteration: "as-Sirata", translation: "to the path", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:6:3", arabic: "الْمُسْتَقِيمَ", transliteration: "al-Mustaqeem", translation: "the straight", tajweedRules: [TajweedRule.madd2], audioFileName: nil)
+                QuranWord(id: "1:6:1", arabic: "اهْدِنَا", transliteration: "Ihdina", translation: "Guide us", rootWord: "ه-د-ي", rootMeaning: "guidance", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:6:2", arabic: "الصِّرَاطَ", transliteration: "as-Sirata", translation: "to the path", rootWord: "ص-ر-ط", rootMeaning: "path, way", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:6:3", arabic: "الْمُسْتَقِيمَ", transliteration: "al-Mustaqeem", translation: "the straight", rootWord: "ق-و-م", rootMeaning: "straight, upright", tajweedRules: [TajweedRule.madd2], audioFileName: nil)
             ],
             sajdahType: nil,
             juz: 1,
@@ -306,15 +308,15 @@ extension Ayah {
             transliteration: "Siratal-ladhina an'amta 'alayhim ghayril-maghdubi 'alayhim wa lad-dalleen",
             translation: "The path of those upon whom You have bestowed favor, not of those who have earned anger or of those who are astray",
             words: [
-                QuranWord(id: "1:7:1", arabic: "صِرَاطَ", transliteration: "Sirata", translation: "The path", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:7:2", arabic: "الَّذِينَ", transliteration: "alladhina", translation: "of those who", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:7:3", arabic: "أَنْعَمْتَ", transliteration: "an'amta", translation: "You have bestowed favor", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:7:4", arabic: "عَلَيْهِمْ", transliteration: "'alayhim", translation: "upon them", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:7:5", arabic: "غَيْرِ", transliteration: "ghayri", translation: "not", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:7:6", arabic: "الْمَغْضُوبِ", transliteration: "al-maghdubi", translation: "those who earned anger", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:7:7", arabic: "عَلَيْهِمْ", transliteration: "'alayhim", translation: "upon them", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:7:8", arabic: "وَلَا", transliteration: "wa la", translation: "and not", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "1:7:9", arabic: "الضَّالِّينَ", transliteration: "ad-dalleen", translation: "those who are astray", tajweedRules: [TajweedRule.madd6], audioFileName: nil)
+                QuranWord(id: "1:7:1", arabic: "صِرَاطَ", transliteration: "Sirata", translation: "The path", rootWord: "ص-ر-ط", rootMeaning: "path, way", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:7:2", arabic: "الَّذِينَ", transliteration: "alladhina", translation: "of those who", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:7:3", arabic: "أَنْعَمْتَ", transliteration: "an'amta", translation: "You have bestowed favor", rootWord: "ن-ع-م", rootMeaning: "blessing, favor", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:7:4", arabic: "عَلَيْهِمْ", transliteration: "'alayhim", translation: "upon them", rootWord: "ع-ل-و", rootMeaning: "upon, over", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:7:5", arabic: "غَيْرِ", transliteration: "ghayri", translation: "not", rootWord: "غ-ي-ر", rootMeaning: "other than", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:7:6", arabic: "الْمَغْضُوبِ", transliteration: "al-maghdubi", translation: "those who earned anger", rootWord: "غ-ض-ب", rootMeaning: "anger", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:7:7", arabic: "عَلَيْهِمْ", transliteration: "'alayhim", translation: "upon them", rootWord: "ع-ل-و", rootMeaning: "upon, over", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:7:8", arabic: "وَلَا", transliteration: "wa la", translation: "and not", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "1:7:9", arabic: "الضَّالِّينَ", transliteration: "ad-dalleen", translation: "those who are astray", rootWord: "ض-ل-ل", rootMeaning: "to go astray", tajweedRules: [TajweedRule.madd6], audioFileName: nil)
             ],
             sajdahType: nil,
             juz: 1,
@@ -333,10 +335,10 @@ extension Ayah {
             transliteration: "Qul Huwa Allahu Ahad",
             translation: "Say, He is Allah, the One",
             words: [
-                QuranWord(id: "112:1:1", arabic: "قُلْ", transliteration: "Qul", translation: "Say", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil),
-                QuranWord(id: "112:1:2", arabic: "هُوَ", transliteration: "Huwa", translation: "He is", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "112:1:3", arabic: "اللَّهُ", transliteration: "Allahu", translation: "Allah", tajweedRules: [TajweedRule.lafzatullahFull], audioFileName: nil),
-                QuranWord(id: "112:1:4", arabic: "أَحَدٌ", transliteration: "Ahad", translation: "the One", tajweedRules: [TajweedRule.ghunnah], audioFileName: nil)
+                QuranWord(id: "112:1:1", arabic: "قُلْ", transliteration: "Qul", translation: "Say", rootWord: "ق-و-ل", rootMeaning: "to say, speak", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil),
+                QuranWord(id: "112:1:2", arabic: "هُوَ", transliteration: "Huwa", translation: "He is", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "112:1:3", arabic: "اللَّهُ", transliteration: "Allahu", translation: "Allah", rootWord: "إ-ل-ه", rootMeaning: "God, deity", tajweedRules: [TajweedRule.lafzatullahFull], audioFileName: nil),
+                QuranWord(id: "112:1:4", arabic: "أَحَدٌ", transliteration: "Ahad", translation: "the One", rootWord: "و-ح-د", rootMeaning: "one, unique", tajweedRules: [TajweedRule.ghunnah], audioFileName: nil)
             ],
             sajdahType: nil,
             juz: 30,
@@ -351,8 +353,8 @@ extension Ayah {
             transliteration: "Allahus-Samad",
             translation: "Allah, the Eternal Refuge",
             words: [
-                QuranWord(id: "112:2:1", arabic: "اللَّهُ", transliteration: "Allahu", translation: "Allah", tajweedRules: [TajweedRule.lafzatullahFull], audioFileName: nil),
-                QuranWord(id: "112:2:2", arabic: "الصَّمَدُ", transliteration: "as-Samad", translation: "the Eternal Refuge", tajweedRules: [], audioFileName: nil)
+                QuranWord(id: "112:2:1", arabic: "اللَّهُ", transliteration: "Allahu", translation: "Allah", rootWord: "إ-ل-ه", rootMeaning: "God, deity", tajweedRules: [TajweedRule.lafzatullahFull], audioFileName: nil),
+                QuranWord(id: "112:2:2", arabic: "الصَّمَدُ", transliteration: "as-Samad", translation: "the Eternal Refuge", rootWord: "ص-م-د", rootMeaning: "eternal, independent", tajweedRules: [], audioFileName: nil)
             ],
             sajdahType: nil,
             juz: 30,
@@ -367,10 +369,10 @@ extension Ayah {
             transliteration: "Lam yalid wa lam yulad",
             translation: "He neither begets nor is born",
             words: [
-                QuranWord(id: "112:3:1", arabic: "لَمْ", transliteration: "Lam", translation: "Not", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "112:3:2", arabic: "يَلِدْ", transliteration: "yalid", translation: "He begets", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil),
-                QuranWord(id: "112:3:3", arabic: "وَلَمْ", transliteration: "wa lam", translation: "and not", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "112:3:4", arabic: "يُولَدْ", transliteration: "yulad", translation: "is He born", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+                QuranWord(id: "112:3:1", arabic: "لَمْ", transliteration: "Lam", translation: "Not", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "112:3:2", arabic: "يَلِدْ", transliteration: "yalid", translation: "He begets", rootWord: "و-ل-د", rootMeaning: "to give birth", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil),
+                QuranWord(id: "112:3:3", arabic: "وَلَمْ", transliteration: "wa lam", translation: "and not", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "112:3:4", arabic: "يُولَدْ", transliteration: "yulad", translation: "is He born", rootWord: "و-ل-د", rootMeaning: "to be born", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
             ],
             sajdahType: nil,
             juz: 30,
@@ -385,11 +387,11 @@ extension Ayah {
             transliteration: "Wa lam yakun lahu kufuwan ahad",
             translation: "Nor is there to Him any equivalent",
             words: [
-                QuranWord(id: "112:4:1", arabic: "وَلَمْ", transliteration: "Wa lam", translation: "And not", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "112:4:2", arabic: "يَكُن", transliteration: "yakun", translation: "is there", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "112:4:3", arabic: "لَّهُ", transliteration: "lahu", translation: "to Him", tajweedRules: [], audioFileName: nil),
-                QuranWord(id: "112:4:4", arabic: "كُفُوًا", transliteration: "kufuwan", translation: "equivalent", tajweedRules: [TajweedRule.ghunnah], audioFileName: nil),
-                QuranWord(id: "112:4:5", arabic: "أَحَدٌ", transliteration: "ahad", translation: "anyone", tajweedRules: [TajweedRule.ghunnah], audioFileName: nil)
+                QuranWord(id: "112:4:1", arabic: "وَلَمْ", transliteration: "Wa lam", translation: "And not", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "112:4:2", arabic: "يَكُن", transliteration: "yakun", translation: "is there", rootWord: "ك-و-ن", rootMeaning: "to be", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "112:4:3", arabic: "لَّهُ", transliteration: "lahu", translation: "to Him", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "112:4:4", arabic: "كُفُوًا", transliteration: "kufuwan", translation: "equivalent", rootWord: "ك-ف-أ", rootMeaning: "equal, equivalent", tajweedRules: [TajweedRule.ghunnah], audioFileName: nil),
+                QuranWord(id: "112:4:5", arabic: "أَحَدٌ", transliteration: "ahad", translation: "anyone", rootWord: "و-ح-د", rootMeaning: "one, unique", tajweedRules: [TajweedRule.ghunnah], audioFileName: nil)
             ],
             sajdahType: nil,
             juz: 30,
