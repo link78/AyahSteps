@@ -28,7 +28,7 @@ struct LearningProgress: Codable {
 }
 
 struct DailyGoal: Codable {
-    var quranMinutes: Int = 5
+    var quranSessionCompleted: Bool = false
     var salahPractice: Bool = false
     var arabicPractice: Bool = false
     var lastUpdated: Date = Date()
@@ -120,7 +120,12 @@ class AppState: ObservableObject {
             self.badges = savedBadges
         }
         
-        self.remindersEnabled = UserDefaults.standard.bool(forKey: "remindersEnabled")
+        // Load reminders setting (default to true if not set)
+        if UserDefaults.standard.object(forKey: "remindersEnabled") != nil {
+            self.remindersEnabled = UserDefaults.standard.bool(forKey: "remindersEnabled")
+        } else {
+            self.remindersEnabled = true // Default value
+        }
         self.prayerTimesEnabled = UserDefaults.standard.bool(forKey: "prayerTimesEnabled")
     }
     

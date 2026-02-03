@@ -252,7 +252,7 @@ struct HomeView: View {
                         subtitle: "Surah Al-Fatiha",
                         icon: "book.fill",
                         color: .purple,
-                        isCompleted: appState.dailyGoal.quranMinutes > 0,
+                        isCompleted: appState.dailyGoal.quranSessionCompleted,
                         isKidsMode: true
                     )
                     
@@ -293,7 +293,7 @@ struct HomeView: View {
                     subtitle: "5-minute session",
                     icon: "book.fill",
                     color: .purple,
-                    isCompleted: appState.dailyGoal.quranMinutes > 0,
+                    isCompleted: appState.dailyGoal.quranSessionCompleted,
                     isKidsMode: false
                 )
                 
