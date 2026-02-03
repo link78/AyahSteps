@@ -799,6 +799,7 @@ struct MatchIconGameContent: View {
         ("☀️", "شَمْس", "Sun"),
         ("🌙", "قَمَر", "Moon")
     ]
+    @State private var shuffledArabicItems: [(icon: String, arabic: String, english: String)] = []
     @State private var selectedIcon: String?
     @State private var selectedArabic: String?
     @State private var matchedPairs: Set<String> = []
@@ -819,7 +820,7 @@ struct MatchIconGameContent: View {
                         .foregroundColor(.secondary)
                     ForEach(items, id: \.icon) { item in
                         Button(action: {
-                            if !matchedPairs.contains(item.icon) {
+                            if !matchedPairs.contains(item.arabic) {
                                 selectedIcon = item.icon
                                 checkMatch()
                             }
@@ -828,7 +829,7 @@ struct MatchIconGameContent: View {
                                 .font(.system(size: 40))
                                 .frame(width: 70, height: 70)
                                 .background(
-                                    matchedPairs.contains(item.icon) ? Color.green.opacity(0.2) :
+                                    matchedPairs.contains(item.arabic) ? Color.green.opacity(0.2) :
                                     selectedIcon == item.icon ? Color.blue.opacity(0.2) :
                                     Color(.systemGray6)
                                 )
@@ -838,7 +839,7 @@ struct MatchIconGameContent: View {
                                         .stroke(selectedIcon == item.icon ? Color.blue : Color.clear, lineWidth: 2)
                                 )
                         }
-                        .disabled(matchedPairs.contains(item.icon))
+                        .disabled(matchedPairs.contains(item.arabic))
                     }
                 }
                 
@@ -847,9 +848,9 @@ struct MatchIconGameContent: View {
                     Text("Arabic")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
-                    ForEach(items.shuffled(), id: \.arabic) { item in
+                    ForEach(shuffledArabicItems, id: \.arabic) { item in
                         Button(action: {
-                            if !matchedPairs.contains(item.icon) {
+                            if !matchedPairs.contains(item.arabic) {
                                 selectedArabic = item.arabic
                                 checkMatch()
                             }
@@ -867,7 +868,7 @@ struct MatchIconGameContent: View {
                                         .stroke(selectedArabic == item.arabic ? Color.blue : Color.clear, lineWidth: 2)
                                 )
                         }
-                        .disabled(matchedPairs.contains(item.icon))
+                        .disabled(matchedPairs.contains(item.arabic))
                     }
                 }
             }
@@ -896,14 +897,19 @@ struct MatchIconGameContent: View {
                 .cornerRadius(12)
             }
         }
+        .onAppear {
+            if shuffledArabicItems.isEmpty {
+                shuffledArabicItems = items.shuffled()
+            }
+        }
     }
     
     func checkMatch() {
         guard let icon = selectedIcon, let arabic = selectedArabic else { return }
         
         if let matchingItem = items.first(where: { $0.icon == icon && $0.arabic == arabic }) {
-            // Correct match
-            matchedPairs.insert(matchingItem.icon)
+            // Correct match - track by arabic since that's what we use for the right column
+            matchedPairs.insert(matchingItem.arabic)
             score += 10
             isCorrectMatch = true
         } else {
@@ -923,7 +929,7 @@ struct MatchIconGameContent: View {
 struct SoundRecognitionGameContent: View {
     @Binding var score: Int
     let isKidsMode: Bool
-    @State private var currentLetter = ArabicLetter.alphabet.randomElement()!
+    @State private var currentLetter = ArabicLetter.alphabet.first ?? ArabicLetter(name: "Alif", transliteration: "a", isolated: "ا", initial: "ا", medial: "ـا", final: "ـا", pronunciation: "Like 'a' in 'father'", exampleWord: "أَسَد", exampleTranslation: "Lion", exampleIcon: "🦁")
     @State private var options: [ArabicLetter] = []
     @State private var showFeedback = false
     @State private var isCorrect = false
@@ -1009,7 +1015,9 @@ struct SoundRecognitionGameContent: View {
             score += 10
             // Next question
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                currentLetter = ArabicLetter.alphabet.randomElement()!
+                if let nextLetter = ArabicLetter.alphabet.randomElement() {
+                    currentLetter = nextLetter
+                }
                 setupOptions()
                 showFeedback = false
             }

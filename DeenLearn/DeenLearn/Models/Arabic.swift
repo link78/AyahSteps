@@ -22,7 +22,6 @@ struct ArabicLetter: Identifiable {
     let exampleWord: String
     let exampleTranslation: String
     let exampleIcon: String
-    var isLearned: Bool = false
     
     // Sample Arabic Alphabet (all 28 letters)
     static let alphabet: [ArabicLetter] = [
@@ -66,7 +65,6 @@ struct VocabularyWord: Identifiable {
     let english: String
     let icon: String
     let category: VocabularyCategory
-    var isLearned: Bool = false
 }
 
 enum VocabularyCategory: String, CaseIterable {
