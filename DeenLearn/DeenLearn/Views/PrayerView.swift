@@ -133,6 +133,16 @@ enum PrayerSection: String, CaseIterable {
         case .duas: return "🤲"
         }
     }
+    
+    var accessibilityDescription: String {
+        switch self {
+        case .wudu: return "Learn how to perform wudu, the Islamic ablution"
+        case .salah: return "Learn how to perform the prayer step by step"
+        case .practice: return "Practice wudu or prayer with guidance"
+        case .mistakes: return "Learn about common mistakes and how to correct them"
+        case .duas: return "Supplications to recite after prayer"
+        }
+    }
 }
 
 struct PrayerSectionButton: View {
@@ -165,6 +175,9 @@ struct PrayerSectionButton: View {
             .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
         }
         .buttonStyle(PlainButtonStyle())
+        .accessibilityLabel("\(section.rawValue) section")
+        .accessibilityHint(section.accessibilityDescription)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 
@@ -583,18 +596,25 @@ struct StepDetailView: View {
                             .italic()
                     }
                     
-                    // Audio buttons placeholder
+                    // Audio buttons placeholder - TODO: Implement AVAudioPlayer for recitation audio
                     HStack {
-                        Button(action: {}) {
+                        Button(action: { /* TODO: Play recitation at slow speed */ }) {
                             Label("Slow", systemImage: "tortoise.fill")
                         }
                         .buttonStyle(.bordered)
+                        .disabled(true) // Disabled until audio implemented
                         
-                        Button(action: {}) {
+                        Button(action: { /* TODO: Play recitation at normal speed */ }) {
                             Label("Normal", systemImage: "hare.fill")
                         }
                         .buttonStyle(.bordered)
+                        .disabled(true) // Disabled until audio implemented
                     }
+                    .opacity(0.5)
+                    
+                    Text("Audio coming soon")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
                 .padding()
                 .background(Color(.systemBackground))
