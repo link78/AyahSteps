@@ -20,13 +20,16 @@ jobs:
     - name: Show Xcode version
       run: xcodebuild -version
 
+    - name: List available simulators
+      run: xcrun simctl list devices available
+
     - name: Build iOS App
       run: |
         cd DeenLearn
         xcodebuild clean build \
           -project DeenLearn.xcodeproj \
           -scheme DeenLearn \
-          -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+          -destination 'generic/platform=iOS Simulator' \
           -configuration Debug \
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
@@ -35,10 +38,13 @@ jobs:
     - name: Run Tests
       run: |
         cd DeenLearn
+        # Find an available iPhone simulator
+        DEVICE=$(xcrun simctl list devices available | grep -m 1 "iPhone" | sed 's/.*(\([^)]*\)).*/\1/' | head -1)
+        echo "Using simulator device: $DEVICE"
         xcodebuild test \
           -project DeenLearn.xcodeproj \
           -scheme DeenLearn \
-          -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+          -destination "platform=iOS Simulator,id=$DEVICE" \
           -configuration Debug \
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
