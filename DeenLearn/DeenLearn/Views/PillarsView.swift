@@ -827,6 +827,9 @@ struct AdultsPillarDetailView: View {
     
     @State private var selectedSection = 0
     @State private var showFiqhDifferences = false
+    @State private var journalText = ""
+    @State private var showJournalSaved = false
+    @State private var selectedReflectionPrompt: ReflectionPrompt?
     
     var body: some View {
         NavigationStack {
@@ -856,11 +859,12 @@ struct AdultsPillarDetailView: View {
                     }
                     .padding()
                     
-                    // Section picker
+                    // Section picker - Enhanced with more tabs
                     Picker("Section", selection: $selectedSection) {
                         Text("Overview").tag(0)
                         Text("Evidence").tag(1)
-                        Text("Scenarios").tag(2)
+                        Text("Cases").tag(2)
+                        Text("Reflect").tag(3)
                     }
                     .pickerStyle(.segmented)
                     .padding(.horizontal)
@@ -872,7 +876,9 @@ struct AdultsPillarDetailView: View {
                     case 1:
                         evidenceSection
                     case 2:
-                        scenariosSection
+                        caseLearningSection
+                    case 3:
+                        reflectionSection
                     default:
                         overviewSection
                     }
@@ -982,6 +988,200 @@ struct AdultsPillarDetailView: View {
         .padding(.horizontal)
     }
     
+    var caseLearningSection: some View {
+        VStack(spacing: 16) {
+            // Header
+            VStack(spacing: 8) {
+                HStack {
+                    Image(systemName: "questionmark.circle.fill")
+                        .foregroundColor(pillar.color)
+                    Text("Case-Based Learning")
+                        .font(.headline)
+                }
+                
+                Text("Apply your knowledge to real-life situations")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            // Real-life scenarios
+            ForEach(pillar.scenarios) { scenario in
+                EnhancedScenarioCard(scenario: scenario, color: pillar.color)
+            }
+            
+            // Special tools based on pillar
+            if pillar.id == "zakat" {
+                ZakatCalculatorCard(color: pillar.color)
+            }
+            
+            if pillar.id == "salah" {
+                PrayerTimingsCard(color: pillar.color)
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    var reflectionSection: some View {
+        VStack(spacing: 20) {
+            // Reflection prompts
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Image(systemName: "sparkles")
+                        .foregroundColor(.purple)
+                    Text("Reflection Prompts")
+                        .font(.headline)
+                }
+                
+                Text("Take a moment to think deeply about this pillar")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                ForEach(reflectionPromptsForPillar) { prompt in
+                    ReflectionPromptCard(
+                        prompt: prompt,
+                        color: pillar.color,
+                        isSelected: selectedReflectionPrompt?.id == prompt.id
+                    ) {
+                        withAnimation {
+                            if selectedReflectionPrompt?.id == prompt.id {
+                                selectedReflectionPrompt = nil
+                            } else {
+                                selectedReflectionPrompt = prompt
+                            }
+                        }
+                    }
+                }
+            }
+            .padding()
+            .background(Color(.systemBackground))
+            .cornerRadius(16)
+            
+            // Journaling space
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Image(systemName: "pencil.and.outline")
+                        .foregroundColor(.orange)
+                    Text("Personal Journal")
+                        .font(.headline)
+                    
+                    Spacer()
+                    
+                    if showJournalSaved {
+                        Text("Saved ✓")
+                            .font(.caption)
+                            .foregroundColor(.green)
+                    }
+                }
+                
+                if let prompt = selectedReflectionPrompt {
+                    Text("Reflecting on: \"\(prompt.question)\"")
+                        .font(.caption)
+                        .foregroundColor(pillar.color)
+                        .italic()
+                }
+                
+                TextEditor(text: $journalText)
+                    .frame(minHeight: 150)
+                    .padding(8)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
+                    .overlay(
+                        Group {
+                            if journalText.isEmpty {
+                                Text("Write your thoughts, reflections, and goals...")
+                                    .foregroundColor(.gray)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 16)
+                            }
+                        },
+                        alignment: .topLeading
+                    )
+                
+                Button(action: saveJournal) {
+                    HStack {
+                        Image(systemName: "square.and.arrow.down")
+                        Text("Save Reflection")
+                    }
+                    .font(.subheadline.bold())
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(journalText.isEmpty ? Color.gray : pillar.color)
+                    .cornerRadius(12)
+                }
+                .disabled(journalText.isEmpty)
+            }
+            .padding()
+            .background(Color(.systemBackground))
+            .cornerRadius(16)
+            
+            // Daily reminder setup
+            DailyReminderCard(pillar: pillar)
+        }
+        .padding(.horizontal)
+    }
+    
+    // Reflection prompts for each pillar
+    var reflectionPromptsForPillar: [ReflectionPrompt] {
+        switch pillar.id {
+        case "shahada":
+            return [
+                ReflectionPrompt(id: "sh1", question: "What does bearing witness to Allah's oneness mean in your daily life?", category: "Personal"),
+                ReflectionPrompt(id: "sh2", question: "How has your understanding of Tawhid grown over time?", category: "Growth"),
+                ReflectionPrompt(id: "sh3", question: "What can you do tomorrow to better embody the Shahada?", category: "Action")
+            ]
+        case "salah":
+            return [
+                ReflectionPrompt(id: "sa1", question: "How has Salah affected your sense of peace today?", category: "Personal"),
+                ReflectionPrompt(id: "sa2", question: "What challenges do you face in maintaining khushu (concentration)?", category: "Challenge"),
+                ReflectionPrompt(id: "sa3", question: "How can you improve your prayer experience this week?", category: "Action")
+            ]
+        case "zakat":
+            return [
+                ReflectionPrompt(id: "z1", question: "How does giving Zakat purify your wealth and soul?", category: "Spiritual"),
+                ReflectionPrompt(id: "z2", question: "Who in your community might benefit from your Zakat?", category: "Community"),
+                ReflectionPrompt(id: "z3", question: "What is your plan for calculating and distributing Zakat this year?", category: "Action")
+            ]
+        case "sawm":
+            return [
+                ReflectionPrompt(id: "sw1", question: "What spiritual benefits have you experienced from fasting?", category: "Spiritual"),
+                ReflectionPrompt(id: "sw2", question: "How has fasting increased your gratitude?", category: "Personal"),
+                ReflectionPrompt(id: "sw3", question: "What goals do you have for your next Ramadan?", category: "Goals")
+            ]
+        case "hajj":
+            return [
+                ReflectionPrompt(id: "h1", question: "What does the concept of Hajj mean to you spiritually?", category: "Spiritual"),
+                ReflectionPrompt(id: "h2", question: "How are you preparing (financially and spiritually) for Hajj?", category: "Preparation"),
+                ReflectionPrompt(id: "h3", question: "What lessons from Hajj can you apply in daily life?", category: "Application")
+            ]
+        default:
+            return []
+        }
+    }
+    
+    private func saveJournal() {
+        // Save journal entry
+        let entry = JournalEntryData(
+            id: UUID().uuidString,
+            pillarId: pillar.id,
+            promptId: selectedReflectionPrompt?.id,
+            content: journalText,
+            date: Date()
+        )
+        appState.saveJournalEntry(entry)
+        
+        withAnimation {
+            showJournalSaved = true
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            withAnimation {
+                showJournalSaved = false
+            }
+        }
+    }
+    
+    // Keep the old scenarios section as well for backward compatibility
     var scenariosSection: some View {
         VStack(spacing: 16) {
             Text("Scenario-Based Learning")
@@ -1168,6 +1368,454 @@ struct FiqhRow: View {
             Text(opinion)
                 .font(.caption)
                 .foregroundColor(.secondary)
+        }
+    }
+}
+
+// MARK: - Reflection Prompt Model
+
+struct ReflectionPrompt: Identifiable {
+    let id: String
+    let question: String
+    let category: String
+}
+
+// MARK: - Enhanced Scenario Card
+
+struct EnhancedScenarioCard: View {
+    let scenario: Scenario
+    let color: Color
+    
+    @State private var showAnswer = false
+    @State private var userResponse = ""
+    @State private var hasSubmitted = false
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Category badge
+            HStack {
+                Text(scenario.category)
+                    .font(.caption.bold())
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(color)
+                    .cornerRadius(8)
+                
+                Spacer()
+                
+                if hasSubmitted {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.green)
+                }
+            }
+            
+            // Question
+            Text(scenario.question)
+                .font(.headline)
+            
+            // User can type their own answer first
+            if !hasSubmitted {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Your thoughts:")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    TextField("Type your answer...", text: $userResponse, axis: .vertical)
+                        .textFieldStyle(.roundedBorder)
+                        .lineLimit(3...6)
+                    
+                    Button(action: {
+                        withAnimation {
+                            hasSubmitted = true
+                            showAnswer = true
+                        }
+                    }) {
+                        Text("Submit & See Answer")
+                            .font(.subheadline.bold())
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                            .background(userResponse.isEmpty ? Color.gray : color)
+                            .cornerRadius(10)
+                    }
+                    .disabled(userResponse.isEmpty)
+                }
+            }
+            
+            // Show/Hide answer toggle
+            if hasSubmitted {
+                Button(action: { withAnimation { showAnswer.toggle() }}) {
+                    HStack {
+                        Text(showAnswer ? "Hide Scholarly Answer" : "Show Scholarly Answer")
+                            .font(.subheadline)
+                        Image(systemName: showAnswer ? "eye.slash" : "eye")
+                    }
+                    .foregroundColor(color)
+                }
+            }
+            
+            // Answer
+            if showAnswer {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Scholarly Answer:")
+                        .font(.caption.bold())
+                        .foregroundColor(color)
+                    
+                    Text(scenario.answer)
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                }
+                .padding()
+                .background(color.opacity(0.1))
+                .cornerRadius(12)
+            }
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
+    }
+}
+
+// MARK: - Reflection Prompt Card
+
+struct ReflectionPromptCard: View {
+    let prompt: ReflectionPrompt
+    let color: Color
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(prompt.category)
+                        .font(.caption)
+                        .foregroundColor(color)
+                    
+                    Text(prompt.question)
+                        .font(.subheadline)
+                        .foregroundColor(.primary)
+                        .multilineTextAlignment(.leading)
+                }
+                
+                Spacer()
+                
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .foregroundColor(isSelected ? color : .gray)
+            }
+            .padding()
+            .background(isSelected ? color.opacity(0.1) : Color(.systemGray6))
+            .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isSelected ? color : Color.clear, lineWidth: 2)
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+// MARK: - Daily Reminder Card
+
+struct DailyReminderCard: View {
+    let pillar: Pillar
+    
+    @State private var reminderEnabled = false
+    @State private var reminderTime = Date()
+    @State private var showTimePicker = false
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "bell.fill")
+                    .foregroundColor(.blue)
+                Text("Daily Reminders")
+                    .font(.headline)
+            }
+            
+            Text("Set a daily reminder to reflect on \(pillar.name)")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            
+            Toggle(isOn: $reminderEnabled) {
+                HStack {
+                    Image(systemName: "alarm")
+                    Text("Enable reminder")
+                }
+            }
+            .tint(pillar.color)
+            
+            if reminderEnabled {
+                HStack {
+                    Text("Reminder time:")
+                        .font(.subheadline)
+                    
+                    Spacer()
+                    
+                    DatePicker("", selection: $reminderTime, displayedComponents: .hourAndMinute)
+                        .labelsHidden()
+                }
+                
+                // Reminder message preview
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("You'll receive:")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    Text(reminderMessage)
+                        .font(.caption)
+                        .padding(10)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                }
+            }
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+    }
+    
+    var reminderMessage: String {
+        switch pillar.id {
+        case "shahada":
+            return "🌟 Take a moment to renew your intention and remember Allah's oneness."
+        case "salah":
+            return "🕌 Time for reflection! How has prayer enriched your day?"
+        case "zakat":
+            return "💝 Remember: Wealth is purified through giving. Review your Zakat plans."
+        case "sawm":
+            return "🌙 Fasting teaches discipline and gratitude. Reflect on its blessings."
+        case "hajj":
+            return "🕋 The journey of a lifetime awaits. Continue preparing your heart."
+        default:
+            return "Time for your daily reflection on the pillars of Islam."
+        }
+    }
+}
+
+// MARK: - Zakat Calculator Card
+
+struct ZakatCalculatorCard: View {
+    let color: Color
+    
+    @State private var showCalculator = false
+    @State private var goldValue: String = ""
+    @State private var silverValue: String = ""
+    @State private var cashValue: String = ""
+    @State private var investmentsValue: String = ""
+    @State private var businessValue: String = ""
+    
+    var totalAssets: Double {
+        (Double(goldValue) ?? 0) +
+        (Double(silverValue) ?? 0) +
+        (Double(cashValue) ?? 0) +
+        (Double(investmentsValue) ?? 0) +
+        (Double(businessValue) ?? 0)
+    }
+    
+    var zakatAmount: Double {
+        totalAssets * 0.025 // 2.5%
+    }
+    
+    // Current nisab threshold (approximately $5,000 - should be updated)
+    let nisabThreshold: Double = 5000
+    
+    var isAboveNisab: Bool {
+        totalAssets >= nisabThreshold
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Button(action: { withAnimation { showCalculator.toggle() }}) {
+                HStack {
+                    Image(systemName: "percent")
+                        .foregroundColor(color)
+                    
+                    Text("Zakat Calculator")
+                        .font(.headline)
+                    
+                    Spacer()
+                    
+                    Image(systemName: showCalculator ? "chevron.up" : "chevron.down")
+                        .foregroundColor(.secondary)
+                }
+            }
+            .buttonStyle(PlainButtonStyle())
+            
+            if showCalculator {
+                VStack(spacing: 16) {
+                    Text("Enter your zakatable assets:")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    AssetInputRow(label: "Gold (value)", icon: "🥇", value: $goldValue)
+                    AssetInputRow(label: "Silver (value)", icon: "🥈", value: $silverValue)
+                    AssetInputRow(label: "Cash & Bank", icon: "💵", value: $cashValue)
+                    AssetInputRow(label: "Investments", icon: "📈", value: $investmentsValue)
+                    AssetInputRow(label: "Business Assets", icon: "🏢", value: $businessValue)
+                    
+                    Divider()
+                    
+                    // Results
+                    VStack(spacing: 8) {
+                        HStack {
+                            Text("Total Assets:")
+                            Spacer()
+                            Text("$\(totalAssets, specifier: "%.2f")")
+                                .bold()
+                        }
+                        
+                        HStack {
+                            Text("Nisab Threshold:")
+                            Spacer()
+                            Text("$\(nisabThreshold, specifier: "%.2f")")
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        HStack {
+                            Text("Zakat Eligible:")
+                            Spacer()
+                            Text(isAboveNisab ? "Yes ✓" : "No")
+                                .foregroundColor(isAboveNisab ? .green : .orange)
+                                .bold()
+                        }
+                        
+                        if isAboveNisab {
+                            HStack {
+                                Text("Zakat Due (2.5%):")
+                                Spacer()
+                                Text("$\(zakatAmount, specifier: "%.2f")")
+                                    .font(.title3.bold())
+                                    .foregroundColor(color)
+                            }
+                            .padding()
+                            .background(color.opacity(0.1))
+                            .cornerRadius(8)
+                        }
+                    }
+                    
+                    Text("Note: Consult a scholar for precise calculations. Nisab varies based on current gold/silver prices.")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+    }
+}
+
+struct AssetInputRow: View {
+    let label: String
+    let icon: String
+    @Binding var value: String
+    
+    var body: some View {
+        HStack {
+            Text(icon)
+            Text(label)
+                .font(.subheadline)
+            Spacer()
+            TextField("$0", text: $value)
+                .keyboardType(.decimalPad)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 100)
+        }
+    }
+}
+
+// MARK: - Prayer Timings Card
+
+struct PrayerTimingsCard: View {
+    let color: Color
+    
+    @State private var showPrayerTimes = false
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Button(action: { withAnimation { showPrayerTimes.toggle() }}) {
+                HStack {
+                    Image(systemName: "clock.fill")
+                        .foregroundColor(color)
+                    
+                    Text("Prayer Times Helper")
+                        .font(.headline)
+                    
+                    Spacer()
+                    
+                    Image(systemName: showPrayerTimes ? "chevron.up" : "chevron.down")
+                        .foregroundColor(.secondary)
+                }
+            }
+            .buttonStyle(PlainButtonStyle())
+            
+            if showPrayerTimes {
+                VStack(spacing: 12) {
+                    Text("Common questions about prayer times:")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    PrayerQuestionRow(
+                        question: "What if I miss Fajr?",
+                        answer: "Make it up as soon as you wake up with the intention of qada (makeup prayer). Seek forgiveness and try setting multiple alarms.",
+                        color: color
+                    )
+                    
+                    PrayerQuestionRow(
+                        question: "Can I combine prayers while traveling?",
+                        answer: "Yes, you may shorten and combine Dhuhr with Asr, and Maghrib with Isha while traveling, according to most scholars.",
+                        color: color
+                    )
+                    
+                    PrayerQuestionRow(
+                        question: "What if I forget a prayer?",
+                        answer: "Pray it as soon as you remember. The Prophet ﷺ said: 'Whoever forgets a prayer, let him pray it when he remembers it.'",
+                        color: color
+                    )
+                }
+            }
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+    }
+}
+
+struct PrayerQuestionRow: View {
+    let question: String
+    let answer: String
+    let color: Color
+    
+    @State private var isExpanded = false
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Button(action: { withAnimation { isExpanded.toggle() }}) {
+                HStack {
+                    Text("Q: \(question)")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.primary)
+                        .multilineTextAlignment(.leading)
+                    
+                    Spacer()
+                    
+                    Image(systemName: isExpanded ? "minus.circle" : "plus.circle")
+                        .foregroundColor(color)
+                }
+            }
+            .buttonStyle(PlainButtonStyle())
+            
+            if isExpanded {
+                Text(answer)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding()
+                    .background(color.opacity(0.1))
+                    .cornerRadius(8)
+            }
         }
     }
 }

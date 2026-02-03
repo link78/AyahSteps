@@ -556,4 +556,34 @@ class AppState: ObservableObject {
     func isContentAppropriate(minAge: Int) -> Bool {
         return userAge >= minAge
     }
+    
+    // MARK: - Journal Entries
+    
+    @Published var journalEntries: [JournalEntryData] = []
+    
+    func saveJournalEntry(_ entry: JournalEntryData) {
+        journalEntries.append(entry)
+        
+        // Save to UserDefaults
+        if let data = try? JSONEncoder().encode(journalEntries) {
+            UserDefaults.standard.set(data, forKey: "journalEntries")
+        }
+    }
+    
+    func loadJournalEntries() {
+        if let data = UserDefaults.standard.data(forKey: "journalEntries"),
+           let entries = try? JSONDecoder().decode([JournalEntryData].self, from: data) {
+            self.journalEntries = entries
+        }
+    }
+}
+
+// MARK: - Journal Entry Data Model
+
+struct JournalEntryData: Identifiable, Codable {
+    let id: String
+    let pillarId: String
+    let promptId: String?
+    let content: String
+    let date: Date
 }
