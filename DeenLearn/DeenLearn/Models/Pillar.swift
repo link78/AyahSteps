@@ -31,11 +31,6 @@ struct Pillar: Identifiable {
     let practicalApplication: String
     let scenarios: [Scenario]
     let fiqhDifferences: [FiqhDifference]
-    
-    // Progress tracking
-    var isUnlocked: Bool = true
-    var starsEarned: Int = 0
-    var completionPercentage: Double = 0.0
 }
 
 // MARK: - Story Episode (Kids)
@@ -47,7 +42,6 @@ struct StoryEpisode: Identifiable {
     let content: String
     let emoji: String
     let duration: Int // in minutes
-    var isCompleted: Bool = false
 }
 
 // MARK: - Mini Game (Kids)
@@ -58,8 +52,6 @@ struct MiniGame: Identifiable {
     let type: MiniGameType
     let description: String
     let icon: String
-    var isCompleted: Bool = false
-    var highScore: Int = 0
 }
 
 enum MiniGameType {

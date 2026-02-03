@@ -807,7 +807,7 @@ struct AdultsPillarDetailView: View {
                 HStack {
                     Image(systemName: "book.closed.fill")
                         .foregroundColor(.purple)
-                    Text("Qur'an Evidence")
+                    Text("Quran Evidence")
                         .font(.headline)
                 }
                 
