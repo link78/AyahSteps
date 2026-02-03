@@ -97,14 +97,15 @@ struct TajweedRule: Identifiable, Codable {
 struct MemorizationProgress: Identifiable, Codable {
     let id: String
     let surahId: Int
+    let totalAyahs: Int
     var ayahsMemorized: Set<Int>
     var lastPracticed: Date
     var strength: Double // 0-1, based on recall accuracy
     var totalReviews: Int
     
     var percentComplete: Double {
-        // Needs total ayah count to calculate
-        0.0
+        guard totalAyahs > 0 else { return 0.0 }
+        return Double(ayahsMemorized.count) / Double(totalAyahs)
     }
 }
 

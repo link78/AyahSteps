@@ -394,8 +394,7 @@ struct AyahReadingView: View {
                     Button(action: { onWordTap(word) }) {
                         Text(word.arabic)
                             .font(.title2)
-                            .foregroundColor(showTajweed && !word.tajweedRules.isEmpty ?
-                                Color(hex: word.tajweedRules.first!.color) : .primary)
+                            .foregroundColor(tajweedColor(for: word))
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
@@ -416,6 +415,13 @@ struct AyahReadingView: View {
         .padding()
         .background(Color(.systemBackground))
         .cornerRadius(16)
+    }
+    
+    private func tajweedColor(for word: QuranWord) -> Color {
+        guard showTajweed, let firstRule = word.tajweedRules.first else {
+            return .primary
+        }
+        return Color(hex: firstRule.color)
     }
 }
 
