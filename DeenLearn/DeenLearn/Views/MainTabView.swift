@@ -35,15 +35,15 @@ struct MainTabView: View {
                 }
                 .tag(2)
             
-            ModulesView()
-                .tabItem {
-                    Label("Learn", systemImage: "book.fill")
-                }
-                .tag(3)
-            
             QuranView()
                 .tabItem {
                     Label("Quran", systemImage: "text.book.closed.fill")
+                }
+                .tag(3)
+            
+            ArabicView()
+                .tabItem {
+                    Label("Arabic", systemImage: "textformat.abc")
                 }
                 .tag(4)
             
