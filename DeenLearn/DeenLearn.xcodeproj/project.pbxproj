@@ -157,7 +157,7 @@
 				Base,
 				ar,
 			);
-			mainGroup = 11111111111111111111110F /* = */;
+			mainGroup = 11111111111111111111110F;
 			productRefGroup = 111111111111111111111119 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
