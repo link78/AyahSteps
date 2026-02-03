@@ -47,17 +47,11 @@ struct MainTabView: View {
                 }
                 .tag(4)
             
-            ProgressView()
+            ProfileView()
                 .tabItem {
-                    Label("Progress", systemImage: isKidsMode ? "star.fill" : "chart.bar.fill")
+                    Label(isKidsMode ? "Me" : "Profile", systemImage: "person.crop.circle.fill")
                 }
                 .tag(5)
-            
-            SettingsView()
-                .tabItem {
-                    Label("Settings", systemImage: "gearshape.fill")
-                }
-                .tag(6)
         }
         .tint(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
     }
