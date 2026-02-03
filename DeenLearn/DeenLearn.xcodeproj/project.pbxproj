@@ -52,7 +52,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		11111111111111111111110F /* = */ = {
+		11111111111111111111110F = {
 			isa = PBXGroup;
 			children = (
 				11111111111111111111111A /* DeenLearn */,
