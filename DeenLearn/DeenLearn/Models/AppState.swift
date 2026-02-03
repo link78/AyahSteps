@@ -19,6 +19,7 @@ struct LearningProgress: Codable {
     var quranMemorization: Double = 0.0     // 0.0 to 1.0
     var arabicLettersLearned: Int = 0       // out of 28
     var pillarsCompleted: Int = 0           // out of 5
+    var starsEarned: Int = 0                // Total stars from activities
     var lastLessonId: String?
     var lastLessonTitle: String?
     var currentQuranSurah: Int = 1

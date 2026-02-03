@@ -3,6 +3,7 @@
 //  DeenLearn
 //
 //  Phase 1.2 - Pillars Tab: Foundations of Islam
+//  Phase 2 - Enhanced Kids Mode with Story-based Worlds
 //  Teaching the 5 pillars through stories (kids) and structured lessons (adults)
 //
 
@@ -11,7 +12,9 @@ import SwiftUI
 struct PillarsView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedPillar: Pillar?
+    @State private var selectedWorld: PillarWorld?
     @State private var showPillarDetail = false
+    @State private var showWorldExplorer = false
     
     var isKidsMode: Bool {
         appState.userMode == .kids
@@ -30,8 +33,14 @@ struct PillarsView: View {
             .navigationTitle(isKidsMode ? "🏰 Pillar Worlds" : "Five Pillars")
             .sheet(item: $selectedPillar) { pillar in
                 if isKidsMode {
-                    KidsPillarDetailView(pillar: pillar)
-                        .environmentObject(appState)
+                    // Phase 2: Use enhanced world explorer for kids
+                    if let world = PillarWorld.world(for: pillar) {
+                        PillarsKidsWorldExplorerView(world: world)
+                            .environmentObject(appState)
+                    } else {
+                        KidsPillarDetailView(pillar: pillar)
+                            .environmentObject(appState)
+                    }
                 } else {
                     AdultsPillarDetailView(pillar: pillar)
                         .environmentObject(appState)
@@ -66,21 +75,21 @@ struct PillarsView: View {
                 
                 KidsProgressBadge(
                     icon: "sparkles",
-                    value: "\(totalStarsEarned)",
+                    value: "\(appState.learningProgress.starsEarned)",
                     label: "Stars",
                     color: .orange
                 )
             }
             .padding(.horizontal)
             
-            // Pillar Worlds
-            ForEach(Pillar.allPillars) { pillar in
-                KidsPillarWorldCard(
-                    pillar: pillar,
-                    isCompleted: isPillarCompleted(pillar),
-                    starsEarned: starsForPillar(pillar)
+            // Pillar Worlds - Enhanced with themed world names
+            ForEach(PillarWorld.allWorlds) { world in
+                KidsPillarWorldCardEnhanced(
+                    world: world,
+                    isCompleted: isPillarCompleted(world.pillar),
+                    starsEarned: starsForPillar(world.pillar)
                 ) {
-                    selectedPillar = pillar
+                    selectedPillar = world.pillar
                 }
             }
             
@@ -196,6 +205,140 @@ struct KidsProgressBadge: View {
         .background(Color(.systemBackground))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
+    }
+}
+
+// MARK: - Enhanced Kids Pillar World Card (Phase 2)
+
+struct KidsPillarWorldCardEnhanced: View {
+    let world: PillarWorld
+    let isCompleted: Bool
+    let starsEarned: Int
+    let action: () -> Void
+    
+    @State private var isAnimating = false
+    @State private var floatOffset: CGFloat = 0
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 0) {
+                // World themed header
+                HStack(spacing: 16) {
+                    // World emoji with floating animation
+                    ZStack {
+                        // Background glow
+                        Circle()
+                            .fill(
+                                RadialGradient(
+                                    colors: [world.pillar.color.opacity(0.4), world.pillar.color.opacity(0.1)],
+                                    center: .center,
+                                    startRadius: 20,
+                                    endRadius: 50
+                                )
+                            )
+                            .frame(width: 90, height: 90)
+                        
+                        // Main emoji
+                        Text(world.theme.primaryEmoji)
+                            .font(.system(size: 45))
+                            .offset(y: floatOffset)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 6) {
+                        // World label
+                        HStack(spacing: 6) {
+                            Text("World \(world.pillar.number)")
+                                .font(.caption.bold())
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(world.pillar.color)
+                                .cornerRadius(8)
+                            
+                            if isCompleted {
+                                Image(systemName: "checkmark.seal.fill")
+                                    .foregroundColor(.green)
+                            }
+                        }
+                        
+                        // World name
+                        Text(world.worldName)
+                            .font(.title3.bold())
+                            .foregroundColor(.primary)
+                        
+                        // Character guide
+                        HStack(spacing: 4) {
+                            Text(world.characterEmoji)
+                                .font(.caption)
+                            Text("Guide: \(world.characterName)")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        // Stars display
+                        HStack(spacing: 4) {
+                            ForEach(0..<6, id: \.self) { index in
+                                Image(systemName: index < starsEarned ? "star.fill" : "star")
+                                    .foregroundColor(.yellow)
+                                    .font(.caption2)
+                            }
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    // Play button
+                    VStack {
+                        Image(systemName: "play.circle.fill")
+                            .font(.system(size: 36))
+                            .foregroundColor(world.pillar.color)
+                        
+                        Text("Explore")
+                            .font(.caption2)
+                            .foregroundColor(world.pillar.color)
+                    }
+                }
+                .padding(16)
+                
+                // Landmarks preview
+                HStack(spacing: 12) {
+                    ForEach(world.landmarks.prefix(4)) { landmark in
+                        VStack(spacing: 4) {
+                            Text(landmark.emoji)
+                                .font(.title3)
+                            Text(landmark.name.components(separatedBy: " ").first ?? "")
+                                .font(.system(size: 8))
+                                .foregroundColor(.secondary)
+                                .lineLimit(1)
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 12)
+                .background(world.pillar.color.opacity(0.1))
+            }
+            .background(
+                LinearGradient(
+                    colors: [Color(.systemBackground), world.pillar.color.opacity(0.15)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .cornerRadius(20)
+            .shadow(color: world.pillar.color.opacity(0.3), radius: 10, y: 5)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(world.pillar.color.opacity(0.3), lineWidth: 1)
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
+        .padding(.horizontal)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                floatOffset = -8
+            }
+        }
     }
 }
 
