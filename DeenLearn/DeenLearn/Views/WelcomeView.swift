@@ -10,6 +10,8 @@ import SwiftUI
 struct WelcomeView: View {
     @EnvironmentObject var appState: AppState
     @State private var showingModeSelection = false
+    @State private var showAgeSelection = false
+    @State private var selectedMode: UserMode?
     
     var body: some View {
         ZStack {
@@ -69,9 +71,8 @@ struct WelcomeView: View {
                     
                     // Kids Mode Button
                     Button(action: {
-                        withAnimation(.spring(response: 0.3)) {
-                            appState.userMode = .kids
-                        }
+                        selectedMode = .kids
+                        showAgeSelection = true
                     }) {
                         HStack(spacing: 16) {
                             Image(systemName: "face.smiling.fill")
@@ -100,9 +101,8 @@ struct WelcomeView: View {
                     
                     // Adults Mode Button
                     Button(action: {
-                        withAnimation(.spring(response: 0.3)) {
-                            appState.userMode = .adults
-                        }
+                        selectedMode = .adults
+                        showAgeSelection = true
                     }) {
                         HStack(spacing: 16) {
                             Image(systemName: "person.fill")
@@ -148,6 +148,197 @@ struct WelcomeView: View {
                 }
                 .padding(.bottom, 40)
             }
+        }
+        .sheet(isPresented: $showAgeSelection) {
+            AgeSelectionSheet(selectedMode: selectedMode ?? .kids) {
+                // Completion handler - set the mode after age is selected
+                withAnimation(.spring(response: 0.3)) {
+                    appState.userMode = selectedMode
+                }
+            }
+            .environmentObject(appState)
+        }
+    }
+}
+
+// MARK: - Age Selection Sheet
+
+struct AgeSelectionSheet: View {
+    @EnvironmentObject var appState: AppState
+    @Environment(\.dismiss) var dismiss
+    let selectedMode: UserMode
+    let onComplete: () -> Void
+    
+    @State private var selectedAge: Int = 10
+    
+    var isKidsMode: Bool {
+        selectedMode == .kids
+    }
+    
+    var ageRange: [Int] {
+        isKidsMode ? Array(4...17) : Array(13...99)
+    }
+    
+    var ageGroupDescription: String {
+        switch selectedAge {
+        case 4...6:
+            return "Early Childhood - Simple, fun learning with lots of visuals"
+        case 7...9:
+            return "Children - Interactive lessons with rewards and stories"
+        case 10...12:
+            return "Tweens - More detailed content with Islamic vocabulary"
+        case 13...17:
+            return "Teens - Scholarly content with fiqh basics"
+        default:
+            return "Adults - Full scholarly content and detailed lessons"
+        }
+    }
+    
+    var ageGroupEmoji: String {
+        switch selectedAge {
+        case 4...6: return "🌈"
+        case 7...9: return "⭐"
+        case 10...12: return "🌟"
+        case 13...17: return "📚"
+        default: return "🎓"
+        }
+    }
+    
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 24) {
+                // Header
+                VStack(spacing: 12) {
+                    Text(ageGroupEmoji)
+                        .font(.system(size: 60))
+                    
+                    Text(isKidsMode ? "How old are you?" : "Select your age")
+                        .font(.title.bold())
+                    
+                    Text("We'll personalize your learning experience")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.top, 20)
+                
+                // Age Picker
+                Picker("Age", selection: $selectedAge) {
+                    ForEach(ageRange, id: \.self) { age in
+                        Text("\(age) years old")
+                            .tag(age)
+                    }
+                }
+                .pickerStyle(.wheel)
+                .frame(height: 150)
+                
+                // Age group description
+                VStack(spacing: 8) {
+                    Text("Learning Level")
+                        .font(.headline)
+                    
+                    Text(ageGroupDescription)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(16)
+                .padding(.horizontal)
+                
+                // Content preview based on age
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("What you'll get:")
+                        .font(.headline)
+                    
+                    ForEach(contentFeatures, id: \.self) { feature in
+                        HStack {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                            Text(feature)
+                                .font(.subheadline)
+                        }
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(.systemGray6))
+                .cornerRadius(16)
+                .padding(.horizontal)
+                
+                Spacer()
+                
+                // Continue Button
+                Button(action: {
+                    appState.userAge = selectedAge
+                    dismiss()
+                    onComplete()
+                }) {
+                    Text("Let's Start Learning!")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
+                        .cornerRadius(16)
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Back") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+    
+    var contentFeatures: [String] {
+        switch selectedAge {
+        case 4...6:
+            return [
+                "Big, colorful pictures and animations",
+                "Simple 1-2 word instructions",
+                "5-minute fun sessions",
+                "Lots of stars and rewards!",
+                "Animated characters to guide you"
+            ]
+        case 7...9:
+            return [
+                "Fun stories about Islamic heroes",
+                "Interactive games and quizzes",
+                "10-minute engaging lessons",
+                "Badge collection and streaks",
+                "Easy Arabic letter tracing"
+            ]
+        case 10...12:
+            return [
+                "Detailed Islamic knowledge",
+                "Arabic vocabulary building",
+                "15-minute focused sessions",
+                "Progress tracking",
+                "Mini-games with learning"
+            ]
+        case 13...17:
+            return [
+                "Scholarly Islamic content",
+                "Basic fiqh introduction",
+                "20-minute comprehensive lessons",
+                "Quran memorization tools",
+                "Critical thinking exercises"
+            ]
+        default:
+            return [
+                "Full scholarly content",
+                "Detailed fiqh discussions",
+                "Flexible session lengths",
+                "Advanced tajweed rules",
+                "In-depth Quran study"
+            ]
         }
     }
 }

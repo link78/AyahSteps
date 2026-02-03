@@ -12,6 +12,217 @@ enum UserMode: String, Codable {
     case adults
 }
 
+// MARK: - Age Group System
+
+enum AgeGroup: String, Codable, CaseIterable {
+    case earlyChildhood = "Early Childhood"  // 4-6 years
+    case children = "Children"               // 7-9 years
+    case tweens = "Tweens"                   // 10-12 years
+    case teens = "Teens"                     // 13-17 years
+    case adults = "Adults"                   // 18+ years
+    
+    var ageRange: String {
+        switch self {
+        case .earlyChildhood: return "4-6"
+        case .children: return "7-9"
+        case .tweens: return "10-12"
+        case .teens: return "13-17"
+        case .adults: return "18+"
+        }
+    }
+    
+    var minAge: Int {
+        switch self {
+        case .earlyChildhood: return 4
+        case .children: return 7
+        case .tweens: return 10
+        case .teens: return 13
+        case .adults: return 18
+        }
+    }
+    
+    var maxAge: Int {
+        switch self {
+        case .earlyChildhood: return 6
+        case .children: return 9
+        case .tweens: return 12
+        case .teens: return 17
+        case .adults: return 99
+        }
+    }
+    
+    // Reading and comprehension level
+    var readingLevel: String {
+        switch self {
+        case .earlyChildhood: return "Simple"
+        case .children: return "Easy"
+        case .tweens: return "Moderate"
+        case .teens: return "Advanced"
+        case .adults: return "Scholarly"
+        }
+    }
+    
+    // Vocabulary complexity (1-5 scale)
+    var vocabularyLevel: Int {
+        switch self {
+        case .earlyChildhood: return 1
+        case .children: return 2
+        case .tweens: return 3
+        case .teens: return 4
+        case .adults: return 5
+        }
+    }
+    
+    // Recommended session length in minutes
+    var recommendedSessionLength: Int {
+        switch self {
+        case .earlyChildhood: return 5
+        case .children: return 10
+        case .tweens: return 15
+        case .teens: return 20
+        case .adults: return 30
+        }
+    }
+    
+    // Memorization chunk size (words per session)
+    var memorizationChunkSize: Int {
+        switch self {
+        case .earlyChildhood: return 3
+        case .children: return 5
+        case .tweens: return 7
+        case .teens: return 10
+        case .adults: return 15
+        }
+    }
+    
+    // Font size multiplier for readability
+    var fontSizeMultiplier: CGFloat {
+        switch self {
+        case .earlyChildhood: return 1.4
+        case .children: return 1.2
+        case .tweens: return 1.1
+        case .teens: return 1.0
+        case .adults: return 1.0
+        }
+    }
+    
+    // Whether to show scholarly/fiqh content
+    var showScholarlyContent: Bool {
+        switch self {
+        case .earlyChildhood, .children: return false
+        case .tweens: return false
+        case .teens, .adults: return true
+        }
+    }
+    
+    // Greeting based on age
+    var greeting: String {
+        switch self {
+        case .earlyChildhood: return "Little Explorer"
+        case .children: return "Young Learner"
+        case .tweens: return "Star Student"
+        case .teens: return "Knowledge Seeker"
+        case .adults: return "Dear Learner"
+        }
+    }
+    
+    // Daily goal description complexity
+    func dailyGoalText(for activity: String) -> String {
+        switch self {
+        case .earlyChildhood:
+            switch activity {
+            case "quran": return "Listen to Quran! 📖"
+            case "salah": return "Learn to pray! 🙏"
+            case "arabic": return "Fun letters! ✨"
+            default: return "Let's learn!"
+            }
+        case .children:
+            switch activity {
+            case "quran": return "Read some Quran today"
+            case "salah": return "Practice your salah"
+            case "arabic": return "Learn a new letter"
+            default: return "Keep learning!"
+            }
+        case .tweens:
+            switch activity {
+            case "quran": return "Continue your Quran lesson"
+            case "salah": return "Practice salah steps"
+            case "arabic": return "Learn Arabic vocabulary"
+            default: return "Continue learning"
+            }
+        case .teens, .adults:
+            switch activity {
+            case "quran": return "Continue Quran memorization"
+            case "salah": return "Review salah with tajweed"
+            case "arabic": return "Study Arabic grammar"
+            default: return "Resume your studies"
+            }
+        }
+    }
+    
+    // Age-appropriate encouragement
+    var encouragementMessage: String {
+        switch self {
+        case .earlyChildhood: return "You're doing amazing! ⭐🎉"
+        case .children: return "Great job! Keep going! 🌟"
+        case .tweens: return "Excellent progress! You're learning so much!"
+        case .teens: return "MashAllah! Your dedication is inspiring."
+        case .adults: return "May Allah bless your efforts in seeking knowledge."
+        }
+    }
+    
+    // Content guidelines for this age group
+    var contentGuidelines: [String] {
+        switch self {
+        case .earlyChildhood:
+            return [
+                "Use simple 1-2 syllable words",
+                "Lots of pictures and animations",
+                "Sessions under 5 minutes",
+                "Repetition is key",
+                "Heavy use of rewards and praise",
+                "No complex concepts"
+            ]
+        case .children:
+            return [
+                "Simple sentences",
+                "Interactive elements",
+                "Sessions 10-15 minutes",
+                "Basic Islamic concepts",
+                "Star and badge rewards",
+                "Stories and characters"
+            ]
+        case .tweens:
+            return [
+                "More detailed explanations",
+                "Some Arabic terminology",
+                "Sessions 15-20 minutes",
+                "Basic reasoning and wisdom",
+                "Achievement tracking",
+                "Peer comparisons okay"
+            ]
+        case .teens:
+            return [
+                "Scholarly references acceptable",
+                "Critical thinking encouraged",
+                "Sessions 20-30 minutes",
+                "Fiqh basics introduced",
+                "Independent study support",
+                "Real-world applications"
+            ]
+        case .adults:
+            return [
+                "Full scholarly content",
+                "Detailed fiqh discussions",
+                "Flexible session lengths",
+                "Multiple scholarly opinions",
+                "Self-directed learning",
+                "Advanced tajweed"
+            ]
+        }
+    }
+}
+
 // MARK: - Progress Tracking Models
 
 struct LearningProgress: Codable {
@@ -49,6 +260,23 @@ class AppState: ObservableObject {
             if let mode = userMode {
                 UserDefaults.standard.set(mode.rawValue, forKey: "userMode")
             }
+        }
+    }
+    
+    // Age-based content filtering
+    @Published var userAge: Int = 10 {
+        didSet {
+            UserDefaults.standard.set(userAge, forKey: "userAge")
+        }
+    }
+    
+    var ageGroup: AgeGroup {
+        switch userAge {
+        case 0...6: return .earlyChildhood
+        case 7...9: return .children
+        case 10...12: return .tweens
+        case 13...17: return .teens
+        default: return .adults
         }
     }
     
@@ -92,6 +320,10 @@ class AppState: ObservableObject {
            let mode = UserMode(rawValue: savedMode) {
             self.userMode = mode
         }
+        
+        // Load user age (default to 10 if not set)
+        let savedAge = UserDefaults.standard.integer(forKey: "userAge")
+        self.userAge = savedAge > 0 ? savedAge : 10
         
         // Load completed lessons
         if let savedLessons = UserDefaults.standard.array(forKey: "completedLessons") as? [String] {
@@ -269,5 +501,59 @@ class AppState: ObservableObject {
     func switchMode() {
         userMode = nil
         UserDefaults.standard.removeObject(forKey: "userMode")
+    }
+    
+    // MARK: - Age-Appropriate Content Helpers
+    
+    /// Returns age-appropriate greeting for the current user
+    var ageAppropriateGreeting: String {
+        ageGroup.greeting
+    }
+    
+    /// Returns the recommended font size for text based on age
+    func fontSize(base: CGFloat) -> CGFloat {
+        base * ageGroup.fontSizeMultiplier
+    }
+    
+    /// Returns age-appropriate text for daily goals
+    func dailyGoalText(for activity: String) -> String {
+        ageGroup.dailyGoalText(for: activity)
+    }
+    
+    /// Whether to show scholarly/detailed content
+    var shouldShowScholarlyContent: Bool {
+        ageGroup.showScholarlyContent
+    }
+    
+    /// Returns the appropriate encouragement message
+    var encouragementMessage: String {
+        ageGroup.encouragementMessage
+    }
+    
+    /// Recommended session length for this user's age
+    var recommendedSessionMinutes: Int {
+        ageGroup.recommendedSessionLength
+    }
+    
+    /// Number of words to memorize per session based on age
+    var memorizationChunkSize: Int {
+        ageGroup.memorizationChunkSize
+    }
+    
+    /// Simplifies text based on age group - returns appropriate version
+    func ageAppropriateText(simple: String, standard: String, detailed: String) -> String {
+        switch ageGroup {
+        case .earlyChildhood, .children:
+            return simple
+        case .tweens:
+            return standard
+        case .teens, .adults:
+            return detailed
+        }
+    }
+    
+    /// Returns content appropriate for the user's age
+    func isContentAppropriate(minAge: Int) -> Bool {
+        return userAge >= minAge
     }
 }

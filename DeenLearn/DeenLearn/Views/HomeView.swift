@@ -23,15 +23,49 @@ struct HomeView: View {
     
     var greeting: String {
         let hour = Calendar.current.component(.hour, from: Date())
+        let ageGreeting = appState.ageAppropriateGreeting
+        
         switch hour {
         case 5..<12:
-            return isKidsMode ? "Good Morning! ☀️" : "Good Morning"
+            if isKidsMode {
+                return appState.ageGroup == .earlyChildhood 
+                    ? "Good Morning, \(ageGreeting)! ☀️🌈" 
+                    : "Good Morning, \(ageGreeting)! ☀️"
+            } else {
+                return "Good Morning, \(ageGreeting)"
+            }
         case 12..<17:
-            return isKidsMode ? "Good Afternoon! 🌤️" : "Good Afternoon"
+            if isKidsMode {
+                return appState.ageGroup == .earlyChildhood 
+                    ? "Good Afternoon, \(ageGreeting)! 🌤️🎈" 
+                    : "Good Afternoon, \(ageGreeting)! 🌤️"
+            } else {
+                return "Good Afternoon, \(ageGreeting)"
+            }
         case 17..<21:
-            return isKidsMode ? "Good Evening! 🌙" : "Good Evening"
+            if isKidsMode {
+                return appState.ageGroup == .earlyChildhood 
+                    ? "Good Evening, \(ageGreeting)! 🌙⭐" 
+                    : "Good Evening, \(ageGreeting)! 🌙"
+            } else {
+                return "Good Evening, \(ageGreeting)"
+            }
         default:
-            return "Assalamu Alaikum!"
+            return "Assalamu Alaikum, \(ageGreeting)!"
+        }
+    }
+    
+    // Age-appropriate message for kids adventure section
+    var ageAppropriateAdventureText: String {
+        switch appState.ageGroup {
+        case .earlyChildhood:
+            return "Let's play and learn! 🎈"
+        case .children:
+            return "Ready for an adventure?"
+        case .tweens:
+            return "What will you discover today?"
+        default:
+            return "Continue your learning journey"
         }
     }
     
@@ -163,7 +197,8 @@ struct HomeView: View {
                             .font(.headline)
                             .foregroundColor(.white.opacity(0.9))
                         
-                        Text("Ready for an adventure?")
+                        // Age-appropriate message
+                        Text(ageAppropriateAdventureText)
                             .font(.subheadline)
                             .foregroundColor(.white.opacity(0.8))
                     }
@@ -241,15 +276,15 @@ struct HomeView: View {
     
     var dailyGoalCardsKids: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("🎯 Today's Goals")
+            Text(appState.ageGroup == .earlyChildhood ? "🎯 Let's Do This!" : "🎯 Today's Goals")
                 .font(.headline)
                 .padding(.horizontal)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     DailyGoalCard(
-                        title: "Continue Qur'an",
-                        subtitle: "Surah Al-Fatiha",
+                        title: appState.dailyGoalText(for: "quran"),
+                        subtitle: appState.ageGroup == .earlyChildhood ? "Fun story time!" : "Surah Al-Fatiha",
                         icon: "book.fill",
                         color: .purple,
                         isCompleted: appState.dailyGoal.quranSessionCompleted,
@@ -257,8 +292,8 @@ struct HomeView: View {
                     )
                     
                     DailyGoalCard(
-                        title: "Today's Salah Step",
-                        subtitle: "Step \(appState.learningProgress.currentSalahStep)",
+                        title: appState.dailyGoalText(for: "salah"),
+                        subtitle: appState.ageGroup == .earlyChildhood ? "Watch & copy! 🙏" : "Step \(appState.learningProgress.currentSalahStep)",
                         icon: "person.fill",
                         color: .green,
                         isCompleted: appState.dailyGoal.salahPractice,
@@ -266,8 +301,8 @@ struct HomeView: View {
                     )
                     
                     DailyGoalCard(
-                        title: "Arabic Letter",
-                        subtitle: "Letter: \(appState.currentArabicLetter)",
+                        title: appState.dailyGoalText(for: "arabic"),
+                        subtitle: appState.ageGroup == .earlyChildhood ? "Letter: \(appState.currentArabicLetter) ✨" : "Letter: \(appState.currentArabicLetter)",
                         icon: "character.textbox",
                         color: .blue,
                         isCompleted: appState.dailyGoal.arabicPractice,
@@ -289,8 +324,8 @@ struct HomeView: View {
             
             VStack(spacing: 12) {
                 DailyGoalCard(
-                    title: "Continue Qur'an Lesson",
-                    subtitle: "5-minute session",
+                    title: appState.dailyGoalText(for: "quran"),
+                    subtitle: "\(appState.recommendedSessionMinutes)-minute session",
                     icon: "book.fill",
                     color: .purple,
                     isCompleted: appState.dailyGoal.quranSessionCompleted,
@@ -298,8 +333,10 @@ struct HomeView: View {
                 )
                 
                 DailyGoalCard(
-                    title: "Today's Salah Step",
-                    subtitle: "Practice step \(appState.learningProgress.currentSalahStep)",
+                    title: appState.dailyGoalText(for: "salah"),
+                    subtitle: appState.shouldShowScholarlyContent 
+                        ? "Practice step \(appState.learningProgress.currentSalahStep) with tajweed" 
+                        : "Practice step \(appState.learningProgress.currentSalahStep)",
                     icon: "person.fill",
                     color: Color(hex: "2d8b6e"),
                     isCompleted: appState.dailyGoal.salahPractice,
@@ -307,8 +344,8 @@ struct HomeView: View {
                 )
                 
                 DailyGoalCard(
-                    title: "Arabic Letter of the Day",
-                    subtitle: "\(appState.currentArabicLetter) - Learn pronunciation",
+                    title: appState.dailyGoalText(for: "arabic"),
+                    subtitle: "\(appState.currentArabicLetter) - \(appState.shouldShowScholarlyContent ? "Grammar & pronunciation" : "Learn pronunciation")",
                     icon: "character.textbox",
                     color: .blue,
                     isCompleted: appState.dailyGoal.arabicPractice,
