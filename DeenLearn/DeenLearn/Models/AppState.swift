@@ -273,6 +273,11 @@ class AppState: ObservableObject {
         isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "6B5B95")
     }
     
+    // Toggle between kids and adult mode
+    func toggleMode() {
+        userMode = isKidsMode ? .adults : .kids
+    }
+    
     // Age-based content filtering
     @Published var userAge: Int = 10 {
         didSet {

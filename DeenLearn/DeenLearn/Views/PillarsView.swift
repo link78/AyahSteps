@@ -1608,11 +1608,12 @@ struct ZakatCalculatorCard: View {
     @State private var businessValue: String = ""
     
     var totalAssets: Double {
-        (Double(goldValue) ?? 0) +
-        (Double(silverValue) ?? 0) +
-        (Double(cashValue) ?? 0) +
-        (Double(investmentsValue) ?? 0) +
-        (Double(businessValue) ?? 0)
+        let gold = Double(goldValue) ?? 0
+        let silver = Double(silverValue) ?? 0
+        let cash = Double(cashValue) ?? 0
+        let investments = Double(investmentsValue) ?? 0
+        let business = Double(businessValue) ?? 0
+        return gold + silver + cash + investments + business
     }
     
     var zakatAmount: Double {
