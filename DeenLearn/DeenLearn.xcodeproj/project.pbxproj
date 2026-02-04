@@ -33,6 +33,7 @@
 		AAAAAAAAAAAAAAAAAAAAAA24 /* PrayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111149 /* PrayerView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA25 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114A /* ProfileView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA26 /* SalahTrainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114B /* SalahTrainerView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA27 /* TextToSpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114C /* TextToSpeechService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		111111111111111111111149 /* PrayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerView.swift; sourceTree = "<group>"; };
 		11111111111111111111114A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		11111111111111111111114B /* SalahTrainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahTrainerView.swift; sourceTree = "<group>"; };
+		11111111111111111111114C /* TextToSpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToSpeechService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,10 +102,19 @@
 				111111111111111111111140 /* Extensions.swift */,
 				111111111111111111111136 /* Models */,
 				111111111111111111111137 /* Views */,
+				11111111111111111111115A /* Services */,
 				11111111111111111111111F /* Assets.xcassets */,
 				111111111111111111111138 /* Preview Content */,
 			);
 			path = DeenLearn;
+			sourceTree = "<group>";
+		};
+		11111111111111111111115A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				11111111111111111111114C /* TextToSpeechService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		111111111111111111111136 /* Models */ = {
@@ -244,6 +255,7 @@
 				AAAAAAAAAAAAAAAAAAAAAA24 /* PrayerView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA25 /* ProfileView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA26 /* SalahTrainerView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA27 /* TextToSpeechService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
