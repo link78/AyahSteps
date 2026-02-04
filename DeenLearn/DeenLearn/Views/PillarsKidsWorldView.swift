@@ -903,7 +903,7 @@ struct StoryActivityView: View {
     func getShahadaLandmarkContent() -> String {
         switch landmark.id {
         case "shahada-lighthouse":
-            return "Welcome to the Lighthouse of Truth! 🗼\n\nThe Shahada is the most important words in Islam:\n\n'La ilaha illallah, Muhammadur Rasulullah'\n\nThis means:\n• There is no god except Allah\n• Muhammad ﷺ is the Messenger of Allah\n\nThese words light our way like a lighthouse in the dark! ✨"
+            return "Welcome to the Lighthouse of Truth! 🗼\n\nThe Shahada contains the most important words in Islam:\n\n'La ilaha illallah, Muhammadur Rasulullah'\n\nThis means:\n• There is no god except Allah\n• Muhammad ﷺ is the Messenger of Allah\n\nThese words light our way like a lighthouse in the dark! ✨"
         case "shahada-beach":
             return "Welcome to Belief Beach! 🏖️\n\nThe Shahada has two parts, like two treasures on the beach:\n\n1. La ilaha illallah - We believe in only ONE God, Allah!\n\n2. Muhammadur Rasulullah - We follow Prophet Muhammad ﷺ\n\nWhen we say these words with our heart, we become Muslim! 🌟"
         case "shahada-cave":
