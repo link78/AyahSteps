@@ -732,7 +732,7 @@ struct WordByWordView: View {
                 }
                 
                 // Progress
-                ProgressView(value: Double(currentWordIndex + 1), total: Double(allWords.count))
+                ProgressView(value: Double(currentWordIndex + 1) / Double(max(allWords.count, 1)))
                     .tint(Color(hex: "6B5B95"))
                     .padding(.horizontal)
             }
@@ -879,7 +879,7 @@ struct MemorizationModeView: View {
                 }
                 
                 // Progress
-                ProgressView(value: Double(currentAyahIndex + 1), total: Double(ayahs.count))
+                ProgressView(value: Double(currentAyahIndex + 1) / Double(max(ayahs.count, 1)))
                     .tint(Color(hex: "6B5B95"))
                     .padding(.horizontal)
             }
