@@ -734,7 +734,10 @@ struct StoryActivityView: View {
     
     var storyContentView: some View {
         VStack(spacing: 24) {
-            if currentPage < stories.count {
+            if stories.isEmpty {
+                // Fallback content for landmarks with no stories
+                landmarkStoryFallbackView
+            } else if currentPage < stories.count {
                 let story = stories[currentPage]
                 
                 // Story emoji
@@ -819,6 +822,159 @@ struct StoryActivityView: View {
             Spacer()
         }
         .padding()
+    }
+    
+    // Fallback content when no stories are available - shows landmark-specific content
+    var landmarkStoryFallbackView: some View {
+        VStack(spacing: 24) {
+            // Landmark emoji
+            Text(landmark.emoji)
+                .font(.system(size: 80))
+                .padding()
+            
+            // Title
+            Text(landmark.name)
+                .font(.title2.bold())
+                .foregroundColor(.white)
+            
+            // Character guide
+            HStack {
+                Text(world.characterEmoji)
+                    .font(.largeTitle)
+                Text("Guide: \(world.characterName)")
+                    .foregroundColor(.white.opacity(0.9))
+            }
+            
+            // Description content
+            ScrollView {
+                VStack(spacing: 16) {
+                    Text(landmark.description)
+                        .font(.title3)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                    
+                    // World-specific content
+                    Text(getLandmarkContent())
+                        .font(.body)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                }
+            }
+            .frame(maxHeight: 250)
+            .background(Color.white.opacity(0.1))
+            .cornerRadius(16)
+            .padding(.horizontal)
+            
+            // Complete button
+            Button(action: {
+                showingCompletion = true
+            }) {
+                HStack {
+                    Text("Complete")
+                    Image(systemName: "chevron.right")
+                }
+                .foregroundColor(.white)
+                .padding()
+                .background(Color.green)
+                .cornerRadius(12)
+            }
+        }
+    }
+    
+    // Get landmark-specific content based on the world and landmark
+    func getLandmarkContent() -> String {
+        switch world.pillar.id {
+        case "shahada":
+            return getShahadaLandmarkContent()
+        case "salah":
+            return getSalahLandmarkContent()
+        case "zakat":
+            return getZakatLandmarkContent()
+        case "sawm":
+            return getSawmLandmarkContent()
+        case "hajj":
+            return getHajjLandmarkContent()
+        default:
+            return getDefaultLandmarkContent()
+        }
+    }
+    
+    func getShahadaLandmarkContent() -> String {
+        switch landmark.id {
+        case "shahada-lighthouse":
+            return "Welcome to the Lighthouse of Truth! 🗼\n\nThe Shahada is the most important words in Islam:\n\n'La ilaha illallah, Muhammadur Rasulullah'\n\nThis means:\n• There is no god except Allah\n• Muhammad ﷺ is the Messenger of Allah\n\nThese words light our way like a lighthouse in the dark! ✨"
+        case "shahada-beach":
+            return "Welcome to Belief Beach! 🏖️\n\nThe Shahada has two parts, like two treasures on the beach:\n\n1. La ilaha illallah - We believe in only ONE God, Allah!\n\n2. Muhammadur Rasulullah - We follow Prophet Muhammad ﷺ\n\nWhen we say these words with our heart, we become Muslim! 🌟"
+        case "shahada-cave":
+            return "Enter the Cave of Wisdom! 🪨\n\nLong ago, Prophet Muhammad ﷺ received his first message from Allah in a cave called Hira!\n\nThe angel Jibreel came and said 'Read!' (Iqra!)\n\nFrom that cave, the light of Islam spread to the whole world!\n\nBelievers have always been strong in their faith, just like the Prophet ﷺ and his companions. 💫"
+        case "shahada-treasure":
+            return "You found the Treasure of Faith! 💎\n\nThe greatest treasure is not gold or jewels - it's our faith in Allah!\n\nWhen you say the Shahada with true belief:\n• You join millions of Muslims worldwide\n• Angels record your good deed\n• Your heart fills with peace\n\nYou are now a Shahada Champion! 🏆"
+        default:
+            return "Explore Shahada Island and discover the beauty of faith! The Shahada is the foundation of everything we believe."
+        }
+    }
+    
+    func getSalahLandmarkContent() -> String {
+        switch landmark.id {
+        case "salah-mosque":
+            return "The Grand Masjid is where Muslims come together to pray five times a day! 🕌\n\nThe five prayers are:\n• Fajr (Dawn) 🌅\n• Dhuhr (Noon) ☀️\n• Asr (Afternoon) 🌤️\n• Maghrib (Sunset) 🌅\n• Isha (Night) 🌙\n\nEach prayer is a special time to talk to Allah!"
+        case "salah-clock":
+            return "The Prayer Clock Tower helps us know when it's time to pray! ⏰\n\nMuslims pray at specific times:\n• Fajr: Before sunrise\n• Dhuhr: After midday\n• Asr: In the afternoon\n• Maghrib: Right after sunset\n• Isha: At night\n\nPrayer keeps us connected to Allah all day long!"
+        case "salah-garden":
+            return "Welcome to the Wudu Garden! 🌺 Before we pray, we clean ourselves with wudu.\n\nSteps of Wudu:\n1. Say Bismillah\n2. Wash hands 3 times\n3. Rinse mouth 3 times\n4. Clean nose 3 times\n5. Wash face 3 times\n6. Wash arms to elbows 3 times\n7. Wipe head once\n8. Wash feet 3 times\n\nNow we're ready to pray!"
+        case "salah-school":
+            return "At Prayer School, we learn the prayer positions! 🏫\n\n1. Qiyam: Standing tall\n2. Ruku: Bowing to Allah\n3. Sujud: Prostrating on the ground\n4. Sitting: Between prostrations\n\nEach position shows our love and respect for Allah!"
+        default:
+            return "Discover the beauty of Salah - our special connection with Allah! Each prayer is a gift, helping us stay close to our Creator throughout the day."
+        }
+    }
+    
+    func getZakatLandmarkContent() -> String {
+        switch landmark.id {
+        case "zakat-farm":
+            return "Welcome to the Sharing Farm! 🌾\n\nAllah has blessed us with so many good things. When we share, everyone is happy!\n\nZakat means giving 2.5% of our savings to help others. If you have 100 coins, you give just 2-3 coins to help people who need it.\n\nSharing makes our hearts grow bigger! 💚"
+        case "zakat-market":
+            return "At the Kindness Market, we learn who receives Zakat! 🏪\n\nZakat helps:\n• Poor families who don't have enough\n• People in debt who need help\n• Travelers who are far from home\n• New Muslims learning about Islam\n\nWhen we give Zakat, we spread Allah's love!"
+        case "zakat-school":
+            return "At Generosity School, we learn from generous people! 🏫\n\nThe Prophet Muhammad ﷺ was the most generous person. He would give everything he had to help others!\n\nThe companions were also very generous. Abu Bakr gave all his wealth for Allah's sake.\n\nGenerosity brings blessings to everyone!"
+        default:
+            return "Discover the joy of giving! Zakat helps us share Allah's blessings with those who need them most."
+        }
+    }
+    
+    func getSawmLandmarkContent() -> String {
+        switch landmark.id {
+        case "sawm-suhoor":
+            return "Suhoor Station - Time for the pre-dawn meal! 🍳\n\nSuhoor is the special meal we eat before Fajr during Ramadan.\n\nThe Prophet ﷺ said there is blessing in suhoor!\n\nGood things to eat:\n• Dates 🌴\n• Water 💧\n• Oatmeal 🥣\n• Eggs 🥚\n\nEat suhoor to have energy for fasting!"
+        case "sawm-summit":
+            return "Welcome to the Fasting Summit! 🏔️\n\nClimbing the mountain is like fasting - it takes strength and patience!\n\nDuring fasting:\n• We don't eat or drink from Fajr to Maghrib\n• We are extra kind to everyone\n• We read more Quran\n• We make lots of dua\n\nEvery step brings us closer to Allah!"
+        case "sawm-iftar":
+            return "Iftar Valley - Time to break the fast! 🍽️\n\nWhen the sun sets, we say 'Allahu Akbar' and break our fast!\n\nThe Prophet ﷺ would break his fast with:\n• Fresh dates 🌴\n• Water 💧\n\nThen we pray Maghrib and enjoy a delicious meal with family and friends! 🥘"
+        case "sawm-laylatul":
+            return "Laylatul Qadr Peak - The Night of Power! ✨\n\nThis is the most special night of Ramadan! The Quran says it's better than 1000 months!\n\nOn this night:\n• The Quran was revealed\n• Angels come down to Earth\n• All good deeds are multiplied\n\nWe look for it in the last 10 nights of Ramadan! 🌙"
+        default:
+            return "Discover the blessings of fasting! Ramadan is a special month of worship, reflection, and growing closer to Allah."
+        }
+    }
+    
+    func getHajjLandmarkContent() -> String {
+        switch landmark.id {
+        case "hajj-ihram":
+            return "Ihram Oasis - Preparing for the Sacred Journey! 🏕️\n\nIhram is the special white clothing worn during Hajj.\n\nFor men: Two white pieces of cloth\nFor women: Simple, modest clothing\n\nWearing Ihram reminds us that everyone is equal before Allah. Rich or poor, young or old - we all look the same!\n\nLabbayk Allahumma Labbayk! 🕋"
+        case "hajj-tawaf":
+            return "Tawaf Trail - Circling the Kaaba! 🔄\n\nTawaf means walking around the Kaaba 7 times!\n\nThe Kaaba is the House of Allah that Prophet Ibrahim built.\n\nWhile walking, pilgrims:\n• Make dua to Allah\n• Ask for forgiveness\n• Feel unity with millions of Muslims\n\nThe Kaaba is in our hearts wherever we are! 🕋"
+        case "hajj-safa":
+            return "Safa & Marwa Path - Following Hajar's Footsteps! 🏃\n\nLong ago, Hajar and baby Ismail were alone in the desert. Baby Ismail was thirsty!\n\nHajar ran between two hills - Safa and Marwa - seven times, looking for water.\n\nAllah rewarded her faith by making Zamzam water spring from the ground! 💧\n\nWe walk this path to remember her beautiful faith!"
+        case "hajj-arafat":
+            return "Mount Arafat - The Most Important Day! ⛰️\n\nThe Day of Arafat is the heart of Hajj!\n\nOn this day:\n• Pilgrims stand on Mount Arafat\n• They make dua from Dhuhr to Maghrib\n• Allah forgives their sins\n• They feel closest to Allah\n\nThe Prophet ﷺ said: 'Hajj is Arafat!' 🤲"
+        default:
+            return "Discover the amazing journey of Hajj! Millions of Muslims travel to Makkah to follow the footsteps of Prophet Ibrahim."
+        }
+    }
+    
+    func getDefaultLandmarkContent() -> String {
+        return "Welcome to \(landmark.name)! 🌟\n\n\(landmark.description)\n\nExplore this special place in \(world.worldName) with your guide \(world.characterName) \(world.characterEmoji)!"
     }
     
     var completionView: some View {
@@ -1121,6 +1277,39 @@ struct DragDropGameView: View {
                 DropTarget(id: "t2", text: "Noon prayer", matchId: "2"),
                 DropTarget(id: "t3", text: "Sunset prayer", matchId: "3")
             ]
+        case "zakat":
+            items = [
+                DragItem(id: "1", text: "2.5%", emoji: "💰"),
+                DragItem(id: "2", text: "Poor", emoji: "🤲"),
+                DragItem(id: "3", text: "Purify", emoji: "✨")
+            ]
+            targets = [
+                DropTarget(id: "t1", text: "Amount we give", matchId: "1"),
+                DropTarget(id: "t2", text: "Who receives Zakat", matchId: "2"),
+                DropTarget(id: "t3", text: "What Zakat does to wealth", matchId: "3")
+            ]
+        case "sawm":
+            items = [
+                DragItem(id: "1", text: "Suhoor", emoji: "🌙"),
+                DragItem(id: "2", text: "Iftar", emoji: "🌅"),
+                DragItem(id: "3", text: "Ramadan", emoji: "☪️")
+            ]
+            targets = [
+                DropTarget(id: "t1", text: "Pre-dawn meal", matchId: "1"),
+                DropTarget(id: "t2", text: "Breaking the fast", matchId: "2"),
+                DropTarget(id: "t3", text: "Month of fasting", matchId: "3")
+            ]
+        case "hajj":
+            items = [
+                DragItem(id: "1", text: "Kaaba", emoji: "🕋"),
+                DragItem(id: "2", text: "Ihram", emoji: "🥋"),
+                DragItem(id: "3", text: "Tawaf", emoji: "🔄")
+            ]
+            targets = [
+                DropTarget(id: "t1", text: "House of Allah", matchId: "1"),
+                DropTarget(id: "t2", text: "Pilgrim's clothing", matchId: "2"),
+                DropTarget(id: "t3", text: "Walking around Kaaba", matchId: "3")
+            ]
         default:
             items = [
                 DragItem(id: "1", text: pillar.name, emoji: pillar.worldEmoji),
@@ -1215,11 +1404,45 @@ struct FixPillarGameView: View {
     }
     
     func setupPuzzle() {
-        pieces = [
-            PillarPiece(id: "p1", order: 0, text: "Step 1", emoji: "1️⃣"),
-            PillarPiece(id: "p2", order: 1, text: "Step 2", emoji: "2️⃣"),
-            PillarPiece(id: "p3", order: 2, text: "Step 3", emoji: "3️⃣")
-        ].shuffled()
+        // Setup based on pillar
+        switch pillar.id {
+        case "shahada":
+            pieces = [
+                PillarPiece(id: "p1", order: 0, text: "La ilaha illallah", emoji: "☝️"),
+                PillarPiece(id: "p2", order: 1, text: "Muhammadur", emoji: "⭐"),
+                PillarPiece(id: "p3", order: 2, text: "Rasulullah", emoji: "🤲")
+            ].shuffled()
+        case "salah":
+            pieces = [
+                PillarPiece(id: "p1", order: 0, text: "Make Wudu", emoji: "💧"),
+                PillarPiece(id: "p2", order: 1, text: "Face Qiblah", emoji: "🕋"),
+                PillarPiece(id: "p3", order: 2, text: "Say Allahu Akbar", emoji: "🙏")
+            ].shuffled()
+        case "zakat":
+            pieces = [
+                PillarPiece(id: "p1", order: 0, text: "Count your wealth", emoji: "💰"),
+                PillarPiece(id: "p2", order: 1, text: "Calculate 2.5%", emoji: "🧮"),
+                PillarPiece(id: "p3", order: 2, text: "Give to the needy", emoji: "🤝")
+            ].shuffled()
+        case "sawm":
+            pieces = [
+                PillarPiece(id: "p1", order: 0, text: "Eat Suhoor", emoji: "🌙"),
+                PillarPiece(id: "p2", order: 1, text: "Fast all day", emoji: "☀️"),
+                PillarPiece(id: "p3", order: 2, text: "Break fast at Maghrib", emoji: "🌅")
+            ].shuffled()
+        case "hajj":
+            pieces = [
+                PillarPiece(id: "p1", order: 0, text: "Wear Ihram", emoji: "🥋"),
+                PillarPiece(id: "p2", order: 1, text: "Circle the Kaaba", emoji: "🕋"),
+                PillarPiece(id: "p3", order: 2, text: "Stand at Arafat", emoji: "⛰️")
+            ].shuffled()
+        default:
+            pieces = [
+                PillarPiece(id: "p1", order: 0, text: "Step 1", emoji: "1️⃣"),
+                PillarPiece(id: "p2", order: 1, text: "Step 2", emoji: "2️⃣"),
+                PillarPiece(id: "p3", order: 2, text: "Step 3", emoji: "3️⃣")
+            ].shuffled()
+        }
     }
     
     func placePiece(_ piece: PillarPiece) {
@@ -1281,11 +1504,47 @@ struct MatchingGameView: View {
     }
     
     func setupCards() {
-        let pairs = [
-            ("🕌", "Mosque"),
-            ("📿", "Prayer"),
-            ("📖", "Quran")
-        ]
+        var pairs: [(String, String)] = []
+        
+        // Setup based on pillar
+        switch pillar.id {
+        case "shahada":
+            pairs = [
+                ("☝️", "One God"),
+                ("⭐", "Prophet"),
+                ("💚", "Faith")
+            ]
+        case "salah":
+            pairs = [
+                ("🌅", "Fajr"),
+                ("☀️", "Dhuhr"),
+                ("🌙", "Isha")
+            ]
+        case "zakat":
+            pairs = [
+                ("💰", "Wealth"),
+                ("🤲", "Give"),
+                ("💚", "Purify")
+            ]
+        case "sawm":
+            pairs = [
+                ("🌙", "Suhoor"),
+                ("🌅", "Iftar"),
+                ("☪️", "Ramadan")
+            ]
+        case "hajj":
+            pairs = [
+                ("🕋", "Kaaba"),
+                ("🐪", "Journey"),
+                ("💧", "Zamzam")
+            ]
+        default:
+            pairs = [
+                ("🕌", "Mosque"),
+                ("📿", "Prayer"),
+                ("📖", "Quran")
+            ]
+        }
         
         var allCards: [MatchCard] = []
         for (index, pair) in pairs.enumerated() {
