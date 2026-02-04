@@ -263,6 +263,16 @@ class AppState: ObservableObject {
         }
     }
     
+    // Computed property for easy kids mode check
+    var isKidsMode: Bool {
+        userMode == .kids
+    }
+    
+    // Theme color based on mode
+    var themeColor: Color {
+        isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "6B5B95")
+    }
+    
     // Age-based content filtering
     @Published var userAge: Int = 10 {
         didSet {
