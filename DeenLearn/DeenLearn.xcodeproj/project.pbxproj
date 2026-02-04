@@ -21,6 +21,18 @@
 		AAAAAAAAAAAAAAAAAAAAAA12 /* QuranView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111131 /* QuranView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA13 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111133 /* ProgressView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA14 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111135 /* SettingsView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA15 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111140 /* Extensions.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA16 /* Arabic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111141 /* Arabic.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA17 /* Pillar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111142 /* Pillar.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA18 /* Prayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111143 /* Prayer.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA19 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111144 /* Profile.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA20 /* Quran.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111145 /* Quran.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA21 /* ArabicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111146 /* ArabicView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA22 /* PillarsKidsWorldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111147 /* PillarsKidsWorldView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA23 /* PillarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111148 /* PillarsView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA24 /* PrayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111149 /* PrayerView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA25 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114A /* ProfileView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA26 /* SalahTrainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114B /* SalahTrainerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +51,18 @@
 		111111111111111111111131 /* QuranView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranView.swift; sourceTree = "<group>"; };
 		111111111111111111111133 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		111111111111111111111135 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		111111111111111111111140 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		111111111111111111111141 /* Arabic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arabic.swift; sourceTree = "<group>"; };
+		111111111111111111111142 /* Pillar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pillar.swift; sourceTree = "<group>"; };
+		111111111111111111111143 /* Prayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prayer.swift; sourceTree = "<group>"; };
+		111111111111111111111144 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		111111111111111111111145 /* Quran.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quran.swift; sourceTree = "<group>"; };
+		111111111111111111111146 /* ArabicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArabicView.swift; sourceTree = "<group>"; };
+		111111111111111111111147 /* PillarsKidsWorldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillarsKidsWorldView.swift; sourceTree = "<group>"; };
+		111111111111111111111148 /* PillarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillarsView.swift; sourceTree = "<group>"; };
+		111111111111111111111149 /* PrayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerView.swift; sourceTree = "<group>"; };
+		11111111111111111111114A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		11111111111111111111114B /* SalahTrainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahTrainerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +97,7 @@
 			children = (
 				11111111111111111111111B /* DeenLearnApp.swift */,
 				11111111111111111111111D /* ContentView.swift */,
+				111111111111111111111140 /* Extensions.swift */,
 				111111111111111111111136 /* Models */,
 				111111111111111111111137 /* Views */,
 				11111111111111111111111F /* Assets.xcassets */,
@@ -86,6 +111,11 @@
 			children = (
 				111111111111111111111123 /* AppState.swift */,
 				111111111111111111111125 /* LearningModule.swift */,
+				111111111111111111111141 /* Arabic.swift */,
+				111111111111111111111142 /* Pillar.swift */,
+				111111111111111111111143 /* Prayer.swift */,
+				111111111111111111111144 /* Profile.swift */,
+				111111111111111111111145 /* Quran.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -101,6 +131,12 @@
 				111111111111111111111131 /* QuranView.swift */,
 				111111111111111111111133 /* ProgressView.swift */,
 				111111111111111111111135 /* SettingsView.swift */,
+				111111111111111111111146 /* ArabicView.swift */,
+				111111111111111111111147 /* PillarsKidsWorldView.swift */,
+				111111111111111111111148 /* PillarsView.swift */,
+				111111111111111111111149 /* PrayerView.swift */,
+				11111111111111111111114A /* ProfileView.swift */,
+				11111111111111111111114B /* SalahTrainerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -186,8 +222,14 @@
 			files = (
 				AAAAAAAAAAAAAAAAAAAAAA02 /* ContentView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA01 /* DeenLearnApp.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA15 /* Extensions.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA05 /* AppState.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA06 /* LearningModule.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA16 /* Arabic.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA17 /* Pillar.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA18 /* Prayer.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA19 /* Profile.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA20 /* Quran.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA07 /* WelcomeView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA08 /* MainTabView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA09 /* HomeView.swift in Sources */,
@@ -196,6 +238,12 @@
 				AAAAAAAAAAAAAAAAAAAAAA12 /* QuranView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA13 /* ProgressView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA14 /* SettingsView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA21 /* ArabicView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA22 /* PillarsKidsWorldView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA23 /* PillarsView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA24 /* PrayerView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA25 /* ProfileView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA26 /* SalahTrainerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
