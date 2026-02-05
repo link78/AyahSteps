@@ -265,17 +265,29 @@ extension PillarWorld {
 
 // MARK: - Kids World Explorer View
 
+// Enum to track which sheet to show
+enum WorldSheetType: Identifiable {
+    case story(WorldLandmark)
+    case miniGame(WorldLandmark)
+    case adventure(Adventure)
+    case reward(WorldLandmark)
+    
+    var id: String {
+        switch self {
+        case .story(let landmark): return "story-\(landmark.id)"
+        case .miniGame(let landmark): return "game-\(landmark.id)"
+        case .adventure(let adventure): return "adventure-\(adventure.id)"
+        case .reward(let landmark): return "reward-\(landmark.id)"
+        }
+    }
+}
+
 struct PillarsKidsWorldExplorerView: View {
     @EnvironmentObject var appState: AppState
     let world: PillarWorld
     @Environment(\.dismiss) var dismiss
     
-    @State private var selectedLandmark: WorldLandmark?
-    @State private var showAdventure = false
-    @State private var currentAdventure: Adventure?
-    @State private var showStoryView = false
-    @State private var showMiniGameView = false
-    @State private var showRewardView = false
+    @State private var activeSheet: WorldSheetType?
     @State private var characterBounce = false
     @State private var starsCollected = 0
     
@@ -342,25 +354,25 @@ struct PillarsKidsWorldExplorerView: View {
                     .cornerRadius(20)
                 }
             }
-            .sheet(isPresented: $showStoryView) {
-                if let landmark = selectedLandmark {
+            .sheet(item: $activeSheet) { sheetType in
+                switch sheetType {
+                case .story(let landmark):
                     StoryActivityView(world: world, landmark: landmark, onComplete: { stars in
                         starsCollected += stars
                     })
                     .environmentObject(appState)
-                }
-            }
-            .sheet(isPresented: $showMiniGameView) {
-                if let landmark = selectedLandmark {
+                case .miniGame(let landmark):
                     MiniGameActivityView(world: world, landmark: landmark, onComplete: { stars in
                         starsCollected += stars
                     })
                     .environmentObject(appState)
-                }
-            }
-            .sheet(isPresented: $showAdventure) {
-                if let adventure = currentAdventure {
+                case .adventure(let adventure):
                     AdventureView(world: world, adventure: adventure, onComplete: { stars in
+                        starsCollected += stars
+                    })
+                    .environmentObject(appState)
+                case .reward(let landmark):
+                    RewardView(world: world, landmark: landmark, onCollect: { stars in
                         starsCollected += stars
                     })
                     .environmentObject(appState)
@@ -438,8 +450,9 @@ struct PillarsKidsWorldExplorerView: View {
     
     var adventureButtonView: some View {
         Button(action: {
-            currentAdventure = world.adventures.first
-            showAdventure = true
+            if let adventure = world.adventures.first {
+                activeSheet = .adventure(adventure)
+            }
         }) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
@@ -484,16 +497,15 @@ struct PillarsKidsWorldExplorerView: View {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
                 ForEach(world.landmarks) { landmark in
                     LandmarkCard(landmark: landmark) {
-                        selectedLandmark = landmark
                         switch landmark.activityType {
                         case .story:
-                            showStoryView = true
+                            activeSheet = .story(landmark)
                         case .miniGame:
-                            showMiniGameView = true
+                            activeSheet = .miniGame(landmark)
                         case .quiz:
-                            showMiniGameView = true
+                            activeSheet = .miniGame(landmark)
                         case .reward:
-                            showRewardView = true
+                            activeSheet = .reward(landmark)
                         }
                     }
                 }
@@ -1857,6 +1869,124 @@ struct AdventureView: View {
             stepProgress = 0
         } else {
             showCompletion = true
+        }
+    }
+}
+
+// MARK: - Reward View
+
+struct RewardView: View {
+    @EnvironmentObject var appState: AppState
+    @Environment(\.dismiss) var dismiss
+    let world: PillarWorld
+    let landmark: WorldLandmark
+    let onCollect: (Int) -> Void
+    
+    @State private var showConfetti = false
+    @State private var scaleEffect: CGFloat = 0.5
+    
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                LinearGradient(
+                    colors: world.backgroundGradient,
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
+                
+                VStack(spacing: 24) {
+                    Spacer()
+                    
+                    // Reward emoji
+                    Text(landmark.emoji)
+                        .font(.system(size: 100))
+                        .scaleEffect(scaleEffect)
+                        .onAppear {
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.6)) {
+                                scaleEffect = 1.2
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                    scaleEffect = 1.0
+                                }
+                            }
+                        }
+                    
+                    Text("🎉 Congratulations! 🎉")
+                        .font(.largeTitle.bold())
+                        .foregroundColor(.white)
+                    
+                    Text(landmark.name)
+                        .font(.title2)
+                        .foregroundColor(.white.opacity(0.9))
+                    
+                    Text(landmark.description)
+                        .font(.body)
+                        .foregroundColor(.white.opacity(0.8))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                    
+                    // Stars reward
+                    VStack(spacing: 8) {
+                        Text("You earned 3 stars!")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        
+                        HStack {
+                            ForEach(0..<3, id: \.self) { _ in
+                                Image(systemName: "star.fill")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.yellow)
+                            }
+                        }
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.2))
+                    .cornerRadius(16)
+                    
+                    // Badge earned
+                    HStack {
+                        Image(systemName: "rosette")
+                            .font(.title)
+                            .foregroundColor(.purple)
+                        Text("Badge: \(world.worldName) Champion!")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.2))
+                    .cornerRadius(12)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        appState.completedLessons.insert("reward-\(landmark.id)")
+                        appState.learningProgress.starsEarned += 3
+                        onCollect(3)
+                        dismiss()
+                    }) {
+                        Text("🎁 Collect Reward!")
+                            .font(.headline.bold())
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.green)
+                            .cornerRadius(16)
+                    }
+                    .padding(.horizontal, 40)
+                }
+                .padding()
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Close") {
+                        dismiss()
+                    }
+                    .foregroundColor(.white)
+                }
+            }
         }
     }
 }
