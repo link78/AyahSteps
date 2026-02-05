@@ -10,6 +10,7 @@ import SwiftUI
 
 struct PrayerView: View {
     @EnvironmentObject var appState: AppState
+    @StateObject private var ttsService = TextToSpeechService.shared
     @State private var selectedSection: PrayerSection = .wudu
     
     var isKidsMode: Bool {
@@ -20,6 +21,10 @@ struct PrayerView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
+                    // Tap to Listen Hint
+                    TapToListenHint(isKidsMode: isKidsMode)
+                        .padding(.horizontal)
+                    
                     // Header
                     prayerHeader
                     
@@ -76,8 +81,11 @@ struct PrayerView: View {
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             } else {
-                Text("الصلاة والوضوء")
-                    .font(.title2)
+                // Arabic title with Tap to Listen
+                SpeakableArabicText(
+                    text: "الصلاة والوضوء",
+                    font: .title2
+                )
                 
                 Text("Salah & Wudu Trainer")
                     .font(.headline)
@@ -190,8 +198,19 @@ struct WuduSectionView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text(isKidsMode ? "💧 Learn Wudu" : "Learn Wudu (الوضوء)")
-                    .font(.headline)
+                if isKidsMode {
+                    Text("💧 Learn Wudu")
+                        .font(.headline)
+                } else {
+                    HStack(spacing: 8) {
+                        Text("Learn Wudu")
+                            .font(.headline)
+                        SpeakableArabicText(
+                            text: "(الوضوء)",
+                            font: .headline
+                        )
+                    }
+                }
                 Spacer()
                 Text("\(WuduStep.allSteps.count) steps")
                     .font(.caption)
@@ -290,8 +309,19 @@ struct SalahSectionView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text(isKidsMode ? "🕌 Learn Salah" : "Learn Salah (الصلاة)")
-                    .font(.headline)
+                if isKidsMode {
+                    Text("🕌 Learn Salah")
+                        .font(.headline)
+                } else {
+                    HStack(spacing: 8) {
+                        Text("Learn Salah")
+                            .font(.headline)
+                        SpeakableArabicText(
+                            text: "(الصلاة)",
+                            font: .headline
+                        )
+                    }
+                }
                 Spacer()
                 Text("2 Rakah Prayer")
                     .font(.caption)
@@ -378,9 +408,11 @@ struct SalahStepCard: View {
                         .foregroundColor(.primary)
                     
                     if !isKidsMode {
-                        Text(step.nameArabic)
-                            .font(.caption)
-                            .foregroundColor(positionColor)
+                        SpeakableArabicText(
+                            text: step.nameArabic,
+                            font: .caption,
+                            color: positionColor
+                        )
                     }
                     
                     Text(isKidsMode ? step.kidsDescription : step.description)
@@ -468,9 +500,12 @@ struct StepDetailView: View {
             Text(wuduStep?.name ?? salahStep?.name ?? "")
                 .font(.title2.bold())
             
-            Text(wuduStep?.nameArabic ?? salahStep?.nameArabic ?? "")
-                .font(.title3)
-                .foregroundColor(.secondary)
+            // Arabic name with Tap to Listen
+            SpeakableArabicText(
+                text: wuduStep?.nameArabic ?? salahStep?.nameArabic ?? "",
+                font: .title3,
+                color: .secondary
+            )
         }
     }
     
@@ -500,16 +535,25 @@ struct StepDetailView: View {
             // Recitation for salah
             if let recitation = salahStep?.recitation {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("🗣️ What to Say")
-                        .font(.headline)
+                    HStack {
+                        Text("🗣️ What to Say")
+                            .font(.headline)
+                        Spacer()
+                        Text("Tap to hear")
+                            .font(.caption)
+                            .foregroundColor(.purple)
+                    }
                     
-                    Text(recitation.arabic)
-                        .font(.title2)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.purple.opacity(0.1))
-                        .cornerRadius(12)
+                    // Speakable Arabic recitation
+                    SpeakableArabicText(
+                        text: recitation.arabic,
+                        font: .title2
+                    )
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.purple.opacity(0.1))
+                    .cornerRadius(12)
                     
                     Text(recitation.transliteration)
                         .font(.body)
@@ -572,53 +616,7 @@ struct StepDetailView: View {
             
             // Recitation
             if let recitation = salahStep?.recitation {
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Recitation")
-                        .font(.headline)
-                    
-                    if showArabic {
-                        Text(recitation.arabic)
-                            .font(.title3)
-                            .multilineTextAlignment(.trailing)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                    }
-                    
-                    if showTransliteration {
-                        Text(recitation.transliteration)
-                            .font(.body)
-                            .foregroundColor(.blue)
-                    }
-                    
-                    if showTranslation {
-                        Text(recitation.translation)
-                            .font(.body)
-                            .foregroundColor(.secondary)
-                            .italic()
-                    }
-                    
-                    // Audio buttons placeholder - TODO: Implement AVAudioPlayer for recitation audio
-                    HStack {
-                        Button(action: { /* TODO: Play recitation at slow speed */ }) {
-                            Label("Slow", systemImage: "tortoise.fill")
-                        }
-                        .buttonStyle(.bordered)
-                        .disabled(true) // Disabled until audio implemented
-                        
-                        Button(action: { /* TODO: Play recitation at normal speed */ }) {
-                            Label("Normal", systemImage: "hare.fill")
-                        }
-                        .buttonStyle(.bordered)
-                        .disabled(true) // Disabled until audio implemented
-                    }
-                    .opacity(0.5)
-                    
-                    Text("Audio coming soon")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-                .padding()
-                .background(Color(.systemBackground))
-                .cornerRadius(16)
+                RecitationCard(recitation: recitation, showArabic: showArabic, showTransliteration: showTransliteration, showTranslation: showTranslation)
             }
             
             // Common mistakes
@@ -694,6 +692,100 @@ struct InfoBadge: View {
         .padding()
         .background(Color(.systemBackground))
         .cornerRadius(12)
+    }
+}
+
+// MARK: - Recitation Card with TTS
+
+struct RecitationCard: View {
+    let recitation: Recitation
+    let showArabic: Bool
+    let showTransliteration: Bool
+    let showTranslation: Bool
+    
+    @StateObject private var ttsService = TextToSpeechService.shared
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Recitation")
+                    .font(.headline)
+                Spacer()
+                
+                // Play button
+                Button(action: {
+                    ttsService.speak(recitation.arabic, language: "ar-SA")
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: ttsService.isSpeaking ? "speaker.wave.3.fill" : "speaker.wave.2.fill")
+                            .symbolEffect(.variableColor, isActive: ttsService.isSpeaking)
+                        Text("Listen")
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.blue)
+                }
+            }
+            
+            if showArabic {
+                // Tappable Arabic text
+                SpeakableArabicText(
+                    text: recitation.arabic,
+                    font: .title3
+                )
+                .multilineTextAlignment(.trailing)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            
+            if showTransliteration {
+                Text(recitation.transliteration)
+                    .font(.body)
+                    .foregroundColor(.blue)
+            }
+            
+            if showTranslation {
+                Text(recitation.translation)
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .italic()
+            }
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+    }
+}
+
+// MARK: - Speakable Arabic Text Component
+
+struct SpeakableArabicText: View {
+    let text: String
+    let font: Font
+    var color: Color = .primary
+    
+    @StateObject private var ttsService = TextToSpeechService.shared
+    @State private var isPressed = false
+    
+    var body: some View {
+        HStack(spacing: 6) {
+            Text(text)
+                .font(font)
+                .foregroundColor(isPressed ? .orange : color)
+            
+            Image(systemName: ttsService.isSpeaking && ttsService.currentText == text ? "speaker.wave.3.fill" : "speaker.wave.2")
+                .font(.caption)
+                .foregroundColor(.blue)
+                .symbolEffect(.variableColor, isActive: ttsService.isSpeaking && ttsService.currentText == text)
+        }
+        .onTapGesture {
+            isPressed = true
+            ttsService.speak(text, language: "ar-SA")
+            
+            // Reset visual feedback
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                isPressed = false
+            }
+        }
+        .sensoryFeedback(.impact(flexibility: .soft), trigger: isPressed)
     }
 }
 
@@ -847,6 +939,13 @@ struct PracticeModeView: View {
                     Text(step.name)
                         .font(.title2.bold())
                     
+                    // Arabic name with TTS
+                    SpeakableArabicText(
+                        text: step.nameArabic,
+                        font: .subheadline,
+                        color: .secondary
+                    )
+                    
                     Text(isKidsMode ? step.kidsDescription : step.description)
                         .font(.body)
                         .foregroundColor(.secondary)
@@ -870,6 +969,13 @@ struct PracticeModeView: View {
                     Text(step.name)
                         .font(.title2.bold())
                     
+                    // Arabic name with TTS
+                    SpeakableArabicText(
+                        text: step.nameArabic,
+                        font: .subheadline,
+                        color: .secondary
+                    )
+                    
                     Text(isKidsMode ? step.kidsDescription : step.description)
                         .font(.body)
                         .foregroundColor(.secondary)
@@ -877,8 +983,11 @@ struct PracticeModeView: View {
                     
                     if let recitation = step.recitation {
                         VStack(spacing: 8) {
-                            Text(recitation.arabic)
-                                .font(.title3)
+                            // Speakable Arabic recitation
+                            SpeakableArabicText(
+                                text: recitation.arabic,
+                                font: .title3
+                            )
                             Text(recitation.transliteration)
                                 .font(.caption)
                                 .foregroundColor(.blue)
@@ -1093,6 +1202,7 @@ struct DuaCard: View {
     let dua: DuaAfterPrayer
     let isKidsMode: Bool
     @State private var isExpanded = false
+    @StateObject private var ttsService = TextToSpeechService.shared
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -1122,10 +1232,14 @@ struct DuaCard: View {
             
             if isExpanded {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text(dua.arabic)
-                        .font(.title3)
-                        .multilineTextAlignment(.trailing)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    // Speakable Arabic dua
+                    HStack {
+                        Spacer()
+                        SpeakableArabicText(
+                            text: dua.arabic,
+                            font: .title3
+                        )
+                    }
                     
                     Text(dua.transliteration)
                         .font(.body)
@@ -1145,6 +1259,23 @@ struct DuaCard: View {
                         Text(dua.benefit)
                             .font(.caption)
                             .foregroundColor(.secondary)
+                    }
+                    
+                    // Listen button
+                    Button(action: {
+                        ttsService.speak(dua.arabic, language: "ar-SA")
+                    }) {
+                        HStack {
+                            Image(systemName: ttsService.isSpeaking ? "speaker.wave.3.fill" : "speaker.wave.2.fill")
+                                .symbolEffect(.variableColor, isActive: ttsService.isSpeaking)
+                            Text("Listen to Dua")
+                        }
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background(Color.blue)
+                        .cornerRadius(10)
                     }
                 }
                 .padding()
