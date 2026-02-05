@@ -263,6 +263,9 @@ class AppState: ObservableObject {
         }
     }
     
+    // Selected tab for navigation from Quick Actions
+    @Published var selectedTab: Int = 0
+    
     // Computed property for easy kids mode check
     var isKidsMode: Bool {
         userMode == .kids

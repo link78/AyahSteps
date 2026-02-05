@@ -587,7 +587,9 @@ struct HomeView: View {
                         icon: "person.fill",
                         color: .green,
                         isKidsMode: isKidsMode
-                    )
+                    ) {
+                        appState.selectedTab = 2 // Prayer tab
+                    }
                     
                     QuickActionCard(
                         title: "Open Mushaf",
@@ -595,7 +597,9 @@ struct HomeView: View {
                         icon: "book.fill",
                         color: .purple,
                         isKidsMode: isKidsMode
-                    )
+                    ) {
+                        appState.selectedTab = 3 // Quran tab
+                    }
                     
                     QuickActionCard(
                         title: "Review Pillars",
@@ -603,7 +607,9 @@ struct HomeView: View {
                         icon: "building.columns.fill",
                         color: .orange,
                         isKidsMode: isKidsMode
-                    )
+                    ) {
+                        appState.selectedTab = 1 // Pillars tab
+                    }
                     
                     QuickActionCard(
                         title: "Practice Arabic",
@@ -611,7 +617,9 @@ struct HomeView: View {
                         icon: "character.textbox",
                         color: .blue,
                         isKidsMode: isKidsMode
-                    )
+                    ) {
+                        appState.selectedTab = 4 // Arabic tab
+                    }
                 }
                 .padding(.horizontal)
             }
@@ -864,35 +872,52 @@ struct QuickActionCard: View {
     let icon: String
     let color: Color
     let isKidsMode: Bool
+    let onTap: () -> Void
+    
+    @State private var isPressed = false
     
     var body: some View {
-        VStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(color.opacity(0.2))
-                    .frame(width: 60, height: 60)
+        Button(action: {
+            let impact = UIImpactFeedbackGenerator(style: .medium)
+            impact.impactOccurred()
+            onTap()
+        }) {
+            VStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(color.opacity(0.2))
+                        .frame(width: 60, height: 60)
+                    
+                    Image(systemName: icon)
+                        .font(.title2)
+                        .foregroundColor(color)
+                }
                 
-                Image(systemName: icon)
-                    .font(.title2)
-                    .foregroundColor(color)
+                VStack(spacing: 4) {
+                    Text(title)
+                        .font(isKidsMode ? .headline : .subheadline)
+                        .fontWeight(.semibold)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .foregroundColor(.primary)
+                    
+                    Text(titleArabic)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
             }
-            
-            VStack(spacing: 4) {
-                Text(title)
-                    .font(isKidsMode ? .headline : .subheadline)
-                    .fontWeight(.semibold)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                
-                Text(titleArabic)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
+            .frame(width: 100, height: 140)
+            .background(Color(.systemBackground))
+            .cornerRadius(16)
+            .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
+            .scaleEffect(isPressed ? 0.95 : 1.0)
         }
-        .frame(width: 100, height: 140)
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
+        .buttonStyle(PlainButtonStyle())
+        .onLongPressGesture(minimumDuration: .infinity, maximumDistance: .infinity, pressing: { pressing in
+            withAnimation(.easeInOut(duration: 0.1)) {
+                isPressed = pressing
+            }
+        }, perform: {})
     }
 }
 

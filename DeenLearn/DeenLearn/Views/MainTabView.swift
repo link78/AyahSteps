@@ -9,14 +9,13 @@ import SwiftUI
 
 struct MainTabView: View {
     @EnvironmentObject var appState: AppState
-    @State private var selectedTab = 0
     
     var isKidsMode: Bool {
         appState.userMode == .kids
     }
     
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $appState.selectedTab) {
             HomeView()
                 .tabItem {
                     Label("Home", systemImage: "house.fill")
