@@ -157,6 +157,8 @@ struct WelcomeView: View {
                 }
             }
             .environmentObject(appState)
+            .presentationDetents([.large])
+            .interactiveDismissDisabled(false)
         }
     }
 }
@@ -170,6 +172,11 @@ struct AgeSelectionSheet: View {
     let onComplete: () -> Void
     
     @State private var selectedAge: Int = 10
+    
+    // iPad detection
+    private var isIPad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
     
     var isKidsMode: Bool {
         selectedMode == .kids
@@ -206,85 +213,87 @@ struct AgeSelectionSheet: View {
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                // Header
-                VStack(spacing: 12) {
-                    Text(ageGroupEmoji)
-                        .font(.system(size: 60))
-                    
-                    Text(isKidsMode ? "How old are you?" : "Select your age")
-                        .font(.title.bold())
-                    
-                    Text("We'll personalize your learning experience")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-                .padding(.top, 20)
-                
-                // Age Picker
-                Picker("Age", selection: $selectedAge) {
-                    ForEach(ageRange, id: \.self) { age in
-                        Text("\(age) years old")
-                            .tag(age)
+            ScrollView {
+                VStack(spacing: 24) {
+                    // Header
+                    VStack(spacing: 12) {
+                        Text(ageGroupEmoji)
+                            .font(.system(size: 60))
+                        
+                        Text(isKidsMode ? "How old are you?" : "Select your age")
+                            .font(.title.bold())
+                        
+                        Text("We'll personalize your learning experience")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                     }
-                }
-                .pickerStyle(.wheel)
-                .frame(height: 150)
-                
-                // Age group description
-                VStack(spacing: 8) {
-                    Text("Learning Level")
-                        .font(.headline)
+                    .padding(.top, 20)
                     
-                    Text(ageGroupDescription)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                }
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(16)
-                .padding(.horizontal)
-                
-                // Content preview based on age
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("What you'll get:")
-                        .font(.headline)
-                    
-                    ForEach(contentFeatures, id: \.self) { feature in
-                        HStack {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.green)
-                            Text(feature)
-                                .font(.subheadline)
+                    // Age Picker
+                    Picker("Age", selection: $selectedAge) {
+                        ForEach(ageRange, id: \.self) { age in
+                            Text("\(age) years old")
+                                .tag(age)
                         }
                     }
+                    .pickerStyle(.wheel)
+                    .frame(height: 150)
+                    
+                    // Age group description
+                    VStack(spacing: 8) {
+                        Text("Learning Level")
+                            .font(.headline)
+                        
+                        Text(ageGroupDescription)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(16)
+                    .padding(.horizontal)
+                    
+                    // Content preview based on age
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("What you'll get:")
+                            .font(.headline)
+                        
+                        ForEach(contentFeatures, id: \.self) { feature in
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                                Text(feature)
+                                    .font(.subheadline)
+                            }
+                        }
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(16)
+                    .padding(.horizontal)
+                    
+                    // Continue Button - Always visible
+                    Button(action: {
+                        appState.userAge = selectedAge
+                        dismiss()
+                        onComplete()
+                    }) {
+                        Text("Let's Start Learning!")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: isIPad ? 400 : .infinity)
+                            .padding()
+                            .background(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
+                            .cornerRadius(16)
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 20)
                 }
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(.systemGray6))
-                .cornerRadius(16)
-                .padding(.horizontal)
-                
-                Spacer()
-                
-                // Continue Button
-                Button(action: {
-                    appState.userAge = selectedAge
-                    dismiss()
-                    onComplete()
-                }) {
-                    Text("Let's Start Learning!")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
-                        .cornerRadius(16)
-                }
-                .padding(.horizontal)
-                .padding(.bottom)
+                .frame(maxWidth: isIPad ? 600 : .infinity)
+                .frame(maxWidth: .infinity) // Center on iPad
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
