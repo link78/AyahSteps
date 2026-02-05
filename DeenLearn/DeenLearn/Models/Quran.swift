@@ -400,10 +400,615 @@ extension Ayah {
         )
     ]
     
+    // Sample ayahs for An-Nas (114)
+    static let anNas: [Ayah] = [
+        Ayah(
+            id: "114:1",
+            surahId: 114,
+            ayahNumber: 1,
+            arabic: "قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
+            transliteration: "Qul a'udhu bi Rabbin-nas",
+            translation: "Say, I seek refuge in the Lord of mankind",
+            words: [
+                QuranWord(id: "114:1:1", arabic: "قُلْ", transliteration: "Qul", translation: "Say", rootWord: "ق-و-ل", rootMeaning: "to say", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil),
+                QuranWord(id: "114:1:2", arabic: "أَعُوذُ", transliteration: "a'udhu", translation: "I seek refuge", rootWord: "ع-و-ذ", rootMeaning: "refuge, protection", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:1:3", arabic: "بِرَبِّ", transliteration: "bi Rabbi", translation: "in the Lord", rootWord: "ر-ب-ب", rootMeaning: "Lord, master", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:1:4", arabic: "النَّاسِ", transliteration: "an-nas", translation: "of mankind", rootWord: "ن-و-س", rootMeaning: "people, mankind", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 604,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "114:2",
+            surahId: 114,
+            ayahNumber: 2,
+            arabic: "مَلِكِ النَّاسِ",
+            transliteration: "Malikin-nas",
+            translation: "The Sovereign of mankind",
+            words: [
+                QuranWord(id: "114:2:1", arabic: "مَلِكِ", transliteration: "Maliki", translation: "The Sovereign", rootWord: "م-ل-ك", rootMeaning: "to own, rule", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:2:2", arabic: "النَّاسِ", transliteration: "an-nas", translation: "of mankind", rootWord: "ن-و-س", rootMeaning: "people", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 604,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "114:3",
+            surahId: 114,
+            ayahNumber: 3,
+            arabic: "إِلَٰهِ النَّاسِ",
+            transliteration: "Ilahin-nas",
+            translation: "The God of mankind",
+            words: [
+                QuranWord(id: "114:3:1", arabic: "إِلَٰهِ", transliteration: "Ilahi", translation: "The God", rootWord: "إ-ل-ه", rootMeaning: "God, deity", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:3:2", arabic: "النَّاسِ", transliteration: "an-nas", translation: "of mankind", rootWord: "ن-و-س", rootMeaning: "people", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 604,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "114:4",
+            surahId: 114,
+            ayahNumber: 4,
+            arabic: "مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ",
+            transliteration: "Min sharril-waswasil-khannas",
+            translation: "From the evil of the retreating whisperer",
+            words: [
+                QuranWord(id: "114:4:1", arabic: "مِن", transliteration: "Min", translation: "From", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:4:2", arabic: "شَرِّ", transliteration: "sharri", translation: "the evil", rootWord: "ش-ر-ر", rootMeaning: "evil", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:4:3", arabic: "الْوَسْوَاسِ", transliteration: "al-waswas", translation: "the whisperer", rootWord: "و-س-و-س", rootMeaning: "whisper", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:4:4", arabic: "الْخَنَّاسِ", transliteration: "al-khannas", translation: "who retreats", rootWord: "خ-ن-س", rootMeaning: "to retreat", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 604,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "114:5",
+            surahId: 114,
+            ayahNumber: 5,
+            arabic: "الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ",
+            transliteration: "Alladhi yuwaswisu fi sudurin-nas",
+            translation: "Who whispers in the breasts of mankind",
+            words: [
+                QuranWord(id: "114:5:1", arabic: "الَّذِي", transliteration: "Alladhi", translation: "Who", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:5:2", arabic: "يُوَسْوِسُ", transliteration: "yuwaswisu", translation: "whispers", rootWord: "و-س-و-س", rootMeaning: "whisper", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:5:3", arabic: "فِي", transliteration: "fi", translation: "in", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:5:4", arabic: "صُدُورِ", transliteration: "suduri", translation: "the breasts", rootWord: "ص-د-ر", rootMeaning: "chest, breast", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:5:5", arabic: "النَّاسِ", transliteration: "an-nas", translation: "of mankind", rootWord: "ن-و-س", rootMeaning: "people", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 604,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "114:6",
+            surahId: 114,
+            ayahNumber: 6,
+            arabic: "مِنَ الْجِنَّةِ وَالنَّاسِ",
+            transliteration: "Minal-jinnati wan-nas",
+            translation: "From among the jinn and mankind",
+            words: [
+                QuranWord(id: "114:6:1", arabic: "مِنَ", transliteration: "Mina", translation: "From", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:6:2", arabic: "الْجِنَّةِ", transliteration: "al-jinnati", translation: "the jinn", rootWord: "ج-ن-ن", rootMeaning: "hidden beings", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "114:6:3", arabic: "وَالنَّاسِ", transliteration: "wan-nas", translation: "and mankind", rootWord: "ن-و-س", rootMeaning: "people", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 604,
+            audioFileName: nil
+        )
+    ]
+    
+    // Sample ayahs for Al-Falaq (113)
+    static let alFalaq: [Ayah] = [
+        Ayah(
+            id: "113:1",
+            surahId: 113,
+            ayahNumber: 1,
+            arabic: "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ",
+            transliteration: "Qul a'udhu bi Rabbil-falaq",
+            translation: "Say, I seek refuge in the Lord of daybreak",
+            words: [
+                QuranWord(id: "113:1:1", arabic: "قُلْ", transliteration: "Qul", translation: "Say", rootWord: "ق-و-ل", rootMeaning: "to say", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil),
+                QuranWord(id: "113:1:2", arabic: "أَعُوذُ", transliteration: "a'udhu", translation: "I seek refuge", rootWord: "ع-و-ذ", rootMeaning: "refuge", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:1:3", arabic: "بِرَبِّ", transliteration: "bi Rabbi", translation: "in the Lord", rootWord: "ر-ب-ب", rootMeaning: "Lord", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:1:4", arabic: "الْفَلَقِ", transliteration: "al-falaq", translation: "of daybreak", rootWord: "ف-ل-ق", rootMeaning: "to split, dawn", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 604,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "113:2",
+            surahId: 113,
+            ayahNumber: 2,
+            arabic: "مِن شَرِّ مَا خَلَقَ",
+            transliteration: "Min sharri ma khalaq",
+            translation: "From the evil of that which He created",
+            words: [
+                QuranWord(id: "113:2:1", arabic: "مِن", transliteration: "Min", translation: "From", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:2:2", arabic: "شَرِّ", transliteration: "sharri", translation: "the evil", rootWord: "ش-ر-ر", rootMeaning: "evil", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:2:3", arabic: "مَا", transliteration: "ma", translation: "of what", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:2:4", arabic: "خَلَقَ", transliteration: "khalaq", translation: "He created", rootWord: "خ-ل-ق", rootMeaning: "to create", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 604,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "113:3",
+            surahId: 113,
+            ayahNumber: 3,
+            arabic: "وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ",
+            transliteration: "Wa min sharri ghasiqin idha waqab",
+            translation: "And from the evil of darkness when it settles",
+            words: [
+                QuranWord(id: "113:3:1", arabic: "وَمِن", transliteration: "Wa min", translation: "And from", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:3:2", arabic: "شَرِّ", transliteration: "sharri", translation: "the evil", rootWord: "ش-ر-ر", rootMeaning: "evil", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:3:3", arabic: "غَاسِقٍ", transliteration: "ghasiqin", translation: "of darkness", rootWord: "غ-س-ق", rootMeaning: "darkness", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:3:4", arabic: "إِذَا", transliteration: "idha", translation: "when", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:3:5", arabic: "وَقَبَ", transliteration: "waqab", translation: "it settles", rootWord: "و-ق-ب", rootMeaning: "to enter", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 604,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "113:4",
+            surahId: 113,
+            ayahNumber: 4,
+            arabic: "وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ",
+            transliteration: "Wa min sharrin-naffathati fil-'uqad",
+            translation: "And from the evil of the blowers in knots",
+            words: [
+                QuranWord(id: "113:4:1", arabic: "وَمِن", transliteration: "Wa min", translation: "And from", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:4:2", arabic: "شَرِّ", transliteration: "sharri", translation: "the evil", rootWord: "ش-ر-ر", rootMeaning: "evil", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:4:3", arabic: "النَّفَّاثَاتِ", transliteration: "an-naffathat", translation: "the blowers", rootWord: "ن-ف-ث", rootMeaning: "to blow", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:4:4", arabic: "فِي", transliteration: "fi", translation: "in", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:4:5", arabic: "الْعُقَدِ", transliteration: "al-'uqad", translation: "the knots", rootWord: "ع-ق-د", rootMeaning: "knot", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 604,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "113:5",
+            surahId: 113,
+            ayahNumber: 5,
+            arabic: "وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
+            transliteration: "Wa min sharri hasidin idha hasad",
+            translation: "And from the evil of an envier when he envies",
+            words: [
+                QuranWord(id: "113:5:1", arabic: "وَمِن", transliteration: "Wa min", translation: "And from", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:5:2", arabic: "شَرِّ", transliteration: "sharri", translation: "the evil", rootWord: "ش-ر-ر", rootMeaning: "evil", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:5:3", arabic: "حَاسِدٍ", transliteration: "hasidin", translation: "of an envier", rootWord: "ح-س-د", rootMeaning: "envy", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:5:4", arabic: "إِذَا", transliteration: "idha", translation: "when", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "113:5:5", arabic: "حَسَدَ", transliteration: "hasad", translation: "he envies", rootWord: "ح-س-د", rootMeaning: "to envy", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 604,
+            audioFileName: nil
+        )
+    ]
+    
+    // Sample ayahs for Al-Kawthar (108)
+    static let alKawthar: [Ayah] = [
+        Ayah(
+            id: "108:1",
+            surahId: 108,
+            ayahNumber: 1,
+            arabic: "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ",
+            transliteration: "Inna a'tayna kal-kawthar",
+            translation: "Indeed, We have granted you al-Kawthar (the abundance)",
+            words: [
+                QuranWord(id: "108:1:1", arabic: "إِنَّا", transliteration: "Inna", translation: "Indeed, We", rootWord: nil, rootMeaning: nil, tajweedRules: [TajweedRule.ghunnah], audioFileName: nil),
+                QuranWord(id: "108:1:2", arabic: "أَعْطَيْنَاكَ", transliteration: "a'taynaka", translation: "have granted you", rootWord: "ع-ط-و", rootMeaning: "to give", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "108:1:3", arabic: "الْكَوْثَرَ", transliteration: "al-kawthar", translation: "the abundance", rootWord: "ك-ث-ر", rootMeaning: "abundance", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 602,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "108:2",
+            surahId: 108,
+            ayahNumber: 2,
+            arabic: "فَصَلِّ لِرَبِّكَ وَانْحَرْ",
+            transliteration: "Fasalli li Rabbika wanhar",
+            translation: "So pray to your Lord and sacrifice",
+            words: [
+                QuranWord(id: "108:2:1", arabic: "فَصَلِّ", transliteration: "Fasalli", translation: "So pray", rootWord: "ص-ل-و", rootMeaning: "prayer", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "108:2:2", arabic: "لِرَبِّكَ", transliteration: "li Rabbika", translation: "to your Lord", rootWord: "ر-ب-ب", rootMeaning: "Lord", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "108:2:3", arabic: "وَانْحَرْ", transliteration: "wanhar", translation: "and sacrifice", rootWord: "ن-ح-ر", rootMeaning: "to sacrifice", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 602,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "108:3",
+            surahId: 108,
+            ayahNumber: 3,
+            arabic: "إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ",
+            transliteration: "Inna shani'aka huwal-abtar",
+            translation: "Indeed, your enemy is the one cut off",
+            words: [
+                QuranWord(id: "108:3:1", arabic: "إِنَّ", transliteration: "Inna", translation: "Indeed", rootWord: nil, rootMeaning: nil, tajweedRules: [TajweedRule.ghunnah], audioFileName: nil),
+                QuranWord(id: "108:3:2", arabic: "شَانِئَكَ", transliteration: "shani'aka", translation: "your enemy", rootWord: "ش-ن-أ", rootMeaning: "to hate", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "108:3:3", arabic: "هُوَ", transliteration: "huwa", translation: "he is", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "108:3:4", arabic: "الْأَبْتَرُ", transliteration: "al-abtar", translation: "the one cut off", rootWord: "ب-ت-ر", rootMeaning: "to cut", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 602,
+            audioFileName: nil
+        )
+    ]
+    
+    // Sample ayahs for Al-Asr (103)
+    static let alAsr: [Ayah] = [
+        Ayah(
+            id: "103:1",
+            surahId: 103,
+            ayahNumber: 1,
+            arabic: "وَالْعَصْرِ",
+            transliteration: "Wal-'asr",
+            translation: "By time",
+            words: [
+                QuranWord(id: "103:1:1", arabic: "وَالْعَصْرِ", transliteration: "Wal-'asr", translation: "By time", rootWord: "ع-ص-ر", rootMeaning: "time, era", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 601,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "103:2",
+            surahId: 103,
+            ayahNumber: 2,
+            arabic: "إِنَّ الْإِنسَانَ لَفِي خُسْرٍ",
+            transliteration: "Innal-insana lafi khusr",
+            translation: "Indeed, mankind is in loss",
+            words: [
+                QuranWord(id: "103:2:1", arabic: "إِنَّ", transliteration: "Inna", translation: "Indeed", rootWord: nil, rootMeaning: nil, tajweedRules: [TajweedRule.ghunnah], audioFileName: nil),
+                QuranWord(id: "103:2:2", arabic: "الْإِنسَانَ", transliteration: "al-insan", translation: "mankind", rootWord: "ء-ن-س", rootMeaning: "human", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "103:2:3", arabic: "لَفِي", transliteration: "lafi", translation: "is surely in", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "103:2:4", arabic: "خُسْرٍ", transliteration: "khusr", translation: "loss", rootWord: "خ-س-ر", rootMeaning: "loss", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 601,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "103:3",
+            surahId: 103,
+            ayahNumber: 3,
+            arabic: "إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ",
+            transliteration: "Illalladhina amanu wa 'amilus-salihati wa tawasaw bil-haqqi wa tawasaw bis-sabr",
+            translation: "Except for those who have believed and done righteous deeds and advised each other to truth and advised each other to patience",
+            words: [
+                QuranWord(id: "103:3:1", arabic: "إِلَّا", transliteration: "Illa", translation: "Except", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "103:3:2", arabic: "الَّذِينَ", transliteration: "alladhina", translation: "those who", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "103:3:3", arabic: "آمَنُوا", transliteration: "amanu", translation: "have believed", rootWord: "ء-م-ن", rootMeaning: "faith", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "103:3:4", arabic: "وَعَمِلُوا", transliteration: "wa 'amilu", translation: "and done", rootWord: "ع-م-ل", rootMeaning: "to do", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "103:3:5", arabic: "الصَّالِحَاتِ", transliteration: "as-salihat", translation: "righteous deeds", rootWord: "ص-ل-ح", rootMeaning: "righteousness", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "103:3:6", arabic: "وَتَوَاصَوْا", transliteration: "wa tawasaw", translation: "and advised each other", rootWord: "و-ص-ي", rootMeaning: "advise", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "103:3:7", arabic: "بِالْحَقِّ", transliteration: "bil-haqq", translation: "to truth", rootWord: "ح-ق-ق", rootMeaning: "truth", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "103:3:8", arabic: "وَتَوَاصَوْا", transliteration: "wa tawasaw", translation: "and advised each other", rootWord: "و-ص-ي", rootMeaning: "advise", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "103:3:9", arabic: "بِالصَّبْرِ", transliteration: "bis-sabr", translation: "to patience", rootWord: "ص-ب-ر", rootMeaning: "patience", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 601,
+            audioFileName: nil
+        )
+    ]
+    
+    // Sample ayahs for An-Nasr (110)
+    static let anNasr: [Ayah] = [
+        Ayah(
+            id: "110:1",
+            surahId: 110,
+            ayahNumber: 1,
+            arabic: "إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ",
+            transliteration: "Idha ja'a nasrullahi wal-fath",
+            translation: "When the victory of Allah has come and the conquest",
+            words: [
+                QuranWord(id: "110:1:1", arabic: "إِذَا", transliteration: "Idha", translation: "When", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:1:2", arabic: "جَاءَ", transliteration: "ja'a", translation: "has come", rootWord: "ج-ي-ء", rootMeaning: "to come", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:1:3", arabic: "نَصْرُ", transliteration: "nasru", translation: "the victory", rootWord: "ن-ص-ر", rootMeaning: "help, victory", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:1:4", arabic: "اللَّهِ", transliteration: "Allahi", translation: "of Allah", rootWord: "إ-ل-ه", rootMeaning: "God", tajweedRules: [TajweedRule.lafzatullahFull], audioFileName: nil),
+                QuranWord(id: "110:1:5", arabic: "وَالْفَتْحُ", transliteration: "wal-fath", translation: "and the conquest", rootWord: "ف-ت-ح", rootMeaning: "to open, conquer", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "110:2",
+            surahId: 110,
+            ayahNumber: 2,
+            arabic: "وَرَأَيْتَ النَّاسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا",
+            transliteration: "Wa ra'aytan-nasa yadkhuluna fi dinil-lahi afwaja",
+            translation: "And you see the people entering into the religion of Allah in multitudes",
+            words: [
+                QuranWord(id: "110:2:1", arabic: "وَرَأَيْتَ", transliteration: "Wa ra'ayta", translation: "And you see", rootWord: "ر-ء-ي", rootMeaning: "to see", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:2:2", arabic: "النَّاسَ", transliteration: "an-nasa", translation: "the people", rootWord: "ن-و-س", rootMeaning: "people", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:2:3", arabic: "يَدْخُلُونَ", transliteration: "yadkhuluna", translation: "entering", rootWord: "د-خ-ل", rootMeaning: "to enter", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:2:4", arabic: "فِي", transliteration: "fi", translation: "into", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:2:5", arabic: "دِينِ", transliteration: "dini", translation: "the religion", rootWord: "د-ي-ن", rootMeaning: "religion", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:2:6", arabic: "اللَّهِ", transliteration: "Allahi", translation: "of Allah", rootWord: "إ-ل-ه", rootMeaning: "God", tajweedRules: [TajweedRule.lafzatullahFull], audioFileName: nil),
+                QuranWord(id: "110:2:7", arabic: "أَفْوَاجًا", transliteration: "afwaja", translation: "in multitudes", rootWord: "ف-و-ج", rootMeaning: "group, crowd", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "110:3",
+            surahId: 110,
+            ayahNumber: 3,
+            arabic: "فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ ۚ إِنَّهُ كَانَ تَوَّابًا",
+            transliteration: "Fasabbih bihamdi Rabbika wastaghfirh, innahu kana tawwaba",
+            translation: "Then exalt Him with praise of your Lord and ask forgiveness of Him. Indeed, He is ever Accepting of repentance",
+            words: [
+                QuranWord(id: "110:3:1", arabic: "فَسَبِّحْ", transliteration: "Fasabbih", translation: "Then exalt", rootWord: "س-ب-ح", rootMeaning: "glorify", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:3:2", arabic: "بِحَمْدِ", transliteration: "bihamdi", translation: "with praise", rootWord: "ح-م-د", rootMeaning: "praise", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:3:3", arabic: "رَبِّكَ", transliteration: "Rabbika", translation: "of your Lord", rootWord: "ر-ب-ب", rootMeaning: "Lord", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:3:4", arabic: "وَاسْتَغْفِرْهُ", transliteration: "wastaghfirh", translation: "and ask forgiveness", rootWord: "غ-ف-ر", rootMeaning: "forgiveness", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:3:5", arabic: "إِنَّهُ", transliteration: "innahu", translation: "Indeed, He", rootWord: nil, rootMeaning: nil, tajweedRules: [TajweedRule.ghunnah], audioFileName: nil),
+                QuranWord(id: "110:3:6", arabic: "كَانَ", transliteration: "kana", translation: "is ever", rootWord: "ك-و-ن", rootMeaning: "to be", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "110:3:7", arabic: "تَوَّابًا", transliteration: "tawwaba", translation: "Accepting of repentance", rootWord: "ت-و-ب", rootMeaning: "repentance", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        )
+    ]
+    
+    // Sample ayahs for Al-Kafirun (109)
+    static let alKafirun: [Ayah] = [
+        Ayah(
+            id: "109:1",
+            surahId: 109,
+            ayahNumber: 1,
+            arabic: "قُلْ يَا أَيُّهَا الْكَافِرُونَ",
+            transliteration: "Qul ya ayyuhal-kafirun",
+            translation: "Say, O disbelievers",
+            words: [
+                QuranWord(id: "109:1:1", arabic: "قُلْ", transliteration: "Qul", translation: "Say", rootWord: "ق-و-ل", rootMeaning: "to say", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil),
+                QuranWord(id: "109:1:2", arabic: "يَا", transliteration: "ya", translation: "O", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:1:3", arabic: "أَيُّهَا", transliteration: "ayyuha", translation: "you", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:1:4", arabic: "الْكَافِرُونَ", transliteration: "al-kafirun", translation: "disbelievers", rootWord: "ك-ف-ر", rootMeaning: "to disbelieve", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "109:2",
+            surahId: 109,
+            ayahNumber: 2,
+            arabic: "لَا أَعْبُدُ مَا تَعْبُدُونَ",
+            transliteration: "La a'budu ma ta'budun",
+            translation: "I do not worship what you worship",
+            words: [
+                QuranWord(id: "109:2:1", arabic: "لَا", transliteration: "La", translation: "Not", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:2:2", arabic: "أَعْبُدُ", transliteration: "a'budu", translation: "I worship", rootWord: "ع-ب-د", rootMeaning: "worship", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:2:3", arabic: "مَا", transliteration: "ma", translation: "what", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:2:4", arabic: "تَعْبُدُونَ", transliteration: "ta'budun", translation: "you worship", rootWord: "ع-ب-د", rootMeaning: "worship", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "109:3",
+            surahId: 109,
+            ayahNumber: 3,
+            arabic: "وَلَا أَنتُمْ عَابِدُونَ مَا أَعْبُدُ",
+            transliteration: "Wa la antum 'abiduna ma a'bud",
+            translation: "Nor are you worshippers of what I worship",
+            words: [
+                QuranWord(id: "109:3:1", arabic: "وَلَا", transliteration: "Wa la", translation: "Nor", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:3:2", arabic: "أَنتُمْ", transliteration: "antum", translation: "are you", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:3:3", arabic: "عَابِدُونَ", transliteration: "'abiduna", translation: "worshippers", rootWord: "ع-ب-د", rootMeaning: "worship", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:3:4", arabic: "مَا", transliteration: "ma", translation: "of what", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:3:5", arabic: "أَعْبُدُ", transliteration: "a'bud", translation: "I worship", rootWord: "ع-ب-د", rootMeaning: "worship", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "109:4",
+            surahId: 109,
+            ayahNumber: 4,
+            arabic: "وَلَا أَنَا عَابِدٌ مَّا عَبَدتُّمْ",
+            transliteration: "Wa la ana 'abidum ma 'abadtum",
+            translation: "Nor will I be a worshipper of what you worship",
+            words: [
+                QuranWord(id: "109:4:1", arabic: "وَلَا", transliteration: "Wa la", translation: "Nor will", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:4:2", arabic: "أَنَا", transliteration: "ana", translation: "I be", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:4:3", arabic: "عَابِدٌ", transliteration: "'abidun", translation: "a worshipper", rootWord: "ع-ب-د", rootMeaning: "worship", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:4:4", arabic: "مَّا", transliteration: "ma", translation: "of what", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:4:5", arabic: "عَبَدتُّمْ", transliteration: "'abadtum", translation: "you worship", rootWord: "ع-ب-د", rootMeaning: "worship", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "109:5",
+            surahId: 109,
+            ayahNumber: 5,
+            arabic: "وَلَا أَنتُمْ عَابِدُونَ مَا أَعْبُدُ",
+            transliteration: "Wa la antum 'abiduna ma a'bud",
+            translation: "Nor will you be worshippers of what I worship",
+            words: [
+                QuranWord(id: "109:5:1", arabic: "وَلَا", transliteration: "Wa la", translation: "Nor will", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:5:2", arabic: "أَنتُمْ", transliteration: "antum", translation: "you be", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:5:3", arabic: "عَابِدُونَ", transliteration: "'abiduna", translation: "worshippers", rootWord: "ع-ب-د", rootMeaning: "worship", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:5:4", arabic: "مَا", transliteration: "ma", translation: "of what", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:5:5", arabic: "أَعْبُدُ", transliteration: "a'bud", translation: "I worship", rootWord: "ع-ب-د", rootMeaning: "worship", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "109:6",
+            surahId: 109,
+            ayahNumber: 6,
+            arabic: "لَكُمْ دِينُكُمْ وَلِيَ دِينِ",
+            transliteration: "Lakum dinukum wa liya din",
+            translation: "For you is your religion, and for me is my religion",
+            words: [
+                QuranWord(id: "109:6:1", arabic: "لَكُمْ", transliteration: "Lakum", translation: "For you", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:6:2", arabic: "دِينُكُمْ", transliteration: "dinukum", translation: "is your religion", rootWord: "د-ي-ن", rootMeaning: "religion", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:6:3", arabic: "وَلِيَ", transliteration: "wa liya", translation: "and for me", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "109:6:4", arabic: "دِينِ", transliteration: "din", translation: "is my religion", rootWord: "د-ي-ن", rootMeaning: "religion", tajweedRules: [], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        )
+    ]
+    
+    // Sample ayahs for Al-Masad (111)
+    static let alMasad: [Ayah] = [
+        Ayah(
+            id: "111:1",
+            surahId: 111,
+            ayahNumber: 1,
+            arabic: "تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ",
+            transliteration: "Tabbat yada abi Lahabiw wa tabb",
+            translation: "May the hands of Abu Lahab be ruined, and ruined is he",
+            words: [
+                QuranWord(id: "111:1:1", arabic: "تَبَّتْ", transliteration: "Tabbat", translation: "May be ruined", rootWord: "ت-ب-ب", rootMeaning: "to perish", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:1:2", arabic: "يَدَا", transliteration: "yada", translation: "the hands", rootWord: "ي-د-ي", rootMeaning: "hand", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:1:3", arabic: "أَبِي", transliteration: "abi", translation: "of the father", rootWord: "أ-ب-و", rootMeaning: "father", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:1:4", arabic: "لَهَبٍ", transliteration: "Lahab", translation: "of Lahab (flame)", rootWord: "ل-ه-ب", rootMeaning: "flame", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil),
+                QuranWord(id: "111:1:5", arabic: "وَتَبَّ", transliteration: "wa tabb", translation: "and ruined is he", rootWord: "ت-ب-ب", rootMeaning: "to perish", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "111:2",
+            surahId: 111,
+            ayahNumber: 2,
+            arabic: "مَا أَغْنَىٰ عَنْهُ مَالُهُ وَمَا كَسَبَ",
+            transliteration: "Ma aghna 'anhu maluhu wa ma kasab",
+            translation: "His wealth will not avail him or that which he gained",
+            words: [
+                QuranWord(id: "111:2:1", arabic: "مَا", transliteration: "Ma", translation: "Not", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:2:2", arabic: "أَغْنَىٰ", transliteration: "aghna", translation: "will avail", rootWord: "غ-ن-ي", rootMeaning: "to enrich", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:2:3", arabic: "عَنْهُ", transliteration: "'anhu", translation: "him", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:2:4", arabic: "مَالُهُ", transliteration: "maluhu", translation: "his wealth", rootWord: "م-و-ل", rootMeaning: "wealth", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:2:5", arabic: "وَمَا", transliteration: "wa ma", translation: "or that which", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:2:6", arabic: "كَسَبَ", transliteration: "kasab", translation: "he gained", rootWord: "ك-س-ب", rootMeaning: "to earn", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "111:3",
+            surahId: 111,
+            ayahNumber: 3,
+            arabic: "سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ",
+            transliteration: "Sayasla naran dhata lahab",
+            translation: "He will burn in a Fire of blazing flame",
+            words: [
+                QuranWord(id: "111:3:1", arabic: "سَيَصْلَىٰ", transliteration: "Sayasla", translation: "He will burn", rootWord: "ص-ل-ي", rootMeaning: "to burn", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:3:2", arabic: "نَارًا", transliteration: "naran", translation: "in a Fire", rootWord: "ن-و-ر", rootMeaning: "fire", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:3:3", arabic: "ذَاتَ", transliteration: "dhata", translation: "of", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:3:4", arabic: "لَهَبٍ", transliteration: "lahab", translation: "blazing flame", rootWord: "ل-ه-ب", rootMeaning: "flame", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "111:4",
+            surahId: 111,
+            ayahNumber: 4,
+            arabic: "وَامْرَأَتُهُ حَمَّالَةَ الْحَطَبِ",
+            transliteration: "Wamra'atuhu hammalatal-hatab",
+            translation: "And his wife, the carrier of firewood",
+            words: [
+                QuranWord(id: "111:4:1", arabic: "وَامْرَأَتُهُ", transliteration: "Wamra'atuhu", translation: "And his wife", rootWord: "م-ر-ء", rootMeaning: "woman", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:4:2", arabic: "حَمَّالَةَ", transliteration: "hammalata", translation: "the carrier", rootWord: "ح-م-ل", rootMeaning: "to carry", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:4:3", arabic: "الْحَطَبِ", transliteration: "al-hatab", translation: "of firewood", rootWord: "ح-ط-ب", rootMeaning: "firewood", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        ),
+        Ayah(
+            id: "111:5",
+            surahId: 111,
+            ayahNumber: 5,
+            arabic: "فِي جِيدِهَا حَبْلٌ مِّن مَّسَدٍ",
+            transliteration: "Fi jidiha hablum mim masad",
+            translation: "Around her neck is a rope of palm fiber",
+            words: [
+                QuranWord(id: "111:5:1", arabic: "فِي", transliteration: "Fi", translation: "Around", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:5:2", arabic: "جِيدِهَا", transliteration: "jidiha", translation: "her neck", rootWord: "ج-ي-د", rootMeaning: "neck", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:5:3", arabic: "حَبْلٌ", transliteration: "hablun", translation: "is a rope", rootWord: "ح-ب-ل", rootMeaning: "rope", tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:5:4", arabic: "مِّن", transliteration: "min", translation: "of", rootWord: nil, rootMeaning: nil, tajweedRules: [], audioFileName: nil),
+                QuranWord(id: "111:5:5", arabic: "مَّسَدٍ", transliteration: "masad", translation: "palm fiber", rootWord: "م-س-د", rootMeaning: "twisted rope", tajweedRules: [TajweedRule.qalqalah], audioFileName: nil)
+            ],
+            sajdahType: nil,
+            juz: 30,
+            page: 603,
+            audioFileName: nil
+        )
+    ]
+    
     static func getAyahs(forSurah surahId: Int) -> [Ayah] {
         switch surahId {
         case 1: return alFatiha
+        case 103: return alAsr
+        case 108: return alKawthar
+        case 109: return alKafirun
+        case 110: return anNasr
+        case 111: return alMasad
         case 112: return alIkhlas
+        case 113: return alFalaq
+        case 114: return anNas
         default: return []
         }
     }
