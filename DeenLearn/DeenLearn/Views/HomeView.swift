@@ -193,9 +193,8 @@ struct HomeView: View {
                             .font(.title2.bold())
                             .foregroundColor(.white)
                         
-                        Text("السلام عليكم")
-                            .font(.headline)
-                            .foregroundColor(.white.opacity(0.9))
+                        // Tappable Arabic greeting
+                        SpeakableArabicGreeting(text: "السلام عليكم", isKidsMode: true)
                         
                         // Age-appropriate message
                         Text(ageAppropriateAdventureText)
@@ -239,9 +238,8 @@ struct HomeView: View {
                         .font(.title3.bold())
                         .foregroundColor(.white)
                     
-                    Text("السلام عليكم")
-                        .font(.headline)
-                        .foregroundColor(.white.opacity(0.8))
+                    // Tappable Arabic greeting
+                    SpeakableArabicGreeting(text: "السلام عليكم", isKidsMode: false)
                 }
                 
                 Spacer()
@@ -935,6 +933,37 @@ struct ReminderCard: View {
         .background(Color(.systemBackground))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
+    }
+}
+
+// MARK: - Speakable Arabic Greeting
+
+struct SpeakableArabicGreeting: View {
+    let text: String
+    let isKidsMode: Bool
+    
+    @ObservedObject private var ttsService = TextToSpeechService.shared
+    
+    private var isCurrentlySpeaking: Bool {
+        ttsService.isSpeaking && ttsService.currentText == text
+    }
+    
+    var body: some View {
+        HStack(spacing: 4) {
+            Text(text)
+                .font(.headline)
+                .foregroundColor(.white.opacity(0.9))
+            
+            Image(systemName: isCurrentlySpeaking ? "speaker.wave.3.fill" : "speaker.wave.2")
+                .font(.caption)
+                .foregroundColor(isCurrentlySpeaking ? .yellow : .white.opacity(0.6))
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+            ttsService.speakArabic(text, rate: 0.35)
+        }
     }
 }
 

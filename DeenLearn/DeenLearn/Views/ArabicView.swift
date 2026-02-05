@@ -94,6 +94,7 @@ struct AlphabetSectionView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedLetter: ArabicLetter?
     @State private var showLetterDetail = false
+    @ObservedObject private var ttsService = TextToSpeechService.shared
     
     let columns = [
         GridItem(.adaptive(minimum: 70), spacing: 12)
@@ -101,6 +102,9 @@ struct AlphabetSectionView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
+            // Tap to Listen Hint
+            TapToListenHint(isKidsMode: appState.isKidsMode)
+            
             // Header
             if appState.isKidsMode {
                 Text("🎨 Tap a letter to learn!")
@@ -109,7 +113,7 @@ struct AlphabetSectionView: View {
             } else {
                 Text("Arabic Alphabet - 28 Letters")
                     .font(.headline)
-                Text("Tap any letter to see all forms and pronunciation")
+                Text("Tap any letter to see all forms and hear pronunciation")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -117,8 +121,13 @@ struct AlphabetSectionView: View {
             // Letter Grid
             LazyVGrid(columns: columns, spacing: 12) {
                 ForEach(ArabicLetter.alphabet) { letter in
-                    LetterCardView(letter: letter, isKidsMode: appState.isKidsMode)
+                    LetterCardView(letter: letter, isKidsMode: appState.isKidsMode, ttsService: ttsService)
                         .onTapGesture {
+                            // Play the letter sound
+                            let impact = UIImpactFeedbackGenerator(style: .light)
+                            impact.impactOccurred()
+                            ttsService.speakArabic(letter.isolated, rate: 0.3)
+                            
                             selectedLetter = letter
                             showLetterDetail = true
                         }
@@ -137,19 +146,31 @@ struct AlphabetSectionView: View {
 struct LetterCardView: View {
     let letter: ArabicLetter
     let isKidsMode: Bool
+    @ObservedObject var ttsService: TextToSpeechService
+    
+    private var isCurrentlySpeaking: Bool {
+        ttsService.isSpeaking && ttsService.currentText == letter.isolated
+    }
     
     var body: some View {
         VStack(spacing: 4) {
             Text(letter.isolated)
                 .font(.system(size: isKidsMode ? 36 : 32))
-            Text(letter.name)
-                .font(.caption2)
-                .foregroundColor(.secondary)
+            
+            HStack(spacing: 2) {
+                Text(letter.name)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                
+                Image(systemName: isCurrentlySpeaking ? "speaker.wave.3.fill" : "speaker.wave.2")
+                    .font(.system(size: 8))
+                    .foregroundColor(isCurrentlySpeaking ? .blue : .gray.opacity(0.5))
+            }
         }
         .frame(width: 70, height: 70)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemBackground))
+                .fill(isCurrentlySpeaking ? Color.blue.opacity(0.1) : Color(.systemBackground))
                 .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
         )
     }
@@ -159,26 +180,42 @@ struct LetterDetailView: View {
     let letter: ArabicLetter
     @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) var dismiss
+    @ObservedObject private var ttsService = TextToSpeechService.shared
     
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 24) {
-                    // Large Letter Display
+                    // Large Letter Display with tap-to-listen
                     VStack(spacing: 8) {
                         Text(letter.isolated)
                             .font(.system(size: 120))
                         Text(letter.name)
                             .font(.title)
                             .fontWeight(.bold)
-                        Text("[\(letter.transliteration)]")
-                            .font(.title3)
-                            .foregroundColor(.secondary)
+                        
+                        HStack(spacing: 4) {
+                            Text("[\(letter.transliteration)]")
+                                .font(.title3)
+                                .foregroundColor(.secondary)
+                            
+                            Image(systemName: ttsService.isSpeaking && ttsService.currentText == letter.isolated ? "speaker.wave.3.fill" : "speaker.wave.2")
+                                .foregroundColor(ttsService.isSpeaking ? .blue : .gray)
+                        }
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(appState.themeColor.opacity(0.1))
                     .cornerRadius(20)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.impactOccurred()
+                        ttsService.speakArabic(letter.isolated, rate: 0.3)
+                    }
+                    
+                    // Tap to Listen hint
+                    TapToListenHint(isKidsMode: appState.isKidsMode)
                     
                     // Four Forms
                     VStack(alignment: .leading, spacing: 12) {
@@ -208,24 +245,22 @@ struct LetterDetailView: View {
                         .background(Color(.systemGray6))
                         .cornerRadius(12)
                         
-                        // Audio button placeholder
-                        Button(action: { /* Audio playback placeholder */ }) {
+                        // Audio button - NOW WORKING
+                        Button(action: {
+                            let impact = UIImpactFeedbackGenerator(style: .medium)
+                            impact.impactOccurred()
+                            ttsService.speakArabic(letter.isolated, rate: 0.3)
+                        }) {
                             HStack {
-                                Image(systemName: "play.circle.fill")
-                                Text("Hear Pronunciation")
+                                Image(systemName: ttsService.isSpeaking && ttsService.currentText == letter.isolated ? "stop.circle.fill" : "play.circle.fill")
+                                Text(ttsService.isSpeaking && ttsService.currentText == letter.isolated ? "Playing..." : "Hear Pronunciation")
                             }
                             .padding()
                             .frame(maxWidth: .infinity)
-                            .background(appState.themeColor)
+                            .background(ttsService.isSpeaking && ttsService.currentText == letter.isolated ? Color.orange : appState.themeColor)
                             .foregroundColor(.white)
                             .cornerRadius(12)
                         }
-                        .disabled(true)
-                        .opacity(0.6)
-                        
-                        Text("Audio coming soon")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
                     }
                     
                     // Example Word
@@ -238,8 +273,14 @@ struct LetterDetailView: View {
                                 .font(.system(size: 50))
                             
                             VStack(alignment: .leading, spacing: 4) {
-                                Text(letter.exampleWord)
-                                    .font(.system(size: 28))
+                                HStack(spacing: 4) {
+                                    Text(letter.exampleWord)
+                                        .font(.system(size: 28))
+                                    
+                                    Image(systemName: ttsService.isSpeaking && ttsService.currentText == letter.exampleWord ? "speaker.wave.3.fill" : "speaker.wave.2")
+                                        .font(.caption)
+                                        .foregroundColor(ttsService.isSpeaking && ttsService.currentText == letter.exampleWord ? .blue : .gray)
+                                }
                                 Text(letter.exampleTranslation)
                                     .font(.title3)
                                     .foregroundColor(.secondary)
@@ -249,6 +290,12 @@ struct LetterDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color(.systemGray6))
                         .cornerRadius(12)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            let impact = UIImpactFeedbackGenerator(style: .light)
+                            impact.impactOccurred()
+                            ttsService.speakArabic(letter.exampleWord, rate: 0.35)
+                        }
                     }
                     
                     if appState.isKidsMode {

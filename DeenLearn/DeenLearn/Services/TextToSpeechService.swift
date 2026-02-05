@@ -349,19 +349,227 @@ struct WordCardWithAudio: View {
     }
 }
 
+// MARK: - Tap to Listen Hint Banner
+
+/// A visual banner that shows users they can tap text to hear it spoken
+struct TapToListenHint: View {
+    var isKidsMode: Bool = false
+    @State private var isPulsing = false
+    
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "speaker.wave.2.fill")
+                .foregroundColor(isKidsMode ? .orange : .blue)
+                .scaleEffect(isPulsing ? 1.2 : 1.0)
+                .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: isPulsing)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(isKidsMode ? "👆 Tap to Listen!" : "Tap to Listen")
+                    .font(isKidsMode ? .headline : .subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(isKidsMode ? .orange : .blue)
+                
+                Text(isKidsMode ? "Tap any text with 🔊 to hear it!" : "Tap text with speaker icon to hear pronunciation")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(isKidsMode ? Color.orange.opacity(0.1) : Color.blue.opacity(0.1))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(isKidsMode ? Color.orange.opacity(0.3) : Color.blue.opacity(0.3), lineWidth: 1)
+        )
+        .onAppear {
+            isPulsing = true
+        }
+    }
+}
+
+// MARK: - Tap to Listen Modifier
+
+/// A view modifier that adds tap-to-listen functionality to any text
+struct TapToListenModifier: ViewModifier {
+    let text: String
+    var language: String = "auto"
+    var showIcon: Bool = true
+    
+    @ObservedObject private var ttsService = TextToSpeechService.shared
+    @State private var isPressed = false
+    
+    func body(content: Content) -> some View {
+        HStack(spacing: 4) {
+            content
+            
+            if showIcon {
+                Image(systemName: ttsService.isSpeaking && ttsService.currentText == text ? "speaker.wave.3.fill" : "speaker.wave.2")
+                    .font(.caption)
+                    .foregroundColor(ttsService.isSpeaking && ttsService.currentText == text ? .blue : .gray)
+            }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+            
+            if language == "auto" {
+                ttsService.speakAutoDetect(text)
+            } else if language.starts(with: "ar") {
+                ttsService.speakArabic(text)
+            } else {
+                ttsService.speakEnglish(text)
+            }
+        }
+        .scaleEffect(isPressed ? 0.98 : 1.0)
+    }
+}
+
+extension View {
+    /// Adds tap-to-listen functionality to the view
+    func tapToListen(_ text: String, language: String = "auto", showIcon: Bool = true) -> some View {
+        self.modifier(TapToListenModifier(text: text, language: language, showIcon: showIcon))
+    }
+}
+
+// MARK: - Simple Speakable Text
+
+/// A simple text view with built-in tap-to-listen
+struct SpeakableText: View {
+    let text: String
+    var font: Font = .body
+    var language: String = "auto"
+    var showSpeakerIcon: Bool = true
+    var iconSize: CGFloat = 14
+    var foregroundColor: Color = .primary
+    
+    @ObservedObject private var ttsService = TextToSpeechService.shared
+    
+    private var isCurrentlySpeaking: Bool {
+        ttsService.isSpeaking && ttsService.currentText == text
+    }
+    
+    var body: some View {
+        HStack(spacing: 6) {
+            Text(text)
+                .font(font)
+                .foregroundColor(foregroundColor)
+            
+            if showSpeakerIcon {
+                Image(systemName: isCurrentlySpeaking ? "speaker.wave.3.fill" : "speaker.wave.2")
+                    .font(.system(size: iconSize))
+                    .foregroundColor(isCurrentlySpeaking ? .blue : .gray.opacity(0.6))
+            }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+            
+            if language == "auto" {
+                ttsService.speakAutoDetect(text)
+            } else if language.starts(with: "ar") {
+                ttsService.speakArabic(text)
+            } else {
+                ttsService.speakEnglish(text)
+            }
+        }
+    }
+}
+
+// MARK: - Arabic Letter with Audio
+
+/// A card for Arabic letters with tap-to-listen for pronunciation
+struct ArabicLetterAudioCard: View {
+    let letter: String
+    let letterName: String
+    let pronunciation: String
+    var isKidsMode: Bool = false
+    
+    @ObservedObject private var ttsService = TextToSpeechService.shared
+    @State private var isPressed = false
+    
+    private var isCurrentlySpeaking: Bool {
+        ttsService.isSpeaking && ttsService.currentText == letter
+    }
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            // Letter display
+            Text(letter)
+                .font(.system(size: isKidsMode ? 48 : 40))
+            
+            // Letter name with speaker
+            HStack(spacing: 4) {
+                Text(letterName)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                Image(systemName: isCurrentlySpeaking ? "speaker.wave.3.fill" : "speaker.wave.2")
+                    .font(.system(size: 10))
+                    .foregroundColor(isCurrentlySpeaking ? .blue : .gray)
+            }
+        }
+        .frame(width: isKidsMode ? 90 : 80, height: isKidsMode ? 90 : 80)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(.systemBackground))
+                .shadow(color: .black.opacity(0.1), radius: 3, y: 2)
+        )
+        .scaleEffect(isPressed ? 0.95 : 1.0)
+        .onTapGesture {
+            withAnimation(.easeInOut(duration: 0.1)) {
+                isPressed = true
+            }
+            
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+            
+            // Speak the letter name for better pronunciation learning
+            ttsService.speakArabic(letter, rate: 0.3)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation {
+                    isPressed = false
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Preview
 
 struct TappableTextView_Previews: PreviewProvider {
     static var previews: some View {
         VStack(spacing: 24) {
+            // Tap to Listen Hint
+            TapToListenHint(isKidsMode: true)
+                .padding(.horizontal)
+            
+            TapToListenHint(isKidsMode: false)
+                .padding(.horizontal)
+            
             // Basic tappable text
             TappableTextView(text: "Hello World", language: "en-US")
+            
+            // Speakable text
+            SpeakableText(text: "Assalamu Alaikum", font: .title3)
             
             // Arabic tappable text
             ArabicTappableText(
                 arabicText: "بِسْمِ اللَّهِ",
                 translation: "In the name of Allah"
             )
+            
+            // Arabic letter card
+            HStack(spacing: 12) {
+                ArabicLetterAudioCard(letter: "ا", letterName: "Alif", pronunciation: "a", isKidsMode: true)
+                ArabicLetterAudioCard(letter: "ب", letterName: "Ba", pronunciation: "b", isKidsMode: false)
+            }
             
             // Quran verse
             QuranVerseTappable(

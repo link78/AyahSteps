@@ -285,19 +285,39 @@ struct SurahReaderView: View {
     @Environment(\.dismiss) var dismiss
     @State private var selectedWord: QuranWord?
     @State private var bookmarks: [Int] = []
+    @ObservedObject private var ttsService = TextToSpeechService.shared
     
     var ayahs: [Ayah] {
         Ayah.getAyahs(forSurah: surah.id)
     }
     
+    private let bismillah = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"
+    
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
+                    // Tap to Listen hint
+                    TapToListenHint(isKidsMode: isKidsMode)
+                        .padding(.horizontal)
+                    
                     // Surah header
                     VStack(spacing: 12) {
-                        Text(surah.nameArabic)
-                            .font(.largeTitle)
+                        // Surah name in Arabic - tappable
+                        HStack(spacing: 6) {
+                            Text(surah.nameArabic)
+                                .font(.largeTitle)
+                            
+                            Image(systemName: ttsService.isSpeaking && ttsService.currentText == surah.nameArabic ? "speaker.wave.3.fill" : "speaker.wave.2")
+                                .font(.title3)
+                                .foregroundColor(ttsService.isSpeaking && ttsService.currentText == surah.nameArabic ? .blue : .gray)
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            let impact = UIImpactFeedbackGenerator(style: .light)
+                            impact.impactOccurred()
+                            ttsService.speakArabic(surah.nameArabic, rate: 0.35)
+                        }
                         
                         Text(surah.name)
                             .font(.title2)
@@ -306,12 +326,24 @@ struct SurahReaderView: View {
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                         
-                        // Bismillah (except for Surah 9)
+                        // Bismillah (except for Surah 9) - tappable
                         if surah.id != 9 && surah.id != 1 {
-                            Text("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ")
-                                .font(.title2)
-                                .foregroundColor(Color(hex: "6B5B95"))
-                                .padding(.top)
+                            HStack(spacing: 6) {
+                                Text(bismillah)
+                                    .font(.title2)
+                                    .foregroundColor(Color(hex: "6B5B95"))
+                                
+                                Image(systemName: ttsService.isSpeaking && ttsService.currentText == bismillah ? "speaker.wave.3.fill" : "speaker.wave.2")
+                                    .font(.caption)
+                                    .foregroundColor(ttsService.isSpeaking && ttsService.currentText == bismillah ? .blue : .gray)
+                            }
+                            .padding(.top)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                let impact = UIImpactFeedbackGenerator(style: .light)
+                                impact.impactOccurred()
+                                ttsService.speakArabic(bismillah, rate: 0.3)
+                            }
                         }
                     }
                     .padding()
@@ -370,13 +402,40 @@ struct AyahReadingView: View {
     let onWordTap: (QuranWord) -> Void
     let onBookmarkToggle: () -> Void
     
+    @ObservedObject private var ttsService = TextToSpeechService.shared
+    
+    // Get full ayah text for audio
+    private var fullAyahArabic: String {
+        ayah.words.map { $0.arabic }.joined(separator: " ")
+    }
+    
+    private var isPlayingThisAyah: Bool {
+        ttsService.isSpeaking && ttsService.currentText == fullAyahArabic
+    }
+    
     var body: some View {
         VStack(alignment: .trailing, spacing: 12) {
-            // Ayah number and bookmark
+            // Ayah number, bookmark, and play button
             HStack {
                 Button(action: onBookmarkToggle) {
                     Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
                         .foregroundColor(isBookmarked ? .orange : .secondary)
+                }
+                
+                // Play entire ayah button
+                Button(action: {
+                    let impact = UIImpactFeedbackGenerator(style: .light)
+                    impact.impactOccurred()
+                    
+                    if isPlayingThisAyah {
+                        ttsService.stop()
+                    } else {
+                        ttsService.speakArabic(fullAyahArabic, rate: 0.3)
+                    }
+                }) {
+                    Image(systemName: isPlayingThisAyah ? "stop.circle.fill" : "play.circle.fill")
+                        .font(.title3)
+                        .foregroundColor(isPlayingThisAyah ? .orange : Color(hex: "6B5B95"))
                 }
                 
                 Spacer()
@@ -388,13 +447,29 @@ struct AyahReadingView: View {
                     .background(Circle().fill(Color(hex: "6B5B95")))
             }
             
-            // Arabic text with tappable words
+            // Arabic text with tappable words - each word plays when tapped
             FlowLayout(spacing: 8) {
                 ForEach(ayah.words) { word in
-                    Button(action: { onWordTap(word) }) {
-                        Text(word.arabic)
-                            .font(.title2)
-                            .foregroundColor(tajweedColor(for: word))
+                    Button(action: {
+                        // Play the word audio
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.impactOccurred()
+                        ttsService.speakArabic(word.arabic, rate: 0.3)
+                        
+                        // Also show word detail
+                        onWordTap(word)
+                    }) {
+                        HStack(spacing: 2) {
+                            Text(word.arabic)
+                                .font(.title2)
+                                .foregroundColor(tajweedColor(for: word))
+                            
+                            if ttsService.isSpeaking && ttsService.currentText == word.arabic {
+                                Image(systemName: "speaker.wave.2.fill")
+                                    .font(.caption2)
+                                    .foregroundColor(.blue)
+                            }
+                        }
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
@@ -413,8 +488,12 @@ struct AyahReadingView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(isPlayingThisAyah ? Color.blue.opacity(0.05) : Color(.systemBackground))
         .cornerRadius(16)
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(isPlayingThisAyah ? Color.blue.opacity(0.3) : Color.clear, lineWidth: 2)
+        )
     }
     
     private func tajweedColor(for word: QuranWord) -> Color {
@@ -478,16 +557,29 @@ struct WordDetailView: View {
     let isKidsMode: Bool
     
     @Environment(\.dismiss) var dismiss
-    @State private var isPlayingAudio = false
+    @ObservedObject private var ttsService = TextToSpeechService.shared
+    
+    private var isPlayingThisWord: Bool {
+        ttsService.isSpeaking && ttsService.currentText == word.arabic
+    }
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
-                    // Word display
+                    // Tap to Listen hint
+                    TapToListenHint(isKidsMode: isKidsMode)
+                    
+                    // Word display - tappable for pronunciation
                     VStack(spacing: 16) {
-                        Text(word.arabic)
-                            .font(.system(size: isKidsMode ? 72 : 60))
+                        HStack(spacing: 8) {
+                            Text(word.arabic)
+                                .font(.system(size: isKidsMode ? 72 : 60))
+                            
+                            Image(systemName: isPlayingThisWord ? "speaker.wave.3.fill" : "speaker.wave.2")
+                                .font(.title2)
+                                .foregroundColor(isPlayingThisWord ? .blue : .gray)
+                        }
                         
                         Text(word.transliteration)
                             .font(.title2)
@@ -498,7 +590,7 @@ struct WordDetailView: View {
                             .foregroundColor(.secondary)
                         
                         if isKidsMode {
-                            Text("✨ Tap the button to hear how it sounds! ✨")
+                            Text("✨ Tap the word or button to hear how it sounds! ✨")
                                 .font(.caption)
                                 .foregroundColor(.purple)
                         }
@@ -507,32 +599,38 @@ struct WordDetailView: View {
                     .frame(maxWidth: .infinity)
                     .background(Color(hex: "6B5B95").opacity(0.1))
                     .cornerRadius(20)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.impactOccurred()
+                        ttsService.speakArabic(word.arabic, rate: 0.3)
+                    }
                     
-                    // Audio button
+                    // Audio button - NOW WORKING with actual TTS
                     Button(action: {
-                        // Toggle play state (placeholder for audio)
-                        withAnimation {
-                            isPlayingAudio.toggle()
-                        }
-                        // Auto-stop after 1.5 seconds
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                            isPlayingAudio = false
+                        let impact = UIImpactFeedbackGenerator(style: .medium)
+                        impact.impactOccurred()
+                        
+                        if isPlayingThisWord {
+                            ttsService.stop()
+                        } else {
+                            ttsService.speakArabic(word.arabic, rate: 0.3)
                         }
                     }) {
                         HStack {
-                            Image(systemName: isPlayingAudio ? "speaker.wave.3.fill" : "speaker.wave.2.fill")
-                                .symbolEffect(.bounce, value: isPlayingAudio)
-                            Text(isKidsMode ? "🔊 Hear Pronunciation" : "Play Pronunciation")
+                            Image(systemName: isPlayingThisWord ? "stop.circle.fill" : "speaker.wave.2.fill")
+                                .symbolEffect(.bounce, value: isPlayingThisWord)
+                            Text(isPlayingThisWord ? "🔊 Playing..." : (isKidsMode ? "🔊 Hear Pronunciation" : "Play Pronunciation"))
                         }
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(isPlayingAudio ? Color.green : Color(hex: "6B5B95"))
+                        .background(isPlayingThisWord ? Color.orange : Color(hex: "6B5B95"))
                         .cornerRadius(16)
                     }
                     
-                    Text(isPlayingAudio ? "Playing..." : "Tap to hear")
+                    Text(isPlayingThisWord ? "Speaking..." : "Tap to hear")
                         .font(.caption)
                         .foregroundColor(.secondary)
                     

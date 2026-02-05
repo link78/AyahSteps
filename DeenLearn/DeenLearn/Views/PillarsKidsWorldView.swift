@@ -697,6 +697,7 @@ struct StoryActivityView: View {
     
     @State private var currentPage = 0
     @State private var showingCompletion = false
+    @ObservedObject private var ttsService = TextToSpeechService.shared
     
     var stories: [StoryEpisode] {
         world.pillar.storyEpisodes
@@ -724,6 +725,7 @@ struct StoryActivityView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Close") {
+                        ttsService.stop() // Stop any playing audio when closing
                         dismiss()
                     }
                     .foregroundColor(.white)
@@ -734,6 +736,10 @@ struct StoryActivityView: View {
     
     var storyContentView: some View {
         VStack(spacing: 24) {
+            // Tap to Listen hint
+            TapToListenHint(isKidsMode: true)
+                .padding(.horizontal)
+            
             if stories.isEmpty {
                 // Fallback content for landmarks with no stories
                 landmarkStoryFallbackView
@@ -745,10 +751,22 @@ struct StoryActivityView: View {
                     .font(.system(size: 80))
                     .padding()
                 
-                // Title
-                Text(story.title)
-                    .font(.title2.bold())
-                    .foregroundColor(.white)
+                // Title - tappable
+                HStack(spacing: 6) {
+                    Text(story.title)
+                        .font(.title2.bold())
+                        .foregroundColor(.white)
+                    
+                    Image(systemName: ttsService.isSpeaking && ttsService.currentText == story.title ? "speaker.wave.3.fill" : "speaker.wave.2")
+                        .font(.caption)
+                        .foregroundColor(ttsService.isSpeaking && ttsService.currentText == story.title ? .yellow : .white.opacity(0.6))
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    let impact = UIImpactFeedbackGenerator(style: .light)
+                    impact.impactOccurred()
+                    ttsService.speakEnglish(story.title)
+                }
                 
                 // Narrator
                 HStack {
@@ -758,13 +776,38 @@ struct StoryActivityView: View {
                 .font(.subheadline)
                 .foregroundColor(.white.opacity(0.8))
                 
-                // Story content
-                ScrollView {
-                    Text(story.content)
-                        .font(.body)
+                // Story content with play button
+                VStack(spacing: 8) {
+                    // Play story button
+                    Button(action: {
+                        let impact = UIImpactFeedbackGenerator(style: .medium)
+                        impact.impactOccurred()
+                        
+                        if ttsService.isSpeaking && ttsService.currentText == story.content {
+                            ttsService.stop()
+                        } else {
+                            ttsService.speakEnglish(story.content, rate: 0.4)
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: ttsService.isSpeaking && ttsService.currentText == story.content ? "stop.circle.fill" : "play.circle.fill")
+                            Text(ttsService.isSpeaking && ttsService.currentText == story.content ? "Stop Reading" : "🔊 Read Story Aloud")
+                        }
+                        .font(.subheadline.bold())
                         .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .padding()
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(ttsService.isSpeaking && ttsService.currentText == story.content ? Color.orange : Color.green)
+                        .cornerRadius(20)
+                    }
+                    
+                    ScrollView {
+                        Text(story.content)
+                            .font(.body)
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                    }
                 }
                 .frame(maxHeight: 250)
                 .background(Color.white.opacity(0.1))
@@ -774,7 +817,10 @@ struct StoryActivityView: View {
                 // Navigation
                 HStack {
                     if currentPage > 0 {
-                        Button(action: { currentPage -= 1 }) {
+                        Button(action: {
+                            ttsService.stop()
+                            currentPage -= 1
+                        }) {
                             HStack {
                                 Image(systemName: "chevron.left")
                                 Text("Back")
@@ -800,6 +846,7 @@ struct StoryActivityView: View {
                     Spacer()
                     
                     Button(action: {
+                        ttsService.stop()
                         if currentPage < stories.count - 1 {
                             currentPage += 1
                         } else {
