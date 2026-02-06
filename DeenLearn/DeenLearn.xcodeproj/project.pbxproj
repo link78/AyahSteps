@@ -34,6 +34,15 @@
 		AAAAAAAAAAAAAAAAAAAAAA25 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114A /* ProfileView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA26 /* SalahTrainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114B /* SalahTrainerView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA27 /* TextToSpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114C /* TextToSpeechService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA28 /* QuranDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114D /* QuranDataService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA29 /* AITutorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114E /* AITutorService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA30 /* AIQuranCoachService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114F /* AIQuranCoachService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA31 /* AILearningAssistantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111150 /* AILearningAssistantService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA32 /* AIQuestionGeneratorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111151 /* AIQuestionGeneratorService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA33 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111152 /* SubscriptionService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA34 /* AITutorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111153 /* AITutorView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA35 /* AIQuranCoachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111154 /* AIQuranCoachView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA36 /* SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111155 /* SubscriptionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +74,15 @@
 		11111111111111111111114A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		11111111111111111111114B /* SalahTrainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahTrainerView.swift; sourceTree = "<group>"; };
 		11111111111111111111114C /* TextToSpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToSpeechService.swift; sourceTree = "<group>"; };
+		11111111111111111111114D /* QuranDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranDataService.swift; sourceTree = "<group>"; };
+		11111111111111111111114E /* AITutorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITutorService.swift; sourceTree = "<group>"; };
+		11111111111111111111114F /* AIQuranCoachService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIQuranCoachService.swift; sourceTree = "<group>"; };
+		111111111111111111111150 /* AILearningAssistantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AILearningAssistantService.swift; sourceTree = "<group>"; };
+		111111111111111111111151 /* AIQuestionGeneratorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIQuestionGeneratorService.swift; sourceTree = "<group>"; };
+		111111111111111111111152 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
+		111111111111111111111153 /* AITutorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITutorView.swift; sourceTree = "<group>"; };
+		111111111111111111111154 /* AIQuranCoachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIQuranCoachView.swift; sourceTree = "<group>"; };
+		111111111111111111111155 /* SubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +131,12 @@
 			isa = PBXGroup;
 			children = (
 				11111111111111111111114C /* TextToSpeechService.swift */,
+				11111111111111111111114D /* QuranDataService.swift */,
+				11111111111111111111114E /* AITutorService.swift */,
+				11111111111111111111114F /* AIQuranCoachService.swift */,
+				111111111111111111111150 /* AILearningAssistantService.swift */,
+				111111111111111111111151 /* AIQuestionGeneratorService.swift */,
+				111111111111111111111152 /* SubscriptionService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -148,6 +172,9 @@
 				111111111111111111111149 /* PrayerView.swift */,
 				11111111111111111111114A /* ProfileView.swift */,
 				11111111111111111111114B /* SalahTrainerView.swift */,
+				111111111111111111111153 /* AITutorView.swift */,
+				111111111111111111111154 /* AIQuranCoachView.swift */,
+				111111111111111111111155 /* SubscriptionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -256,6 +283,15 @@
 				AAAAAAAAAAAAAAAAAAAAAA25 /* ProfileView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA26 /* SalahTrainerView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA27 /* TextToSpeechService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA28 /* QuranDataService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA29 /* AITutorService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA30 /* AIQuranCoachService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA31 /* AILearningAssistantService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA32 /* AIQuestionGeneratorService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA33 /* SubscriptionService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA34 /* AITutorView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA35 /* AIQuranCoachView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA36 /* SubscriptionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

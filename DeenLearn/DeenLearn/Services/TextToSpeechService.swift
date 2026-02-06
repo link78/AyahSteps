@@ -5,7 +5,9 @@ import AVFoundation
 
 /// A singleton service that provides text-to-speech functionality
 /// allowing users to tap on text and hear it spoken aloud.
-class TextToSpeechService: NSObject, ObservableObject {
+/// Note: Using @MainActor to ensure thread safety with AVSpeechSynthesizer
+@MainActor
+final class TextToSpeechService: NSObject, ObservableObject {
     static let shared = TextToSpeechService()
     
     private let synthesizer = AVSpeechSynthesizer()
@@ -91,15 +93,15 @@ class TextToSpeechService: NSObject, ObservableObject {
 // MARK: - AVSpeechSynthesizerDelegate
 
 extension TextToSpeechService: AVSpeechSynthesizerDelegate {
-    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-        DispatchQueue.main.async {
+    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        Task { @MainActor in
             self.isSpeaking = false
             self.currentText = nil
         }
     }
     
-    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
-        DispatchQueue.main.async {
+    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
+        Task { @MainActor in
             self.isSpeaking = false
             self.currentText = nil
         }
