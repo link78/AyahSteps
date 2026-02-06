@@ -1090,7 +1090,7 @@ struct TajweedToolsView: View {
             }
             
             ForEach(TajweedRule.allRules) { rule in
-                TajweedRuleCard(rule: rule, isKidsMode: isKidsMode) {
+                QuranTajweedRuleCard(rule: rule, isKidsMode: isKidsMode) {
                     selectedRule = rule
                 }
             }
@@ -1101,7 +1101,7 @@ struct TajweedToolsView: View {
     }
 }
 
-struct TajweedRuleCard: View {
+struct QuranTajweedRuleCard: View {
     let rule: TajweedRule
     let isKidsMode: Bool
     let action: () -> Void
