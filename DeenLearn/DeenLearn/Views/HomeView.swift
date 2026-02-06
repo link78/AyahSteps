@@ -286,7 +286,14 @@ struct HomeView: View {
                         icon: "book.fill",
                         color: .purple,
                         isCompleted: appState.dailyGoal.quranSessionCompleted,
-                        isKidsMode: true
+                        isKidsMode: true,
+                        onTap: {
+                            appState.selectedTab = 3 // Navigate to Quran tab
+                        },
+                        onToggleComplete: {
+                            appState.dailyGoal.quranSessionCompleted.toggle()
+                            appState.updateStreakIfAllGoalsComplete()
+                        }
                     )
                     
                     DailyGoalCard(
@@ -295,7 +302,14 @@ struct HomeView: View {
                         icon: "person.fill",
                         color: .green,
                         isCompleted: appState.dailyGoal.salahPractice,
-                        isKidsMode: true
+                        isKidsMode: true,
+                        onTap: {
+                            appState.selectedTab = 2 // Navigate to Prayer tab
+                        },
+                        onToggleComplete: {
+                            appState.dailyGoal.salahPractice.toggle()
+                            appState.updateStreakIfAllGoalsComplete()
+                        }
                     )
                     
                     DailyGoalCard(
@@ -304,7 +318,14 @@ struct HomeView: View {
                         icon: "character.textbox",
                         color: .blue,
                         isCompleted: appState.dailyGoal.arabicPractice,
-                        isKidsMode: true
+                        isKidsMode: true,
+                        onTap: {
+                            appState.selectedTab = 4 // Navigate to Arabic tab
+                        },
+                        onToggleComplete: {
+                            appState.dailyGoal.arabicPractice.toggle()
+                            appState.updateStreakIfAllGoalsComplete()
+                        }
                     )
                 }
                 .padding(.horizontal)
@@ -327,7 +348,14 @@ struct HomeView: View {
                     icon: "book.fill",
                     color: .purple,
                     isCompleted: appState.dailyGoal.quranSessionCompleted,
-                    isKidsMode: false
+                    isKidsMode: false,
+                    onTap: {
+                        appState.selectedTab = 3 // Navigate to Quran tab
+                    },
+                    onToggleComplete: {
+                        appState.dailyGoal.quranSessionCompleted.toggle()
+                        appState.updateStreakIfAllGoalsComplete()
+                    }
                 )
                 
                 DailyGoalCard(
@@ -338,7 +366,14 @@ struct HomeView: View {
                     icon: "person.fill",
                     color: Color(hex: "2d8b6e"),
                     isCompleted: appState.dailyGoal.salahPractice,
-                    isKidsMode: false
+                    isKidsMode: false,
+                    onTap: {
+                        appState.selectedTab = 2 // Navigate to Prayer tab
+                    },
+                    onToggleComplete: {
+                        appState.dailyGoal.salahPractice.toggle()
+                        appState.updateStreakIfAllGoalsComplete()
+                    }
                 )
                 
                 DailyGoalCard(
@@ -347,7 +382,14 @@ struct HomeView: View {
                     icon: "character.textbox",
                     color: .blue,
                     isCompleted: appState.dailyGoal.arabicPractice,
-                    isKidsMode: false
+                    isKidsMode: false,
+                    onTap: {
+                        appState.selectedTab = 4 // Navigate to Arabic tab
+                    },
+                    onToggleComplete: {
+                        appState.dailyGoal.arabicPractice.toggle()
+                        appState.updateStreakIfAllGoalsComplete()
+                    }
                 )
             }
             .padding(.horizontal)
@@ -707,6 +749,8 @@ struct DailyGoalCard: View {
     let color: Color
     let isCompleted: Bool
     let isKidsMode: Bool
+    var onTap: (() -> Void)? = nil
+    var onToggleComplete: (() -> Void)? = nil
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -722,14 +766,25 @@ struct DailyGoalCard: View {
                 
                 Spacer()
                 
-                if isCompleted {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.green)
-                } else {
-                    Circle()
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 2)
-                        .frame(width: 24, height: 24)
+                // Completion toggle button
+                Button(action: {
+                    onToggleComplete?()
+                }) {
+                    if isCompleted {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                            .font(.title2)
+                    } else {
+                        Circle()
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 2)
+                            .frame(width: 24, height: 24)
+                            .overlay(
+                                Image(systemName: "circle")
+                                    .foregroundColor(.clear)
+                            )
+                    }
                 }
+                .buttonStyle(PlainButtonStyle())
             }
             
             VStack(alignment: .leading, spacing: 4) {
@@ -741,13 +796,26 @@ struct DailyGoalCard: View {
                 Text(subtitle)
                     .font(.caption)
                     .foregroundColor(.secondary)
+                
+                // "Start" button for incomplete goals
+                if !isCompleted {
+                    Text(isKidsMode ? "Let's Go! →" : "Start →")
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundColor(color)
+                        .padding(.top, 4)
+                }
             }
         }
         .padding(16)
-        .frame(width: isKidsMode ? 160 : nil, height: isKidsMode ? 140 : nil)
+        .frame(width: isKidsMode ? 160 : nil, height: isKidsMode ? 150 : nil)
         .background(Color(.systemBackground))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            onTap?()
+        }
     }
 }
 

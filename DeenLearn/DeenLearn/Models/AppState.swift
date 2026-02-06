@@ -330,6 +330,7 @@ class AppState: ObservableObject {
     init() {
         loadAllData()
         initializeBadges()
+        checkAndResetDailyGoals() // Reset daily goals if it's a new day
     }
     
     private func loadAllData() {
@@ -514,6 +515,70 @@ class AppState: ObservableObject {
         UserDefaults.standard.removeObject(forKey: "learningProgress")
         UserDefaults.standard.removeObject(forKey: "dailyGoal")
         UserDefaults.standard.removeObject(forKey: "badges")
+    }
+    
+    /// Updates streak when all daily goals are completed
+    func updateStreakIfAllGoalsComplete() {
+        // Check if all goals are complete
+        if dailyGoal.quranSessionCompleted && 
+           dailyGoal.salahPractice && 
+           dailyGoal.arabicPractice {
+            
+            // Check if we haven't already updated today
+            let calendar = Calendar.current
+            let lastUpdate = dailyGoal.lastUpdated
+            let today = Date()
+            
+            if !calendar.isDate(lastUpdate, inSameDayAs: today) {
+                // Increment streak
+                currentStreak += 1
+                UserDefaults.standard.set(currentStreak, forKey: "currentStreak")
+                
+                // Award bonus points for completing all goals
+                totalPoints += 50
+                UserDefaults.standard.set(totalPoints, forKey: "totalPoints")
+                
+                // Award stars
+                totalStars += 3
+                UserDefaults.standard.set(totalStars, forKey: "totalStars")
+                
+                // Update last updated date
+                dailyGoal.lastUpdated = today
+                
+                // Check for streak badges
+                checkBadges()
+            }
+        }
+        
+        // Save daily goal state
+        saveProgress()
+    }
+    
+    /// Resets daily goals at the start of a new day
+    func checkAndResetDailyGoals() {
+        let calendar = Calendar.current
+        let lastUpdate = dailyGoal.lastUpdated
+        let today = Date()
+        
+        // If it's a new day, reset the goals (but keep the streak if they were completed)
+        if !calendar.isDate(lastUpdate, inSameDayAs: today) {
+            // Check if yesterday's goals were not all completed - break streak
+            if !(dailyGoal.quranSessionCompleted && dailyGoal.salahPractice && dailyGoal.arabicPractice) {
+                // Only break streak if it's been more than a day
+                if let daysDiff = calendar.dateComponents([.day], from: lastUpdate, to: today).day, daysDiff > 1 {
+                    currentStreak = 0
+                    UserDefaults.standard.set(0, forKey: "currentStreak")
+                }
+            }
+            
+            // Reset goals for new day
+            dailyGoal.quranSessionCompleted = false
+            dailyGoal.salahPractice = false
+            dailyGoal.arabicPractice = false
+            dailyGoal.lastUpdated = today
+            
+            saveProgress()
+        }
     }
     
     func switchMode() {
