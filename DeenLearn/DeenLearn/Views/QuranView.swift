@@ -170,6 +170,33 @@ struct ReadingModeView: View {
     let isKidsMode: Bool
     @State private var selectedSurah: Surah?
     @State private var showTajweedOverlay = false
+    @State private var searchText = ""
+    @State private var filterJuz: Int? = nil
+    
+    var allSurahs: [Surah] {
+        Surah.getAllSurahs()
+    }
+    
+    var filteredSurahs: [Surah] {
+        var result = allSurahs
+        
+        // Filter by search text
+        if !searchText.isEmpty {
+            result = result.filter { surah in
+                surah.name.localizedCaseInsensitiveContains(searchText) ||
+                surah.nameArabic.contains(searchText) ||
+                surah.englishMeaning.localizedCaseInsensitiveContains(searchText) ||
+                "\(surah.id)".contains(searchText)
+            }
+        }
+        
+        // Filter by Juz
+        if let juz = filterJuz {
+            result = result.filter { $0.juz.contains(juz) }
+        }
+        
+        return result
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -189,8 +216,60 @@ struct ReadingModeView: View {
             }
             .padding(.horizontal)
             
-            // Surah list
-            ForEach(Surah.juzAmma.sorted(by: { $0.id > $1.id }).prefix(15), id: \.id) { surah in
+            // Search bar
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.secondary)
+                TextField("Search Surah...", text: $searchText)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                if !searchText.isEmpty {
+                    Button(action: { searchText = "" }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+            .padding(.horizontal)
+            
+            // Juz filter
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    // All Juz
+                    Button(action: { filterJuz = nil }) {
+                        Text("All")
+                            .font(.caption)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(filterJuz == nil ? Color(hex: "6B5B95") : Color(.systemGray6))
+                            .foregroundColor(filterJuz == nil ? .white : .primary)
+                            .cornerRadius(8)
+                    }
+                    
+                    // Juz 1-30
+                    ForEach(1...30, id: \.self) { juz in
+                        Button(action: { filterJuz = juz }) {
+                            Text("Juz \(juz)")
+                                .font(.caption)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(filterJuz == juz ? Color(hex: "6B5B95") : Color(.systemGray6))
+                                .foregroundColor(filterJuz == juz ? .white : .primary)
+                                .cornerRadius(8)
+                        }
+                    }
+                }
+                .padding(.horizontal)
+            }
+            
+            // Surah count
+            Text("\(filteredSurahs.count) Surahs")
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .padding(.horizontal)
+            
+            // Surah list - All 114 surahs
+            ForEach(filteredSurahs, id: \.id) { surah in
                 SurahReadingCard(surah: surah, isKidsMode: isKidsMode) {
                     selectedSurah = surah
                 }

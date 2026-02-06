@@ -189,7 +189,13 @@ extension Surah {
     ]
     
     static func getSurah(id: Int) -> Surah? {
-        juzAmma.first { $0.id == id }
+        juzAmma.first { $0.id == id } ?? getAllSurahs().first { $0.id == id }
+    }
+    
+    // MARK: - Get All 114 Surahs
+    
+    static func getAllSurahs() -> [Surah] {
+        return QuranDataService.shared.getCompleteSurahList()
     }
 }
 
@@ -999,6 +1005,7 @@ extension Ayah {
     ]
     
     static func getAyahs(forSurah surahId: Int) -> [Ayah] {
+        // First check hardcoded data for detailed surahs
         switch surahId {
         case 1: return alFatiha
         case 103: return alAsr
@@ -1009,7 +1016,9 @@ extension Ayah {
         case 112: return alIkhlas
         case 113: return alFalaq
         case 114: return anNas
-        default: return []
+        default:
+            // Try to load from QuranDataService
+            return QuranDataService.shared.loadAyahsWithContext(forSurah: surahId)
         }
     }
 }
