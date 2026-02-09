@@ -111,6 +111,9 @@ struct HomeView: View {
             // Animated Character Greeting
             animatedCharacterGreeting
             
+            // Prayer Times Card
+            CompactPrayerTimesWidget()
+            
             // Daily Goal Cards
             dailyGoalCardsKids
             
@@ -139,6 +142,9 @@ struct HomeView: View {
         VStack(spacing: 20) {
             // Header with Greeting
             adultsHeaderCard
+            
+            // Prayer Times Card
+            PrayerTimesCardView()
             
             // Daily Goal Cards
             dailyGoalCardsAdults
