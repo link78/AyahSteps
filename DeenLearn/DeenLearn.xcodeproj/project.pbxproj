@@ -1,0 +1,516 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AAAAAAAAAAAAAAAAAAAAAA01 /* DeenLearnApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111111B /* DeenLearnApp.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA02 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111111D /* ContentView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111111F /* Assets.xcassets */; };
+		AAAAAAAAAAAAAAAAAAAAAA04 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111121 /* Preview Assets.xcassets */; };
+		AAAAAAAAAAAAAAAAAAAAAA05 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111123 /* AppState.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA06 /* LearningModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111125 /* LearningModule.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA07 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111127 /* WelcomeView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA08 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111129 /* MainTabView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA09 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111112B /* HomeView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA10 /* ModulesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111112D /* ModulesView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA11 /* LessonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111112F /* LessonView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA12 /* QuranView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111131 /* QuranView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA13 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111133 /* ProgressView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA14 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111135 /* SettingsView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA15 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111140 /* Extensions.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA16 /* Arabic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111141 /* Arabic.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA17 /* Pillar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111142 /* Pillar.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA18 /* Prayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111143 /* Prayer.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA19 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111144 /* Profile.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA20 /* Quran.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111145 /* Quran.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA21 /* ArabicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111146 /* ArabicView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA22 /* PillarsKidsWorldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111147 /* PillarsKidsWorldView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA23 /* PillarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111148 /* PillarsView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA24 /* PrayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111149 /* PrayerView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA25 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114A /* ProfileView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA26 /* SalahTrainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114B /* SalahTrainerView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA27 /* TextToSpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114C /* TextToSpeechService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA28 /* QuranDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114D /* QuranDataService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA29 /* AITutorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114E /* AITutorService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA30 /* AIQuranCoachService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114F /* AIQuranCoachService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA31 /* AILearningAssistantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111150 /* AILearningAssistantService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA32 /* AIQuestionGeneratorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111151 /* AIQuestionGeneratorService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA33 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111152 /* SubscriptionService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA34 /* AITutorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111153 /* AITutorView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA35 /* AIQuranCoachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111154 /* AIQuranCoachView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA36 /* SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111155 /* SubscriptionView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA37 /* PrayerTimesCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111156 /* PrayerTimesCardView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA38 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111157 /* LocationService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA39 /* PrayerTimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111158 /* PrayerTimeService.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		111111111111111111111118 /* DeenLearn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeenLearn.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		11111111111111111111111B /* DeenLearnApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeenLearnApp.swift; sourceTree = "<group>"; };
+		11111111111111111111111D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		11111111111111111111111F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		111111111111111111111121 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		111111111111111111111123 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		111111111111111111111125 /* LearningModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningModule.swift; sourceTree = "<group>"; };
+		111111111111111111111127 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		111111111111111111111129 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		11111111111111111111112B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		11111111111111111111112D /* ModulesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulesView.swift; sourceTree = "<group>"; };
+		11111111111111111111112F /* LessonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonView.swift; sourceTree = "<group>"; };
+		111111111111111111111131 /* QuranView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranView.swift; sourceTree = "<group>"; };
+		111111111111111111111133 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
+		111111111111111111111135 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		111111111111111111111140 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		111111111111111111111141 /* Arabic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arabic.swift; sourceTree = "<group>"; };
+		111111111111111111111142 /* Pillar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pillar.swift; sourceTree = "<group>"; };
+		111111111111111111111143 /* Prayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prayer.swift; sourceTree = "<group>"; };
+		111111111111111111111144 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		111111111111111111111145 /* Quran.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quran.swift; sourceTree = "<group>"; };
+		111111111111111111111146 /* ArabicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArabicView.swift; sourceTree = "<group>"; };
+		111111111111111111111147 /* PillarsKidsWorldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillarsKidsWorldView.swift; sourceTree = "<group>"; };
+		111111111111111111111148 /* PillarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillarsView.swift; sourceTree = "<group>"; };
+		111111111111111111111149 /* PrayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerView.swift; sourceTree = "<group>"; };
+		11111111111111111111114A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		11111111111111111111114B /* SalahTrainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahTrainerView.swift; sourceTree = "<group>"; };
+		11111111111111111111114C /* TextToSpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToSpeechService.swift; sourceTree = "<group>"; };
+		11111111111111111111114D /* QuranDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranDataService.swift; sourceTree = "<group>"; };
+		11111111111111111111114E /* AITutorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITutorService.swift; sourceTree = "<group>"; };
+		11111111111111111111114F /* AIQuranCoachService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIQuranCoachService.swift; sourceTree = "<group>"; };
+		111111111111111111111150 /* AILearningAssistantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AILearningAssistantService.swift; sourceTree = "<group>"; };
+		111111111111111111111151 /* AIQuestionGeneratorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIQuestionGeneratorService.swift; sourceTree = "<group>"; };
+		111111111111111111111152 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
+		111111111111111111111153 /* AITutorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITutorView.swift; sourceTree = "<group>"; };
+		111111111111111111111154 /* AIQuranCoachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIQuranCoachView.swift; sourceTree = "<group>"; };
+		111111111111111111111155 /* SubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionView.swift; sourceTree = "<group>"; };
+		111111111111111111111156 /* PrayerTimesCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesCardView.swift; sourceTree = "<group>"; };
+		111111111111111111111157 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		111111111111111111111158 /* PrayerTimeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimeService.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		111111111111111111111115 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		11111111111111111111110F = {
+			isa = PBXGroup;
+			children = (
+				11111111111111111111111A /* DeenLearn */,
+				111111111111111111111119 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		111111111111111111111119 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				111111111111111111111118 /* DeenLearn.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		11111111111111111111111A /* DeenLearn */ = {
+			isa = PBXGroup;
+			children = (
+				11111111111111111111111B /* DeenLearnApp.swift */,
+				11111111111111111111111D /* ContentView.swift */,
+				111111111111111111111140 /* Extensions.swift */,
+				111111111111111111111136 /* Models */,
+				111111111111111111111137 /* Views */,
+				11111111111111111111115A /* Services */,
+				11111111111111111111111F /* Assets.xcassets */,
+				111111111111111111111138 /* Preview Content */,
+			);
+			path = DeenLearn;
+			sourceTree = "<group>";
+		};
+		11111111111111111111115A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				11111111111111111111114C /* TextToSpeechService.swift */,
+				11111111111111111111114D /* QuranDataService.swift */,
+				11111111111111111111114E /* AITutorService.swift */,
+				11111111111111111111114F /* AIQuranCoachService.swift */,
+				111111111111111111111150 /* AILearningAssistantService.swift */,
+				111111111111111111111151 /* AIQuestionGeneratorService.swift */,
+				111111111111111111111152 /* SubscriptionService.swift */,
+				111111111111111111111157 /* LocationService.swift */,
+				111111111111111111111158 /* PrayerTimeService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		111111111111111111111136 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				111111111111111111111123 /* AppState.swift */,
+				111111111111111111111125 /* LearningModule.swift */,
+				111111111111111111111141 /* Arabic.swift */,
+				111111111111111111111142 /* Pillar.swift */,
+				111111111111111111111143 /* Prayer.swift */,
+				111111111111111111111144 /* Profile.swift */,
+				111111111111111111111145 /* Quran.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		111111111111111111111137 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				111111111111111111111127 /* WelcomeView.swift */,
+				111111111111111111111129 /* MainTabView.swift */,
+				11111111111111111111112B /* HomeView.swift */,
+				11111111111111111111112D /* ModulesView.swift */,
+				11111111111111111111112F /* LessonView.swift */,
+				111111111111111111111131 /* QuranView.swift */,
+				111111111111111111111133 /* ProgressView.swift */,
+				111111111111111111111135 /* SettingsView.swift */,
+				111111111111111111111146 /* ArabicView.swift */,
+				111111111111111111111147 /* PillarsKidsWorldView.swift */,
+				111111111111111111111148 /* PillarsView.swift */,
+				111111111111111111111149 /* PrayerView.swift */,
+				11111111111111111111114A /* ProfileView.swift */,
+				11111111111111111111114B /* SalahTrainerView.swift */,
+				111111111111111111111153 /* AITutorView.swift */,
+				111111111111111111111154 /* AIQuranCoachView.swift */,
+				111111111111111111111155 /* SubscriptionView.swift */,
+				111111111111111111111156 /* PrayerTimesCardView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		111111111111111111111138 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				111111111111111111111121 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		111111111111111111111117 /* DeenLearn */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 111111111111111111111139 /* Build configuration list for PBXNativeTarget "DeenLearn" */;
+			buildPhases = (
+				111111111111111111111114 /* Sources */,
+				111111111111111111111115 /* Frameworks */,
+				111111111111111111111116 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DeenLearn;
+			productName = DeenLearn;
+			productReference = 111111111111111111111118 /* DeenLearn.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		111111111111111111111110 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					111111111111111111111117 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 111111111111111111111113 /* Build configuration list for PBXProject "DeenLearn" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				ar,
+			);
+			mainGroup = 11111111111111111111110F;
+			productRefGroup = 111111111111111111111119 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				111111111111111111111117 /* DeenLearn */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		111111111111111111111116 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAAAAAAAAAAAAAAAAAAAAA04 /* Preview Assets.xcassets in Resources */,
+				AAAAAAAAAAAAAAAAAAAAAA03 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		111111111111111111111114 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAAAAAAAAAAAAAAAAAAAAA02 /* ContentView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA01 /* DeenLearnApp.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA15 /* Extensions.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA05 /* AppState.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA06 /* LearningModule.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA16 /* Arabic.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA17 /* Pillar.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA18 /* Prayer.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA19 /* Profile.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA20 /* Quran.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA07 /* WelcomeView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA08 /* MainTabView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA09 /* HomeView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA10 /* ModulesView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA11 /* LessonView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA12 /* QuranView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA13 /* ProgressView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA14 /* SettingsView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA21 /* ArabicView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA22 /* PillarsKidsWorldView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA23 /* PillarsView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA24 /* PrayerView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA25 /* ProfileView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA26 /* SalahTrainerView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA27 /* TextToSpeechService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA28 /* QuranDataService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA29 /* AITutorService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA30 /* AIQuranCoachService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA31 /* AILearningAssistantService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA32 /* AIQuestionGeneratorService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA33 /* SubscriptionService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA34 /* AITutorView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA35 /* AIQuranCoachView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA36 /* SubscriptionView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA37 /* PrayerTimesCardView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA38 /* LocationService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA39 /* PrayerTimeService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		11111111111111111111113A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		11111111111111111111113B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		11111111111111111111113C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"DeenLearn/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = DeenLearn;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ayahsteps.DeenLearn;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		11111111111111111111113D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"DeenLearn/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = DeenLearn;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ayahsteps.DeenLearn;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		111111111111111111111113 /* Build configuration list for PBXProject "DeenLearn" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				11111111111111111111113A /* Debug */,
+				11111111111111111111113B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		111111111111111111111139 /* Build configuration list for PBXNativeTarget "DeenLearn" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				11111111111111111111113C /* Debug */,
+				11111111111111111111113D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 111111111111111111111110 /* Project object */;
+}
