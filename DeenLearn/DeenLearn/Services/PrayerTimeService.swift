@@ -129,6 +129,11 @@ final class PrayerTimeService: ObservableObject {
         
         // Start timer to update countdown
         startTimer()
+        
+        // Calculate initial prayer times after a short delay to allow location service to initialize
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.calculatePrayerTimes()
+        }
     }
     
     deinit {

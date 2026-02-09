@@ -45,8 +45,19 @@ struct PrayerTimesCardView: View {
                 hasRequestedLocation = true
                 locationService.requestLocation()
             }
+            // Always calculate prayer times on appear
+            // This ensures times are shown even if location was already available
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                if prayerTimeService.prayerTimes.isEmpty {
+                    prayerTimeService.calculatePrayerTimes()
+                }
+            }
         }
         .onChange(of: locationService.currentLocation) { _ in
+            prayerTimeService.calculatePrayerTimes()
+        }
+        .onChange(of: locationService.authorizationStatus) { _ in
+            // Also trigger calculation when authorization changes
             prayerTimeService.calculatePrayerTimes()
         }
         .sheet(isPresented: $showSettings) {
@@ -433,8 +444,19 @@ struct CompactPrayerTimesWidget: View {
                 hasRequestedLocation = true
                 locationService.requestLocation()
             }
+            // Always calculate prayer times on appear
+            // This ensures times are shown even if location was already available
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                if prayerTimeService.prayerTimes.isEmpty {
+                    prayerTimeService.calculatePrayerTimes()
+                }
+            }
         }
         .onChange(of: locationService.currentLocation) { _ in
+            prayerTimeService.calculatePrayerTimes()
+        }
+        .onChange(of: locationService.authorizationStatus) { _ in
+            // Also trigger calculation when authorization changes
             prayerTimeService.calculatePrayerTimes()
         }
     }
