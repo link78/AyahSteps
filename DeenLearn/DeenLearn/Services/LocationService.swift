@@ -20,7 +20,7 @@ final class LocationService: NSObject, ObservableObject {
     
     @Published var currentLocation: CLLocation?
     @Published var locationName: String = "Unknown Location"
-    @Published var locationTimezone: TimeZone = TimeZone(identifier: "Asia/Riyadh")! // Default: Mecca timezone
+    @Published var locationTimezone: TimeZone = TimeZone.current
     @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
     @Published var isLoading = false
     @Published var error: String?

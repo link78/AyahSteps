@@ -185,7 +185,7 @@ final class PrayerTimeService: ObservableObject {
         ]
         
         for (name, arabicName, time, icon, isPrayer) in prayerData {
-            if let prayerDate = timeToDate(time, baseDate: date) {
+            if let prayerDate = timeToDate(time, baseDate: date, timezone: locationTimezone) {
                 prayers.append(PrayerTime(
                     name: name,
                     arabicName: arabicName,
@@ -280,12 +280,12 @@ final class PrayerTimeService: ObservableObject {
         return radToDeg(acos(min(1, max(-1, cosAngle)))) / 15.0
     }
     
-    private func timeToDate(_ time: Double, baseDate: Date) -> Date? {
+    private func timeToDate(_ time: Double, baseDate: Date, timezone: TimeZone) -> Date? {
         let hours = Int(time)
         let minutes = Int((time - Double(hours)) * 60)
         
         var calendar = Calendar.current
-        calendar.timeZone = TimeZone.current
+        calendar.timeZone = timezone
         
         var components = calendar.dateComponents([.year, .month, .day], from: baseDate)
         components.hour = hours
