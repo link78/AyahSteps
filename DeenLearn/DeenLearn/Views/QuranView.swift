@@ -928,9 +928,16 @@ struct MemorizationModeView: View {
     @State private var isLooping = false
     @State private var loopCount = 3
     @State private var showTranslation = true
+    @State private var currentLoopIteration = 0
+    @ObservedObject private var ttsService = TextToSpeechService.shared
     
     var ayahs: [Ayah] {
         Ayah.getAyahs(forSurah: selectedSurah)
+    }
+    
+    private var isPlayingCurrentAyah: Bool {
+        guard !ayahs.isEmpty else { return false }
+        return ttsService.isSpeaking && ttsService.currentText == ayahs[currentAyahIndex].arabic
     }
     
     var body: some View {
@@ -1000,19 +1007,36 @@ struct MemorizationModeView: View {
                     
                     // Playback buttons
                     HStack(spacing: 20) {
-                        Button(action: { /* TODO: Play audio */ }) {
+                        Button(action: {
+                            let impact = UIImpactFeedbackGenerator(style: .medium)
+                            impact.impactOccurred()
+                            
+                            if isPlayingCurrentAyah {
+                                ttsService.stop()
+                                currentLoopIteration = 0
+                            } else {
+                                // Play the current ayah
+                                playCurrentAyah()
+                            }
+                        }) {
                             VStack {
-                                Image(systemName: "play.circle.fill")
+                                Image(systemName: isPlayingCurrentAyah ? "stop.circle.fill" : "play.circle.fill")
                                     .font(.largeTitle)
-                                Text("Play")
+                                    .symbolEffect(.bounce, value: isPlayingCurrentAyah)
+                                Text(isPlayingCurrentAyah ? "Stop" : "Play")
                                     .font(.caption)
                             }
-                            .foregroundColor(Color(hex: "6B5B95"))
+                            .foregroundColor(isPlayingCurrentAyah ? .orange : Color(hex: "6B5B95"))
                         }
-                        .disabled(true)
-                        .opacity(0.5)
                         
-                        Button(action: { /* TODO: Call and response */ }) {
+                        Button(action: {
+                            let impact = UIImpactFeedbackGenerator(style: .light)
+                            impact.impactOccurred()
+                            // Play at slower rate for call and response
+                            if !ayahs.isEmpty {
+                                ttsService.speakArabic(ayahs[currentAyahIndex].arabic, rate: 0.25)
+                            }
+                        }) {
                             VStack {
                                 Image(systemName: "mic.circle.fill")
                                     .font(.largeTitle)
@@ -1021,13 +1045,13 @@ struct MemorizationModeView: View {
                             }
                             .foregroundColor(.green)
                         }
-                        .disabled(true)
-                        .opacity(0.5)
                     }
                     
-                    Text("Audio features coming soon")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+                    if isLooping && isPlayingCurrentAyah {
+                        Text("Loop \(currentLoopIteration + 1) of \(loopCount)")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
                 }
                 .padding()
                 .background(Color(.systemBackground))
@@ -1067,6 +1091,11 @@ struct MemorizationModeView: View {
                 //     .padding(.horizontal)
             }
         }
+    }
+    
+    private func playCurrentAyah() {
+        guard !ayahs.isEmpty else { return }
+        ttsService.speakArabic(ayahs[currentAyahIndex].arabic, rate: 0.3)
     }
 }
 
