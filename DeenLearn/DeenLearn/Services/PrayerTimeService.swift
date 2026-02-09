@@ -147,12 +147,13 @@ final class PrayerTimeService: ObservableObject {
     func calculatePrayerTimes() {
         isLoading = true
         let location = locationService.bestLocation
-        calculatePrayerTimes(for: location, date: Date())
+        let timezone = locationService.bestTimezone
+        calculatePrayerTimes(for: location, date: Date(), timezone: timezone)
         isLoading = false
     }
     
     /// Calculate prayer times for a specific location and date
-    func calculatePrayerTimes(for location: CLLocation, date: Date) {
+    func calculatePrayerTimes(for location: CLLocation, date: Date, timezone: TimeZone? = nil) {
         let latitude = location.coordinate.latitude
         let longitude = location.coordinate.longitude
         
@@ -161,9 +162,9 @@ final class PrayerTimeService: ObservableObject {
         let month = calendar.component(.month, from: date)
         let day = calendar.component(.day, from: date)
         
-        // Get timezone offset
-        let timezone = TimeZone.current
-        let timezoneOffset = Double(timezone.secondsFromGMT(for: date)) / 3600.0
+        // Get timezone offset for the location (not the device)
+        let locationTimezone = timezone ?? TimeZone.current
+        let timezoneOffset = Double(locationTimezone.secondsFromGMT(for: date)) / 3600.0
         
         // Calculate Julian date
         let jd = julianDate(year: year, month: month, day: day)
