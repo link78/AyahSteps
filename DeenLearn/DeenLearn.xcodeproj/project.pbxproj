@@ -43,6 +43,9 @@
 		AAAAAAAAAAAAAAAAAAAAAA34 /* AITutorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111153 /* AITutorView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA35 /* AIQuranCoachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111154 /* AIQuranCoachView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA36 /* SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111155 /* SubscriptionView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA37 /* PrayerTimesCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111156 /* PrayerTimesCardView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA38 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111157 /* LocationService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA39 /* PrayerTimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111158 /* PrayerTimeService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -83,6 +86,9 @@
 		111111111111111111111153 /* AITutorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITutorView.swift; sourceTree = "<group>"; };
 		111111111111111111111154 /* AIQuranCoachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIQuranCoachView.swift; sourceTree = "<group>"; };
 		111111111111111111111155 /* SubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionView.swift; sourceTree = "<group>"; };
+		111111111111111111111156 /* PrayerTimesCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesCardView.swift; sourceTree = "<group>"; };
+		111111111111111111111157 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		111111111111111111111158 /* PrayerTimeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimeService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +143,8 @@
 				111111111111111111111150 /* AILearningAssistantService.swift */,
 				111111111111111111111151 /* AIQuestionGeneratorService.swift */,
 				111111111111111111111152 /* SubscriptionService.swift */,
+				111111111111111111111157 /* LocationService.swift */,
+				111111111111111111111158 /* PrayerTimeService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -175,6 +183,7 @@
 				111111111111111111111153 /* AITutorView.swift */,
 				111111111111111111111154 /* AIQuranCoachView.swift */,
 				111111111111111111111155 /* SubscriptionView.swift */,
+				111111111111111111111156 /* PrayerTimesCardView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -292,6 +301,9 @@
 				AAAAAAAAAAAAAAAAAAAAAA34 /* AITutorView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA35 /* AIQuranCoachView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA36 /* SubscriptionView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA37 /* PrayerTimesCardView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA38 /* LocationService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA39 /* PrayerTimeService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
