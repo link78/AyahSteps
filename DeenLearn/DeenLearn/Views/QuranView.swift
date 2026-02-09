@@ -876,7 +876,7 @@ struct WordByWordView: View {
                     // Audio button
                     Button(action: {
                         if isPlayingWord {
-                            ttsService.stopSpeaking()
+                            ttsService.stop()
                         } else if !allWords.isEmpty && currentWordIndex < allWords.count {
                             ttsService.speakArabic(allWords[currentWordIndex].arabic)
                         }
