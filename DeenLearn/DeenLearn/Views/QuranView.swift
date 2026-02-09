@@ -827,6 +827,11 @@ struct WordByWordView: View {
     let isKidsMode: Bool
     @State private var selectedSurah: Int = 1
     @State private var currentWordIndex: Int = 0
+    @ObservedObject private var ttsService = TextToSpeechService.shared
+    
+    private var isPlayingWord: Bool {
+        ttsService.isSpeaking && !allWords.isEmpty && currentWordIndex < allWords.count && ttsService.currentText == allWords[currentWordIndex].arabic
+    }
     
     var currentAyahs: [Ayah] {
         Ayah.getAyahs(forSurah: selectedSurah)
@@ -869,18 +874,23 @@ struct WordByWordView: View {
                         .foregroundColor(.secondary)
                     
                     // Audio button
-                    Button(action: { /* TODO: Play audio */ }) {
+                    Button(action: {
+                        if isPlayingWord {
+                            ttsService.stopSpeaking()
+                        } else if !allWords.isEmpty && currentWordIndex < allWords.count {
+                            ttsService.speakArabic(allWords[currentWordIndex].arabic)
+                        }
+                    }) {
                         HStack {
-                            Image(systemName: "speaker.wave.2.fill")
-                            Text("Listen")
+                            Image(systemName: isPlayingWord ? "stop.circle.fill" : "speaker.wave.2.fill")
+                                .symbolEffect(.bounce, value: isPlayingWord)
+                            Text(isPlayingWord ? "Stop" : "Listen")
                         }
                         .padding()
-                        .background(Color(hex: "6B5B95"))
+                        .background(isPlayingWord ? Color.orange : Color(hex: "6B5B95"))
                         .foregroundColor(.white)
                         .cornerRadius(12)
                     }
-                    .disabled(true)
-                    .opacity(0.5)
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
