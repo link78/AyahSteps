@@ -416,7 +416,7 @@ struct CompactPrayerTimesWidget: View {
             
             // Quick view of all prayers
             HStack(spacing: 0) {
-                ForEach(prayerTimeService.prayerTimes.prefix(5)) { prayer in
+                ForEach(prayerTimeService.prayerTimes.prefix(6)) { prayer in
                     VStack(spacing: 4) {
                         Image(systemName: prayer.icon)
                             .font(.caption)

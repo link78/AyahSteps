@@ -230,7 +230,7 @@ final class PrayerTimeService: ObservableObject {
         result.dhuhr = 12 + timezone - longitude / 15.0 - eqt
         
         // Calculate Sunrise and Sunset
-        let sunriseAngle = 0.833 + 0.0347 * sqrt(max(0, latitude))
+        let sunriseAngle = 0.833
         result.sunrise = result.dhuhr - timeDiff(angle: sunriseAngle, dec: dec, lat: latitude)
         result.maghrib = result.dhuhr + timeDiff(angle: sunriseAngle, dec: dec, lat: latitude)
         
@@ -239,7 +239,7 @@ final class PrayerTimeService: ObservableObject {
         
         // Calculate Asr
         let asrAngle = radToDeg(atan(1 / (asrMethod.shadowFactor + tan(degToRad(abs(latitude - dec))))))
-        result.asr = result.dhuhr + timeDiff(angle: asrAngle, dec: dec, lat: latitude)
+        result.asr = result.dhuhr + asrTimeDiff(elevation: asrAngle, dec: dec, lat: latitude)
         
         // Calculate Isha
         if calculationMethod.ishaAngle < 0 {
@@ -269,6 +269,11 @@ final class PrayerTimeService: ObservableObject {
     
     private func timeDiff(angle: Double, dec: Double, lat: Double) -> Double {
         let cosAngle = (-sin(degToRad(angle)) - sin(degToRad(dec)) * sin(degToRad(lat))) / (cos(degToRad(dec)) * cos(degToRad(lat)))
+        return radToDeg(acos(min(1, max(-1, cosAngle)))) / 15.0
+    }
+    
+    private func asrTimeDiff(elevation: Double, dec: Double, lat: Double) -> Double {
+        let cosAngle = (sin(degToRad(elevation)) - sin(degToRad(dec)) * sin(degToRad(lat))) / (cos(degToRad(dec)) * cos(degToRad(lat)))
         return radToDeg(acos(min(1, max(-1, cosAngle)))) / 15.0
     }
     
