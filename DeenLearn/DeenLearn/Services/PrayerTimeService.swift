@@ -17,6 +17,7 @@ struct PrayerTime: Identifiable, Equatable {
     let arabicName: String
     let time: Date
     let icon: String
+    let isPrayer: Bool
     
     var formattedTime: String {
         let formatter = DateFormatter()
@@ -173,22 +174,23 @@ final class PrayerTimeService: ObservableObject {
         // Create PrayerTime objects
         var prayers: [PrayerTime] = []
         
-        let prayerData: [(String, String, Double, String)] = [
-            ("Fajr", "الفجر", times.fajr, "sun.horizon.fill"),
-            ("Sunrise", "الشروق", times.sunrise, "sunrise.fill"),
-            ("Dhuhr", "الظهر", times.dhuhr, "sun.max.fill"),
-            ("Asr", "العصر", times.asr, "sun.min.fill"),
-            ("Maghrib", "المغرب", times.maghrib, "sunset.fill"),
-            ("Isha", "العشاء", times.isha, "moon.stars.fill")
+        let prayerData: [(String, String, Double, String, Bool)] = [
+            ("Fajr", "الفجر", times.fajr, "sun.horizon.fill", true),
+            ("Shuruq", "الشروق", times.sunrise, "sunrise.fill", false),
+            ("Dhuhr", "الظهر", times.dhuhr, "sun.max.fill", true),
+            ("Asr", "العصر", times.asr, "sun.min.fill", true),
+            ("Maghrib", "المغرب", times.maghrib, "sunset.fill", true),
+            ("Isha", "العشاء", times.isha, "moon.stars.fill", true)
         ]
         
-        for (name, arabicName, time, icon) in prayerData {
+        for (name, arabicName, time, icon, isPrayer) in prayerData {
             if let prayerDate = timeToDate(time, baseDate: date) {
                 prayers.append(PrayerTime(
                     name: name,
                     arabicName: arabicName,
                     time: prayerDate,
-                    icon: icon
+                    icon: icon,
+                    isPrayer: isPrayer
                 ))
             }
         }
@@ -312,10 +314,10 @@ final class PrayerTimeService: ObservableObject {
     private func updateNextPrayer() {
         let now = Date()
         
-        // Find the next prayer
+        // Find the next prayer (skip non-prayer reference times like Shuruq)
         var foundNext = false
         for (index, prayer) in prayerTimes.enumerated() {
-            if prayer.time > now {
+            if prayer.time > now && prayer.isPrayer {
                 nextPrayer = prayer
                 currentPrayerIndex = index - 1
                 foundNext = true
@@ -326,7 +328,7 @@ final class PrayerTimeService: ObservableObject {
         
         // If no prayer found today, next is Fajr tomorrow
         if !foundNext {
-            if let fajr = prayerTimes.first {
+            if let fajr = prayerTimes.first(where: { $0.isPrayer }) {
                 nextPrayer = fajr
                 currentPrayerIndex = prayerTimes.count - 1
                 

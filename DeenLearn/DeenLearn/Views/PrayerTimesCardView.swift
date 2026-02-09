@@ -207,28 +207,28 @@ struct PrayerTimeRow: View {
             // Icon
             ZStack {
                 Circle()
-                    .fill(isNext ? primaryColor : (isPast ? Color.gray.opacity(0.3) : Color(.systemGray5)))
+                    .fill(prayer.isPrayer ? (isNext ? primaryColor : (isPast ? Color.gray.opacity(0.3) : Color(.systemGray5))) : Color(.systemGray6))
                     .frame(width: 40, height: 40)
                 
                 Image(systemName: prayer.icon)
                     .font(.body)
-                    .foregroundColor(isNext ? .white : (isPast ? .gray : primaryColor))
+                    .foregroundColor(prayer.isPrayer ? (isNext ? .white : (isPast ? .gray : primaryColor)) : .secondary)
             }
             
             // Prayer Name
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 8) {
                     Text(prayer.name)
-                        .font(.body)
-                        .fontWeight(isNext ? .bold : .medium)
-                        .foregroundColor(isPast ? .gray : .primary)
+                        .font(prayer.isPrayer ? .body : .caption)
+                        .fontWeight(isNext && prayer.isPrayer ? .bold : .medium)
+                        .foregroundColor(prayer.isPrayer ? (isPast ? .gray : .primary) : .secondary)
                     
                     Text(prayer.arabicName)
                         .font(.subheadline)
                         .foregroundColor(isPast ? .gray.opacity(0.7) : .secondary)
                 }
                 
-                if isNext {
+                if isNext && prayer.isPrayer {
                     Text("Next Prayer")
                         .font(.caption2)
                         .foregroundColor(primaryColor)
@@ -239,21 +239,21 @@ struct PrayerTimeRow: View {
             
             // Time
             Text(prayer.formattedTime)
-                .font(.body)
-                .fontWeight(isNext ? .bold : .regular)
-                .foregroundColor(isPast ? .gray : .primary)
+                .font(prayer.isPrayer ? .body : .caption)
+                .fontWeight(isNext && prayer.isPrayer ? .bold : .regular)
+                .foregroundColor(prayer.isPrayer ? (isPast ? .gray : .primary) : .secondary)
                 .monospacedDigit()
             
-            // Checkmark for past prayers
-            if isPast {
+            // Checkmark for past prayers (only for actual prayers)
+            if isPast && prayer.isPrayer {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.green)
                     .font(.body)
             }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .background(isNext ? primaryColor.opacity(0.08) : Color.clear)
+        .padding(.vertical, prayer.isPrayer ? 12 : 8)
+        .background(isNext && prayer.isPrayer ? primaryColor.opacity(0.08) : Color.clear)
     }
 }
 
@@ -414,9 +414,9 @@ struct CompactPrayerTimesWidget: View {
                 }
             }
             
-            // Quick view of all prayers
+            // Quick view of all prayers (only actual prayers, not reference times)
             HStack(spacing: 0) {
-                ForEach(prayerTimeService.prayerTimes.prefix(6)) { prayer in
+                ForEach(prayerTimeService.prayerTimes.filter { $0.isPrayer }) { prayer in
                     VStack(spacing: 4) {
                         Image(systemName: prayer.icon)
                             .font(.caption)
