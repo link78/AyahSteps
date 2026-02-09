@@ -18,10 +18,12 @@ struct PrayerTime: Identifiable, Equatable {
     let time: Date
     let icon: String
     let isPrayer: Bool
+    let timezone: TimeZone
     
     var formattedTime: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
+        formatter.timeZone = timezone
         return formatter.string(from: time)
     }
     
@@ -191,7 +193,8 @@ final class PrayerTimeService: ObservableObject {
                     arabicName: arabicName,
                     time: prayerDate,
                     icon: icon,
-                    isPrayer: isPrayer
+                    isPrayer: isPrayer,
+                    timezone: locationTimezone
                 ))
             }
         }
