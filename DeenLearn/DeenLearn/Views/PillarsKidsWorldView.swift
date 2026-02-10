@@ -826,6 +826,15 @@ struct StoryActivityView: View {
                 .cornerRadius(16)
                 .padding(.horizontal)
                 
+                // Kids Hadith Corner
+                if !world.pillar.kidsHadiths.isEmpty {
+                    KidsHadithCornerView(
+                        hadith: world.pillar.kidsHadiths[currentPage % world.pillar.kidsHadiths.count],
+                        pillarColor: world.pillar.color
+                    )
+                    .padding(.horizontal)
+                }
+                
                 // Navigation
                 HStack {
                     if currentPage > 0 {
@@ -1987,6 +1996,89 @@ struct RewardView: View {
                     .foregroundColor(.white)
                 }
             }
+        }
+    }
+}
+
+// MARK: - Kids Hadith Corner View
+
+struct KidsHadithCornerView: View {
+    let hadith: KidsHadith
+    let pillarColor: Color
+    @ObservedObject private var ttsService = TextToSpeechService.shared
+    @State private var apiArabicText: String?
+    
+    var body: some View {
+        VStack(spacing: 12) {
+            // Header
+            HStack {
+                Text(hadith.emoji)
+                    .font(.title2)
+                Text("Hadith Corner")
+                    .font(.headline.bold())
+                    .foregroundColor(.white)
+                Text("📚")
+                    .font(.title2)
+            }
+            
+            // Arabic text
+            Text(apiArabicText ?? hadith.arabicText)
+                .font(.title3)
+                .foregroundColor(.yellow)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    let impact = UIImpactFeedbackGenerator(style: .light)
+                    impact.impactOccurred()
+                    ttsService.speakArabic(apiArabicText ?? hadith.arabicText, rate: 0.3)
+                }
+            
+            // Title
+            Text(hadith.title)
+                .font(.subheadline.bold())
+                .foregroundColor(.white)
+            
+            // Simple meaning for kids
+            Text(hadith.simpleMeaning)
+                .font(.callout)
+                .foregroundColor(.white.opacity(0.9))
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    let impact = UIImpactFeedbackGenerator(style: .light)
+                    impact.impactOccurred()
+                    ttsService.speakEnglish(hadith.simpleMeaning, rate: 0.4)
+                }
+            
+            // Fun fact
+            HStack {
+                Text("💡")
+                Text(hadith.funFact)
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.8))
+                    .italic()
+            }
+            .padding(.horizontal)
+            
+            // Reference
+            Text(hadith.reference)
+                .font(.caption2)
+                .foregroundColor(.white.opacity(0.6))
+        }
+        .padding()
+        .background(Color.white.opacity(0.15))
+        .cornerRadius(16)
+        .task {
+            await fetchFromAPI()
+        }
+    }
+    
+    private func fetchFromAPI() async {
+        let hadithService = HadithAPIService.shared
+        if let apiHadith = await hadithService.fetchHadith(collection: hadith.collection, number: hadith.hadithNumber) {
+            apiArabicText = apiHadith.arab
         }
     }
 }

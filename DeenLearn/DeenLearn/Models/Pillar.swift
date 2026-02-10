@@ -31,6 +31,9 @@ struct Pillar: Identifiable {
     let practicalApplication: String
     let scenarios: [Scenario]
     let fiqhDifferences: [FiqhDifference]
+    
+    // Kids hadith content
+    let kidsHadiths: [KidsHadith]
 }
 
 // MARK: - Story Episode (Kids)
@@ -90,6 +93,20 @@ struct FiqhDifference: Identifiable {
     let hanbali: String
 }
 
+// MARK: - Kids Hadith
+
+struct KidsHadith: Identifiable {
+    let id: String
+    let emoji: String
+    let title: String
+    let arabicText: String
+    let simpleMeaning: String
+    let funFact: String
+    let collection: String      // e.g., "bukhari"
+    let hadithNumber: Int       // API hadith number for enrichment
+    let reference: String       // e.g., "Sahih al-Bukhari, Hadith 13"
+}
+
 // MARK: - Sample Data
 
 extension Pillar {
@@ -142,6 +159,30 @@ extension Pillar {
             ],
             fiqhDifferences: [
                 FiqhDifference(id: "shahada-fiqh-1", topic: "Conditions of Valid Shahada", hanafi: "Knowledge, certainty, sincerity, truthfulness, love, submission, acceptance", maliki: "Same conditions with emphasis on acting upon it", shafii: "Same conditions with specific rulings on pronunciation", hanbali: "Same conditions with emphasis on negating shirk completely")
+            ],
+            kidsHadiths: [
+                KidsHadith(
+                    id: "shahada-kids-hadith-1",
+                    emoji: "🏗️",
+                    title: "The Five Pillars",
+                    arabicText: "بُنِيَ الإِسْلاَمُ عَلَى خَمْسٍ",
+                    simpleMeaning: "Islam is built on five things — like a house needs five strong walls! The Shahada is the very first one.",
+                    funFact: "Every Muslim around the world says the same Shahada — that's billions of people! 🌍",
+                    collection: "bukhari",
+                    hadithNumber: 8,
+                    reference: "Sahih al-Bukhari, Hadith 8"
+                ),
+                KidsHadith(
+                    id: "shahada-kids-hadith-2",
+                    emoji: "💝",
+                    title: "Love for Others",
+                    arabicText: "لاَ يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
+                    simpleMeaning: "You're not a true believer until you want good things for others just like you want for yourself!",
+                    funFact: "Imagine if everyone followed this — the whole world would be so kind! 🤗",
+                    collection: "bukhari",
+                    hadithNumber: 13,
+                    reference: "Sahih al-Bukhari, Hadith 13"
+                )
             ]
         ),
         
@@ -196,6 +237,30 @@ extension Pillar {
             fiqhDifferences: [
                 FiqhDifference(id: "salah-fiqh-1", topic: "Raising Hands (Rafa' al-Yadayn)", hanafi: "Only at the opening takbeer", maliki: "Only at the opening takbeer", shafii: "At opening, before ruku', rising from ruku'", hanbali: "At opening, before ruku', rising from ruku'"),
                 FiqhDifference(id: "salah-fiqh-2", topic: "Witr Prayer", hanafi: "3 rak'ahs obligatory (wajib)", maliki: "1 rak'ah, strongly recommended", shafii: "1-11 rak'ahs, sunnah mu'akkadah", hanbali: "1-11 rak'ahs, sunnah mu'akkadah")
+            ],
+            kidsHadiths: [
+                KidsHadith(
+                    id: "salah-kids-hadith-1",
+                    emoji: "🌊",
+                    title: "Prayer Cleans Your Heart",
+                    arabicText: "أَرَأَيْتُمْ لَوْ أَنَّ نَهْرًا بِبَابِ أَحَدِكُمْ يَغْتَسِلُ مِنْهُ كُلَّ يَوْمٍ خَمْسَ مَرَّاتٍ",
+                    simpleMeaning: "The Prophet ﷺ said: If you had a river at your door and bathed in it 5 times daily, would you be dirty? That's what the 5 prayers do for your heart!",
+                    funFact: "That means every prayer washes away mistakes — like a spiritual shower! 🚿",
+                    collection: "bukhari",
+                    hadithNumber: 528,
+                    reference: "Sahih al-Bukhari, Hadith 528"
+                ),
+                KidsHadith(
+                    id: "salah-kids-hadith-2",
+                    emoji: "🗝️",
+                    title: "The Key to Paradise",
+                    arabicText: "مِفْتَاحُ الْجَنَّةِ الصَّلاَةُ",
+                    simpleMeaning: "The key to Paradise is prayer! Every time you pray, you're turning the key a little more.",
+                    funFact: "Imagine holding a golden key — that's what every prayer is like! ✨",
+                    collection: "tirmidhi",
+                    hadithNumber: 4,
+                    reference: "Jami' at-Tirmidhi, Hadith 4"
+                )
             ]
         ),
         
@@ -248,6 +313,30 @@ extension Pillar {
             fiqhDifferences: [
                 FiqhDifference(id: "zakat-fiqh-1", topic: "Nisab Calculation", hanafi: "Based on silver value (more inclusive)", maliki: "Based on gold value", shafii: "Based on gold value", hanbali: "Based on gold value"),
                 FiqhDifference(id: "zakat-fiqh-2", topic: "Zakat on Jewelry", hanafi: "Zakat due on gold/silver jewelry", maliki: "No Zakat on personal jewelry", shafii: "No Zakat on personal jewelry", hanbali: "Zakat due on gold/silver jewelry")
+            ],
+            kidsHadiths: [
+                KidsHadith(
+                    id: "zakat-kids-hadith-1",
+                    emoji: "🌱",
+                    title: "Charity Makes Wealth Grow",
+                    arabicText: "مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ",
+                    simpleMeaning: "Giving charity never makes your money less — it actually makes it grow! Like planting a seed that becomes a big tree.",
+                    funFact: "When you share your toys, Allah replaces them with even better blessings! 🎁",
+                    collection: "muslim",
+                    hadithNumber: 2588,
+                    reference: "Sahih Muslim, Hadith 2588"
+                ),
+                KidsHadith(
+                    id: "zakat-kids-hadith-2",
+                    emoji: "😊",
+                    title: "A Smile is Charity",
+                    arabicText: "تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ لَكَ صَدَقَةٌ",
+                    simpleMeaning: "Even smiling at someone is charity! You don't need money to be generous — your smile counts too!",
+                    funFact: "You have unlimited smiles to give — the easiest charity ever! 😁",
+                    collection: "tirmidhi",
+                    hadithNumber: 1956,
+                    reference: "Jami' at-Tirmidhi, Hadith 1956"
+                )
             ]
         ),
         
@@ -301,6 +390,30 @@ extension Pillar {
             fiqhDifferences: [
                 FiqhDifference(id: "sawm-fiqh-1", topic: "Using Inhaler While Fasting", hanafi: "Breaks the fast", maliki: "Breaks the fast", shafii: "Breaks the fast", hanbali: "Does not break the fast (some scholars)"),
                 FiqhDifference(id: "sawm-fiqh-2", topic: "Brushing Teeth While Fasting", hanafi: "Permissible, but better to use miswak", maliki: "Permissible before noon only", shafii: "Permissible, but makruh after noon", hanbali: "Permissible anytime")
+            ],
+            kidsHadiths: [
+                KidsHadith(
+                    id: "sawm-kids-hadith-1",
+                    emoji: "🛡️",
+                    title: "Fasting is a Shield",
+                    arabicText: "الصِّيَامُ جُنَّةٌ",
+                    simpleMeaning: "Fasting is like a shield that protects you! Just like a superhero's shield blocks bad things, fasting protects your heart.",
+                    funFact: "When you fast, angels cheer you on and write extra rewards! 📝",
+                    collection: "bukhari",
+                    hadithNumber: 1894,
+                    reference: "Sahih al-Bukhari, Hadith 1894"
+                ),
+                KidsHadith(
+                    id: "sawm-kids-hadith-2",
+                    emoji: "🚪",
+                    title: "The Special Gate of Paradise",
+                    arabicText: "إِنَّ فِي الْجَنَّةِ بَابًا يُقَالُ لَهُ الرَّيَّانُ",
+                    simpleMeaning: "There's a special gate in Paradise called Ar-Rayyan, and only people who fasted can enter through it! How cool is that?",
+                    funFact: "Imagine your own VIP door to Paradise — that's what fasting earns you! 🌟",
+                    collection: "bukhari",
+                    hadithNumber: 1896,
+                    reference: "Sahih al-Bukhari, Hadith 1896"
+                )
             ]
         ),
         
@@ -354,6 +467,30 @@ extension Pillar {
             fiqhDifferences: [
                 FiqhDifference(id: "hajj-fiqh-1", topic: "Women Traveling for Hajj", hanafi: "Requires mahram for any distance", maliki: "Can travel with trustworthy group", shafii: "Can travel with trustworthy women", hanbali: "Requires mahram for any distance"),
                 FiqhDifference(id: "hajj-fiqh-2", topic: "Shaving vs. Trimming Hair", hanafi: "Shaving preferred for men", maliki: "Shaving preferred for men", shafii: "Shaving preferred for men", hanbali: "Shaving preferred for men")
+            ],
+            kidsHadiths: [
+                KidsHadith(
+                    id: "hajj-kids-hadith-1",
+                    emoji: "✨",
+                    title: "Hajj Erases All Sins",
+                    arabicText: "مَنْ حَجَّ فَلَمْ يَرْفُثْ وَلَمْ يَفْسُقْ رَجَعَ كَيَوْمِ وَلَدَتْهُ أُمُّهُ",
+                    simpleMeaning: "Whoever does Hajj properly comes back as clean as the day they were born! Like hitting a reset button on all your mistakes.",
+                    funFact: "Imagine being as pure as a newborn baby — that's the power of Hajj! 👶",
+                    collection: "bukhari",
+                    hadithNumber: 1521,
+                    reference: "Sahih al-Bukhari, Hadith 1521"
+                ),
+                KidsHadith(
+                    id: "hajj-kids-hadith-2",
+                    emoji: "🤝",
+                    title: "Everyone is Equal",
+                    arabicText: "لاَ فَضْلَ لِعَرَبِيٍّ عَلَى أَعْجَمِيٍّ",
+                    simpleMeaning: "No one is better than anyone else because of where they come from — only by being good! At Hajj, everyone wears the same clothes to show this.",
+                    funFact: "During Hajj, even kings and presidents wear the same simple white clothes as everyone else! 👑➡️🤍",
+                    collection: "ahmad",
+                    hadithNumber: 23536,
+                    reference: "Musnad Ahmad, Hadith 23536"
+                )
             ]
         )
     ]

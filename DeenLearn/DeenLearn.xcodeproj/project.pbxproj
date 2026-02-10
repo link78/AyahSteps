@@ -48,6 +48,7 @@
 		AAAAAAAAAAAAAAAAAAAAAA39 /* PrayerTimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111158 /* PrayerTimeService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA40 /* IslamicAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111159 /* IslamicAPIService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA41 /* QuranAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111160 /* QuranAPIService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA42 /* HadithAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111161 /* HadithAPIService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,6 +94,7 @@
 		111111111111111111111158 /* PrayerTimeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimeService.swift; sourceTree = "<group>"; };
 		111111111111111111111159 /* IslamicAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslamicAPIService.swift; sourceTree = "<group>"; };
 		111111111111111111111160 /* QuranAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranAPIService.swift; sourceTree = "<group>"; };
+		111111111111111111111161 /* HadithAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithAPIService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 				111111111111111111111158 /* PrayerTimeService.swift */,
 				111111111111111111111159 /* IslamicAPIService.swift */,
 				111111111111111111111160 /* QuranAPIService.swift */,
+				111111111111111111111161 /* HadithAPIService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				AAAAAAAAAAAAAAAAAAAAAA39 /* PrayerTimeService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA40 /* IslamicAPIService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA41 /* QuranAPIService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA42 /* HadithAPIService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
