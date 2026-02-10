@@ -56,10 +56,6 @@ struct PrayerTimesCardView: View {
         .onChange(of: locationService.currentLocation) { _ in
             prayerTimeService.calculatePrayerTimes()
         }
-        .onChange(of: locationService.locationTimezone) { _ in
-            // Recalculate when timezone is resolved (from reverse geocoding)
-            prayerTimeService.calculatePrayerTimes()
-        }
         .onChange(of: locationService.authorizationStatus) { _ in
             // Also trigger calculation when authorization changes
             prayerTimeService.calculatePrayerTimes()
@@ -457,10 +453,6 @@ struct CompactPrayerTimesWidget: View {
             }
         }
         .onChange(of: locationService.currentLocation) { _ in
-            prayerTimeService.calculatePrayerTimes()
-        }
-        .onChange(of: locationService.locationTimezone) { _ in
-            // Recalculate when timezone is resolved (from reverse geocoding)
             prayerTimeService.calculatePrayerTimes()
         }
         .onChange(of: locationService.authorizationStatus) { _ in

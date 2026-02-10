@@ -20,14 +20,12 @@ final class LocationService: NSObject, ObservableObject {
     
     @Published var currentLocation: CLLocation?
     @Published var locationName: String = "Unknown Location"
-    @Published var locationTimezone: TimeZone = TimeZone.current
     @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
     @Published var isLoading = false
     @Published var error: String?
     
     // Default location (Mecca) if user location is not available
     static let defaultLocation = CLLocation(latitude: 21.4225, longitude: 39.8262)
-    static let defaultTimezone = TimeZone(identifier: "Asia/Riyadh")! // Mecca timezone (UTC+3)
     
     private override init() {
         super.init()
@@ -57,7 +55,6 @@ final class LocationService: NSObject, ObservableObject {
             // Use default location
             currentLocation = LocationService.defaultLocation
             locationName = "Mecca (Default)"
-            locationTimezone = LocationService.defaultTimezone
         @unknown default:
             isLoading = false
             error = "Unknown location status"
@@ -69,20 +66,13 @@ final class LocationService: NSObject, ObservableObject {
         currentLocation ?? LocationService.defaultLocation
     }
     
-    /// Get the timezone for the best available location
-    var bestTimezone: TimeZone {
-        currentLocation != nil ? locationTimezone : LocationService.defaultTimezone
-    }
-    
-    /// Reverse geocode to get location name and timezone
+    /// Reverse geocode to get location name
     private func reverseGeocode(_ location: CLLocation) {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location) { [weak self] placemarks, error in
             Task { @MainActor in
                 if let error = error {
                     self?.locationName = "Location Found"
-                    // Fall back to estimating timezone from longitude
-                    self?.locationTimezone = TimeZone(secondsFromGMT: Int(round(location.coordinate.longitude / 15.0 * 3600))) ?? LocationService.defaultTimezone
                     print("Geocoding error: \(error.localizedDescription)")
                     return
                 }
@@ -99,11 +89,6 @@ final class LocationService: NSObject, ObservableObject {
                         self?.locationName = country
                     } else {
                         self?.locationName = "Location Found"
-                    }
-                    
-                    // Get timezone from placemark
-                    if let tz = placemark.timeZone {
-                        self?.locationTimezone = tz
                     }
                 }
             }
@@ -132,7 +117,6 @@ extension LocationService: CLLocationManagerDelegate {
             // Use default location on error
             self.currentLocation = LocationService.defaultLocation
             self.locationName = "Mecca (Default)"
-            self.locationTimezone = LocationService.defaultTimezone
             print("Location error: \(error.localizedDescription)")
         }
     }
@@ -149,7 +133,6 @@ extension LocationService: CLLocationManagerDelegate {
                 self.error = "Location access denied"
                 self.currentLocation = LocationService.defaultLocation
                 self.locationName = "Mecca (Default)"
-                self.locationTimezone = LocationService.defaultTimezone
             default:
                 break
             }

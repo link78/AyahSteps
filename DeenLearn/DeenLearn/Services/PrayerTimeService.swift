@@ -149,8 +149,7 @@ final class PrayerTimeService: ObservableObject {
     func calculatePrayerTimes() {
         isLoading = true
         let location = locationService.bestLocation
-        let timezone = locationService.bestTimezone
-        calculatePrayerTimes(for: location, date: Date(), timezone: timezone)
+        calculatePrayerTimes(for: location, date: Date())
         isLoading = false
     }
     
@@ -164,9 +163,9 @@ final class PrayerTimeService: ObservableObject {
         let month = calendar.component(.month, from: date)
         let day = calendar.component(.day, from: date)
         
-        // Get timezone offset for the location (not the device)
-        let locationTimezone = timezone ?? TimeZone.current
-        let timezoneOffset = Double(locationTimezone.secondsFromGMT(for: date)) / 3600.0
+        // Always use device timezone to match what the user sees on their clock
+        let deviceTimezone = timezone ?? TimeZone.current
+        let timezoneOffset = Double(deviceTimezone.secondsFromGMT(for: date)) / 3600.0
         
         // Calculate Julian date
         let jd = julianDate(year: year, month: month, day: day)
@@ -187,14 +186,14 @@ final class PrayerTimeService: ObservableObject {
         ]
         
         for (name, arabicName, time, icon, isPrayer) in prayerData {
-            if let prayerDate = timeToDate(time, baseDate: date, timezone: locationTimezone) {
+            if let prayerDate = timeToDate(time, baseDate: date, timezone: deviceTimezone) {
                 prayers.append(PrayerTime(
                     name: name,
                     arabicName: arabicName,
                     time: prayerDate,
                     icon: icon,
                     isPrayer: isPrayer,
-                    timezone: locationTimezone
+                    timezone: deviceTimezone
                 ))
             }
         }
