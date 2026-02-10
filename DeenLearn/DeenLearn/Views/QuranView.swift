@@ -364,11 +364,9 @@ struct SurahReaderView: View {
     @Environment(\.dismiss) var dismiss
     @State private var selectedWord: QuranWord?
     @State private var bookmarks: [Int] = []
+    @State private var ayahs: [Ayah] = []
+    @State private var isLoadingFromAPI = false
     @ObservedObject private var ttsService = TextToSpeechService.shared
-    
-    var ayahs: [Ayah] {
-        Ayah.getAyahs(forSurah: surah.id)
-    }
     
     private let bismillah = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"
     
@@ -469,6 +467,16 @@ struct SurahReaderView: View {
             .sheet(item: $selectedWord) { word in
                 WordDetailView(word: word, isKidsMode: isKidsMode)
             }
+            .onAppear {
+                // Load local ayahs immediately
+                ayahs = Ayah.getAyahs(forSurah: surah.id)
+            }
+            .task {
+                // Fetch from API in background for real audio URLs
+                if let apiAyahs = await QuranDataService.shared.fetchAyahsFromAPI(forSurah: surah.id) {
+                    ayahs = apiAyahs
+                }
+            }
         }
     }
 }
@@ -485,7 +493,10 @@ struct AyahReadingView: View {
     
     // Get full ayah text for audio
     private var fullAyahArabic: String {
-        ayah.words.map { $0.arabic }.joined(separator: " ")
+        if !ayah.arabic.isEmpty {
+            return ayah.arabic
+        }
+        return ayah.words.map { $0.arabic }.joined(separator: " ")
     }
     
     private var isPlayingThisAyah: Bool {
@@ -501,13 +512,15 @@ struct AyahReadingView: View {
                         .foregroundColor(isBookmarked ? .orange : .secondary)
                 }
                 
-                // Play entire ayah button
+                // Play entire ayah button — uses API audio URL if available, TTS as fallback
                 Button(action: {
                     let impact = UIImpactFeedbackGenerator(style: .light)
                     impact.impactOccurred()
                     
                     if isPlayingThisAyah {
                         ttsService.stop()
+                    } else if let audioURL = ayah.audioURL, !audioURL.isEmpty {
+                        ttsService.playAudioURL(audioURL, identifier: fullAyahArabic)
                     } else {
                         ttsService.speakArabic(fullAyahArabic, rate: 0.3)
                     }

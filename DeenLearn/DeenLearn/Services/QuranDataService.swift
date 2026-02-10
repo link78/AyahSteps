@@ -14,6 +14,7 @@ class QuranDataService {
     
     private var cachedSurahs: [QuranSurahData]?
     private var cachedAyahs: [Int: [QuranAyahData]] = [:]
+    private var apiAyahsCache: [Int: [Ayah]] = [:]
     
     private init() {}
     
@@ -36,9 +37,15 @@ class QuranDataService {
         return quranData.surahs.map { $0.toSurah() }
     }
     
-    // MARK: - Load Ayahs for Surah
+    // MARK: - Load Ayahs for Surah (API-first with local fallback)
     
+    /// Load ayahs from API cache if available, otherwise from local data
     func loadAyahs(forSurah surahId: Int) -> [Ayah] {
+        // Check API cache first
+        if let apiAyahs = apiAyahsCache[surahId], !apiAyahs.isEmpty {
+            return apiAyahs
+        }
+        
         if let cached = cachedAyahs[surahId] {
             return cached.map { $0.toAyah() }
         }
@@ -54,6 +61,49 @@ class QuranDataService {
         
         cachedAyahs[surahId] = surahData.ayahs
         return surahData.ayahs.map { $0.toAyah() }
+    }
+    
+    // MARK: - Fetch Ayahs from API (async)
+    
+    /// Fetch ayahs from SutanLab API with audio URLs, caches result
+    func fetchAyahsFromAPI(forSurah surahId: Int) async -> [Ayah]? {
+        // Check cache first
+        if let cached = apiAyahsCache[surahId], !cached.isEmpty {
+            return cached
+        }
+        
+        guard let surahDetail = await QuranAPIService.shared.fetchSurah(number: surahId) else {
+            return nil
+        }
+        
+        let ayahs = surahDetail.verses.map { verse in
+            return Ayah(
+                id: "\(surahId):\(verse.number.inSurah)",
+                surahId: surahId,
+                ayahNumber: verse.number.inSurah,
+                arabic: verse.text.arab,
+                transliteration: verse.text.transliteration.en,
+                translation: verse.translation.en,
+                words: [], // Word-level data not available from API; local data provides word-by-word details
+                sajdahType: verse.meta.sajda.obligatory ? .obligatory : (verse.meta.sajda.recommended ? .recommended : nil),
+                juz: verse.meta.juz,
+                page: verse.meta.page,
+                audioFileName: nil,
+                audioURL: verse.audio.secondary.first ?? verse.audio.primary
+            )
+        }
+        
+        apiAyahsCache[surahId] = ayahs
+        return ayahs
+    }
+    
+    /// Clear API cache for a surah
+    func clearAPICache(forSurah surahId: Int? = nil) {
+        if let id = surahId {
+            apiAyahsCache.removeValue(forKey: id)
+        } else {
+            apiAyahsCache.removeAll()
+        }
     }
     
     // MARK: - Complete Surah List (Fallback)

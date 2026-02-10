@@ -5,15 +5,19 @@ import AVFoundation
 
 /// A singleton service that provides text-to-speech functionality
 /// allowing users to tap on text and hear it spoken aloud.
+/// Supports both TTS synthesis and streaming audio from URLs (Quran recitation).
 /// Note: Using @MainActor to ensure thread safety with AVSpeechSynthesizer
 @MainActor
 final class TextToSpeechService: NSObject, ObservableObject {
     static let shared = TextToSpeechService()
     
     private let synthesizer = AVSpeechSynthesizer()
+    private var audioPlayer: AVPlayer?
+    private var playerObserver: Any?
     
     @Published var isSpeaking = false
     @Published var currentText: String?
+    @Published var isPlayingAudio = false
     
     private override init() {
         super.init()
@@ -58,13 +62,65 @@ final class TextToSpeechService: NSObject, ObservableObject {
         speak(text, language: language, rate: language == "ar-SA" ? 0.35 : rate)
     }
     
-    /// Stop any current speech
+    /// Stop any current speech or audio playback
     func stop() {
         if synthesizer.isSpeaking {
             synthesizer.stopSpeaking(at: .immediate)
         }
+        stopAudioPlayer()
         isSpeaking = false
+        isPlayingAudio = false
         currentText = nil
+    }
+    
+    // MARK: - Audio URL Playback
+    
+    /// Play Quran recitation audio from a URL
+    /// - Parameters:
+    ///   - urlString: The audio URL string
+    ///   - identifier: A text identifier to track what's playing (typically the ayah text)
+    func playAudioURL(_ urlString: String, identifier: String) {
+        stop()
+        
+        guard let url = URL(string: urlString) else { return }
+        
+        // Configure audio session for playback
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Audio session error: \(error.localizedDescription)")
+        }
+        
+        let playerItem = AVPlayerItem(url: url)
+        audioPlayer = AVPlayer(playerItem: playerItem)
+        
+        currentText = identifier
+        isSpeaking = true
+        isPlayingAudio = true
+        
+        audioPlayer?.play()
+        
+        // Observe when playback finishes
+        playerObserver = NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemDidPlayToEndTime,
+            object: playerItem,
+            queue: .main
+        ) { [weak self] _ in
+            self?.isSpeaking = false
+            self?.isPlayingAudio = false
+            self?.currentText = nil
+        }
+    }
+    
+    /// Stop audio player and remove observer
+    private func stopAudioPlayer() {
+        audioPlayer?.pause()
+        audioPlayer = nil
+        if let observer = playerObserver {
+            NotificationCenter.default.removeObserver(observer)
+            playerObserver = nil
+        }
     }
     
     /// Pause current speech

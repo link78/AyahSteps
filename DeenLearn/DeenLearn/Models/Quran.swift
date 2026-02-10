@@ -62,6 +62,7 @@ struct Ayah: Identifiable, Codable {
     let juz: Int
     let page: Int
     let audioFileName: String?
+    var audioURL: String? = nil
 }
 
 enum SajdahType: String, Codable {
