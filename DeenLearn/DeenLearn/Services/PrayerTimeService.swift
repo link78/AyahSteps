@@ -46,6 +46,19 @@ enum CalculationMethod: String, CaseIterable, Identifiable {
     
     var id: String { rawValue }
     
+    /// Aladhan API method number
+    var apiMethodNumber: Int {
+        switch self {
+        case .mwl: return 3
+        case .isna: return 2
+        case .egypt: return 5
+        case .makkah: return 4
+        case .karachi: return 1
+        case .tehran: return 7
+        case .singapore: return 11
+        }
+    }
+    
     // Fajr angle
     var fajrAngle: Double {
         switch self {
@@ -81,6 +94,14 @@ enum AsrJuristicMethod: String, CaseIterable, Identifiable {
     
     var id: String { rawValue }
     
+    /// Aladhan API school number (0 = Shafi'i, 1 = Hanafi)
+    var apiSchoolNumber: Int {
+        switch self {
+        case .shafii: return 0
+        case .hanafi: return 1
+        }
+    }
+    
     var shadowFactor: Double {
         switch self {
         case .shafii: return 1.0
@@ -101,6 +122,11 @@ final class PrayerTimeService: ObservableObject {
     @Published var currentPrayerIndex: Int = -1
     @Published var isLoading = false
     
+    // API-provided data
+    @Published var hijriDate: String = ""
+    @Published var qiblaDirection: Double?
+    @Published var isUsingAPI: Bool = false
+    
     @Published var calculationMethod: CalculationMethod = .isna {
         didSet {
             UserDefaults.standard.set(calculationMethod.rawValue, forKey: "prayerCalculationMethod")
@@ -116,6 +142,7 @@ final class PrayerTimeService: ObservableObject {
     }
     
     private var locationService = LocationService.shared
+    private var islamicAPI = IslamicAPIService.shared
     private var timer: Timer?
     
     private init() {
@@ -145,16 +172,110 @@ final class PrayerTimeService: ObservableObject {
     
     // MARK: - Public Methods
     
-    /// Calculate prayer times for the current location
+    /// Calculate prayer times — tries API first, falls back to local calculation
     func calculatePrayerTimes() {
         isLoading = true
         let location = locationService.bestLocation
-        calculatePrayerTimes(for: location, date: Date())
+        
+        // Try API first, use local calculation as immediate fallback
+        calculateLocalPrayerTimes(for: location, date: Date())
+        
+        // Fetch from API in background (will update when response arrives)
+        Task {
+            await fetchAPIPrayerTimes(for: location, date: Date())
+        }
+    }
+    
+    /// Recalculate prayer times with current settings
+    func recalculatePrayerTimes() {
+        calculatePrayerTimes()
+    }
+    
+    /// Fetch prayer times from Aladhan API
+    private func fetchAPIPrayerTimes(for location: CLLocation, date: Date) async {
+        let latitude = location.coordinate.latitude
+        let longitude = location.coordinate.longitude
+        
+        // Fetch prayer times from API
+        guard let apiData = await islamicAPI.fetchPrayerTimes(
+            latitude: latitude,
+            longitude: longitude,
+            date: date,
+            method: calculationMethod.apiMethodNumber,
+            school: asrMethod.apiSchoolNumber
+        ) else {
+            // API failed — keep local calculation
+            isLoading = false
+            return
+        }
+        
+        // Parse API time strings into PrayerTime objects
+        let deviceTimezone = TimeZone.current
+        let timings = apiData.timings
+        
+        let prayerData: [(String, String, String, String, Bool)] = [
+            ("Fajr", "الفجر", timings.Fajr, "sun.horizon.fill", true),
+            ("Shuruq", "الشروق", timings.Sunrise, "sunrise.fill", false),
+            ("Dhuhr", "الظهر", timings.Dhuhr, "sun.max.fill", true),
+            ("Asr", "العصر", timings.Asr, "sun.min.fill", true),
+            ("Maghrib", "المغرب", timings.Maghrib, "sunset.fill", true),
+            ("Isha", "العشاء", timings.Isha, "moon.stars.fill", true)
+        ]
+        
+        var prayers: [PrayerTime] = []
+        for (name, arabicName, timeString, icon, isPrayer) in prayerData {
+            if let prayerDate = parseAPITime(timeString, baseDate: date, timezone: deviceTimezone) {
+                prayers.append(PrayerTime(
+                    name: name,
+                    arabicName: arabicName,
+                    time: prayerDate,
+                    icon: icon,
+                    isPrayer: isPrayer,
+                    timezone: deviceTimezone
+                ))
+            }
+        }
+        
+        if !prayers.isEmpty {
+            self.prayerTimes = prayers
+            self.isUsingAPI = true
+            
+            // Update Hijri date
+            let hijri = apiData.date.hijri
+            self.hijriDate = "\(hijri.day) \(hijri.month.en) \(hijri.year)"
+            
+            updateNextPrayer()
+        }
+        
+        // Also fetch Qibla direction
+        await islamicAPI.fetchQiblaDirection(latitude: latitude, longitude: longitude)
+        self.qiblaDirection = islamicAPI.qiblaDirection
+        
         isLoading = false
     }
     
-    /// Calculate prayer times for a specific location and date
-    func calculatePrayerTimes(for location: CLLocation, date: Date, timezone: TimeZone? = nil) {
+    /// Parse API time string (e.g. "05:30" or "05:30 (CST)") into Date
+    private func parseAPITime(_ timeString: String, baseDate: Date, timezone: TimeZone) -> Date? {
+        // API returns times like "05:30" or "05:30 (CST)" — extract HH:mm
+        let cleanTime = timeString.components(separatedBy: " ").first ?? timeString
+        let parts = cleanTime.components(separatedBy: ":")
+        guard parts.count == 2,
+              let hours = Int(parts[0]),
+              let minutes = Int(parts[1]) else { return nil }
+        
+        var calendar = Calendar.current
+        calendar.timeZone = timezone
+        
+        var components = calendar.dateComponents([.year, .month, .day], from: baseDate)
+        components.hour = hours
+        components.minute = minutes
+        components.second = 0
+        
+        return calendar.date(from: components)
+    }
+    
+    /// Calculate prayer times locally (offline fallback)
+    func calculateLocalPrayerTimes(for location: CLLocation, date: Date, timezone: TimeZone? = nil) {
         let latitude = location.coordinate.latitude
         let longitude = location.coordinate.longitude
         
@@ -200,11 +321,7 @@ final class PrayerTimeService: ObservableObject {
         
         self.prayerTimes = prayers
         updateNextPrayer()
-    }
-    
-    /// Recalculate prayer times with current settings
-    func recalculatePrayerTimes() {
-        calculatePrayerTimes()
+        isLoading = false
     }
     
     // MARK: - Private Calculation Methods

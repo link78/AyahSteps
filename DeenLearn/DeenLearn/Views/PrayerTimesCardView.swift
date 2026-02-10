@@ -96,6 +96,19 @@ struct PrayerTimesCardView: View {
                                 .tint(.white)
                         }
                     }
+                    
+                    // Hijri date from API
+                    if !prayerTimeService.hijriDate.isEmpty {
+                        HStack(spacing: 4) {
+                            Image(systemName: "calendar")
+                                .font(.caption2)
+                                .foregroundColor(.white.opacity(0.7))
+                            
+                            Text(prayerTimeService.hijriDate)
+                                .font(.caption2)
+                                .foregroundColor(.white.opacity(0.7))
+                        }
+                    }
                 }
                 
                 Spacer()
@@ -330,8 +343,14 @@ struct PrayerSettingsView: View {
                 // Info Section
                 Section {
                     VStack(alignment: .leading, spacing: 8) {
-                        Label("Prayer times are calculated locally", systemImage: "info.circle")
-                        Label("No internet required", systemImage: "wifi.slash")
+                        if prayerTimeService.isUsingAPI {
+                            Label("Powered by Aladhan API", systemImage: "globe")
+                            Label("Includes Hijri date & Qibla direction", systemImage: "calendar.badge.clock")
+                            Label("Falls back to local calculation offline", systemImage: "wifi.slash")
+                        } else {
+                            Label("Prayer times are calculated locally", systemImage: "info.circle")
+                            Label("Connect to internet for enhanced accuracy", systemImage: "wifi")
+                        }
                         Label("Accuracy: ±1-2 minutes", systemImage: "clock")
                     }
                     .font(.caption)
