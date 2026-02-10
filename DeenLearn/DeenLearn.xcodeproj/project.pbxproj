@@ -46,6 +46,7 @@
 		AAAAAAAAAAAAAAAAAAAAAA37 /* PrayerTimesCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111156 /* PrayerTimesCardView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA38 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111157 /* LocationService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA39 /* PrayerTimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111158 /* PrayerTimeService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA40 /* IslamicAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111159 /* IslamicAPIService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +90,7 @@
 		111111111111111111111156 /* PrayerTimesCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesCardView.swift; sourceTree = "<group>"; };
 		111111111111111111111157 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		111111111111111111111158 /* PrayerTimeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimeService.swift; sourceTree = "<group>"; };
+		111111111111111111111159 /* IslamicAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslamicAPIService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 				111111111111111111111152 /* SubscriptionService.swift */,
 				111111111111111111111157 /* LocationService.swift */,
 				111111111111111111111158 /* PrayerTimeService.swift */,
+				111111111111111111111159 /* IslamicAPIService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				AAAAAAAAAAAAAAAAAAAAAA37 /* PrayerTimesCardView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA38 /* LocationService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA39 /* PrayerTimeService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA40 /* IslamicAPIService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
