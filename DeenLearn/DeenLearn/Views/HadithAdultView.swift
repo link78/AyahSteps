@@ -79,24 +79,25 @@ class HadithAdultViewModel: ObservableObject {
         isLoading = true
         defer { isLoading = false }
 
-        do {
-            let hadiths = try await hadithAPI.fetchHadithRange(collection: collection, range: range)
+        let components = range.split(separator: "-").compactMap { Int($0) }
+        guard components.count == 2 else {
+            currentHadiths = []
+            return
+        }
+        if let hadiths = await hadithAPI.fetchHadithRange(collection: collection, from: components[0], to: components[1]) {
             currentHadiths = hadiths.map { hadith in
                 (number: hadith.number, arabic: hadith.arab, english: "", narrator: "", grade: "")
             }
-        } catch {
-            // Use sample data as fallback
+        } else {
             currentHadiths = []
         }
     }
 
     func fetchSingleHadith(collection: String, number: Int) async -> (arabic: String, english: String, narrator: String, grade: String)? {
-        do {
-            let hadith = try await hadithAPI.fetchHadith(collection: collection, number: number)
+        if let hadith = await hadithAPI.fetchHadith(collection: collection, number: number) {
             return (arabic: hadith.arab, english: "", narrator: "", grade: "")
-        } catch {
-            return nil
         }
+        return nil
     }
 
     // MARK: - Bookmarks
@@ -543,13 +544,9 @@ private struct CollectionBrowserView: View {
         isLoading = true
         let start = (currentPage - 1) * pageSize + 1
         let end = min(start + pageSize - 1, collection.totalHadith)
-        let range = "\(start)-\(end)"
 
-        do {
-            let results = try await HadithAPIService.shared.fetchHadithRange(collection: collection.apiName, range: range)
+        if let results = await HadithAPIService.shared.fetchHadithRange(collection: collection.apiName, from: start, to: end) {
             hadiths = results.map { (number: $0.number, arabic: $0.arab, english: "") }
-        } catch {
-            // Empty fallback
         }
         isLoading = false
     }
@@ -559,14 +556,10 @@ private struct CollectionBrowserView: View {
         Task {
             let start = (currentPage - 1) * pageSize + 1
             let end = min(start + pageSize - 1, collection.totalHadith)
-            let range = "\(start)-\(end)"
 
-            do {
-                let results = try await HadithAPIService.shared.fetchHadithRange(collection: collection.apiName, range: range)
+            if let results = await HadithAPIService.shared.fetchHadithRange(collection: collection.apiName, from: start, to: end) {
                 let newHadiths = results.map { (number: $0.number, arabic: $0.arab, english: "") }
                 hadiths.append(contentsOf: newHadiths)
-            } catch {
-                // Ignore
             }
         }
     }
@@ -850,11 +843,8 @@ private struct TopicDetailView: View {
     private func loadTopicHadiths() async {
         var results: [(number: Int, arabic: String, collection: String)] = []
         for curated in curatedHadiths {
-            do {
-                let hadith = try await HadithAPIService.shared.fetchHadith(collection: curated.collection, number: curated.number)
+            if let hadith = await HadithAPIService.shared.fetchHadith(collection: curated.collection, number: curated.number) {
                 results.append((number: hadith.number, arabic: hadith.arab, collection: curated.collection))
-            } catch {
-                // Skip failed fetches
             }
         }
         hadiths = results
@@ -1065,10 +1055,9 @@ private struct HadithSearchSection: View {
         guard let number = Int(searchText) else { return }
         isSearching = true
         Task {
-            do {
-                let hadith = try await HadithAPIService.shared.fetchHadith(collection: selectedCollection, number: number)
+            if let hadith = await HadithAPIService.shared.fetchHadith(collection: selectedCollection, number: number) {
                 searchResults = [(number: hadith.number, arabic: hadith.arab, collection: selectedCollection)]
-            } catch {
+            } else {
                 searchResults = []
             }
             isSearching = false
