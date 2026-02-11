@@ -40,19 +40,18 @@ struct MainTabView: View {
                 }
                 .tag(3)
             
-            if isKidsMode {
-                HadithKidsWorldView()
-                    .tabItem {
-                        Label("Hadith", systemImage: "sparkles")
-                    }
-                    .tag(4)
-            } else {
-                ArabicView()
-                    .tabItem {
-                        Label("Arabic", systemImage: "textformat.abc")
-                    }
-                    .tag(4)
+            Group {
+                if isKidsMode {
+                    HadithKidsWorldView()
+                } else {
+                    ArabicView()
+                }
             }
+            .tabItem {
+                Label(isKidsMode ? "Hadith" : "Arabic",
+                      systemImage: isKidsMode ? "sparkles" : "textformat.abc")
+            }
+            .tag(4)
             
             ProfileView()
                 .tabItem {
