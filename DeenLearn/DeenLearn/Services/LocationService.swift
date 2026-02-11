@@ -19,7 +19,7 @@ final class LocationService: NSObject, ObservableObject {
     private let locationManager = CLLocationManager()
     
     @Published var currentLocation: CLLocation?
-    @Published var locationName: String = "Unknown Location"
+    @Published var locationName: String = "Mecca"
     @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
     @Published var isLoading = false
     @Published var error: String?

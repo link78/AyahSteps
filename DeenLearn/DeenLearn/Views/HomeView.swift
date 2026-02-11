@@ -832,7 +832,7 @@ struct DailyGoalCard: View {
             }
         }
         .padding(16)
-        .frame(width: isKidsMode ? DeviceLayout.scaled(160) : nil, height: isKidsMode ? DeviceLayout.scaled(150) : nil)
+        .frame(width: DeviceLayout.scaled(160), height: DeviceLayout.scaled(150))
         .background(Color(.systemBackground))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
@@ -998,7 +998,7 @@ struct QuickActionCard: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .frame(width: DeviceLayout.scaled(100), height: DeviceLayout.scaled(140))
+            .frame(minWidth: DeviceLayout.scaled(100), maxWidth: DeviceLayout.scaled(160), minHeight: DeviceLayout.scaled(140), maxHeight: DeviceLayout.scaled(180))
             .background(Color(.systemBackground))
             .cornerRadius(16)
             .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
