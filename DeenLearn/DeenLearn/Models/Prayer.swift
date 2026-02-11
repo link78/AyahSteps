@@ -60,6 +60,38 @@ struct Recitation: Identifiable {
     let audioFileName: String?
 }
 
+// MARK: - Dua Categories
+
+enum DuaCategory: String, CaseIterable, Identifiable {
+    case afterPrayer = "After Prayer"
+    case morningAdhkar = "Morning Adhkar"
+    case eveningAdhkar = "Evening Adhkar"
+    case protection = "Protection"
+    case general = "General Duas"
+    
+    var id: String { rawValue }
+    
+    var icon: String {
+        switch self {
+        case .afterPrayer: return "hands.and.sparkles"
+        case .morningAdhkar: return "sunrise.fill"
+        case .eveningAdhkar: return "sunset.fill"
+        case .protection: return "shield.fill"
+        case .general: return "star.fill"
+        }
+    }
+    
+    var color: String {
+        switch self {
+        case .afterPrayer: return "blue"
+        case .morningAdhkar: return "orange"
+        case .eveningAdhkar: return "purple"
+        case .protection: return "green"
+        case .general: return "teal"
+        }
+    }
+}
+
 // MARK: - Dua After Prayer
 
 struct DuaAfterPrayer: Identifiable {
@@ -70,6 +102,25 @@ struct DuaAfterPrayer: Identifiable {
     let translation: String
     let benefit: String
     let timesToRecite: Int
+    let category: DuaCategory
+    let source: String
+    let hadithCollection: String?
+    let hadithNumber: Int?
+    
+    // Backward-compatible init
+    init(id: String, name: String, arabic: String, transliteration: String, translation: String, benefit: String, timesToRecite: Int, category: DuaCategory = .afterPrayer, source: String = "Sunnah", hadithCollection: String? = nil, hadithNumber: Int? = nil) {
+        self.id = id
+        self.name = name
+        self.arabic = arabic
+        self.transliteration = transliteration
+        self.translation = translation
+        self.benefit = benefit
+        self.timesToRecite = timesToRecite
+        self.category = category
+        self.source = source
+        self.hadithCollection = hadithCollection
+        self.hadithNumber = hadithNumber
+    }
 }
 
 // MARK: - Prayer Mistake
@@ -587,6 +638,7 @@ extension SalahStep {
 
 extension DuaAfterPrayer {
     static let allDuas: [DuaAfterPrayer] = [
+        // MARK: - After Prayer Adhkar
         DuaAfterPrayer(
             id: "dua-1",
             name: "Astaghfirullah",
@@ -594,7 +646,11 @@ extension DuaAfterPrayer {
             transliteration: "Astaghfirullah",
             translation: "I seek forgiveness from Allah",
             benefit: "Seeking forgiveness from Allah for any shortcomings in the prayer",
-            timesToRecite: 3
+            timesToRecite: 3,
+            category: .afterPrayer,
+            source: "Sahih Muslim 591",
+            hadithCollection: "muslim",
+            hadithNumber: 591
         ),
         DuaAfterPrayer(
             id: "dua-2",
@@ -603,7 +659,11 @@ extension DuaAfterPrayer {
             transliteration: "Allahumma antas-salam wa minkas-salam, tabarakta ya dhal-jalali wal-ikram",
             translation: "O Allah, You are Peace and from You comes peace. Blessed are You, O Owner of majesty and honor.",
             benefit: "Acknowledging Allah as the source of all peace",
-            timesToRecite: 1
+            timesToRecite: 1,
+            category: .afterPrayer,
+            source: "Sahih Muslim 592",
+            hadithCollection: "muslim",
+            hadithNumber: 592
         ),
         DuaAfterPrayer(
             id: "dua-3",
@@ -611,8 +671,12 @@ extension DuaAfterPrayer {
             arabic: "سُبْحَانَ اللَّهِ",
             transliteration: "SubhanAllah",
             translation: "Glory be to Allah",
-            benefit: "Glorifying Allah - the Prophet ﷺ said this fills the scale of good deeds",
-            timesToRecite: 33
+            benefit: "Glorifying Allah — the Prophet ﷺ said this fills the scale of good deeds",
+            timesToRecite: 33,
+            category: .afterPrayer,
+            source: "Sahih Muslim 597",
+            hadithCollection: "muslim",
+            hadithNumber: 597
         ),
         DuaAfterPrayer(
             id: "dua-4",
@@ -621,7 +685,11 @@ extension DuaAfterPrayer {
             transliteration: "Alhamdulillah",
             translation: "All praise is due to Allah",
             benefit: "Praising Allah for all blessings",
-            timesToRecite: 33
+            timesToRecite: 33,
+            category: .afterPrayer,
+            source: "Sahih Muslim 597",
+            hadithCollection: "muslim",
+            hadithNumber: 597
         ),
         DuaAfterPrayer(
             id: "dua-5",
@@ -630,7 +698,11 @@ extension DuaAfterPrayer {
             transliteration: "Allahu Akbar",
             translation: "Allah is the Greatest",
             benefit: "Acknowledging Allah's greatness",
-            timesToRecite: 33
+            timesToRecite: 33,
+            category: .afterPrayer,
+            source: "Sahih Muslim 597",
+            hadithCollection: "muslim",
+            hadithNumber: 597
         ),
         DuaAfterPrayer(
             id: "dua-6",
@@ -639,18 +711,245 @@ extension DuaAfterPrayer {
             transliteration: "La ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamd wa huwa 'ala kulli shay'in qadir",
             translation: "There is no deity but Allah alone, with no partner. To Him belongs the dominion, and to Him is all praise, and He is capable of all things.",
             benefit: "Completing the 100 with this declaration of faith",
-            timesToRecite: 1
+            timesToRecite: 1,
+            category: .afterPrayer,
+            source: "Sahih Muslim 593",
+            hadithCollection: "muslim",
+            hadithNumber: 593
         ),
         DuaAfterPrayer(
             id: "dua-7",
-            name: "Ayatul Kursi (Verse 255 of Al-Baqarah)",
+            name: "Ayatul Kursi",
             arabic: "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
             transliteration: "Allahu la ilaha illa huwal-Hayyul-Qayyum. La ta'khudhuhu sinatun wa la nawm. Lahu ma fis-samawati wa ma fil-ard. Man dhal-ladhi yashfa'u 'indahu illa bi-idhnih. Ya'lamu ma bayna aydihim wa ma khalfahum wa la yuhituna bi-shay'im-min 'ilmihi illa bima sha'. Wasi'a kursiyyuhus-samawati wal-ard. Wa la ya'uduhu hifdhuhuwa wa huwal-'Aliyyul-'Azim.",
-            translation: "Allah - there is no deity except Him, the Ever-Living, the Sustainer of existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great.",
+            translation: "Allah — there is no deity except Him, the Ever-Living, the Sustainer of existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great.",
             benefit: "The Prophet ﷺ said whoever recites it after every prayer, nothing prevents them from entering Paradise except death",
-            timesToRecite: 1
+            timesToRecite: 1,
+            category: .afterPrayer,
+            source: "Sunan an-Nasa'i 9928 / Al-Baqarah 2:255",
+            hadithCollection: "nasai",
+            hadithNumber: 9928
+        ),
+        
+        // MARK: - Morning Adhkar
+        DuaAfterPrayer(
+            id: "dua-morning-1",
+            name: "Morning Remembrance",
+            arabic: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ",
+            transliteration: "Asbahna wa asbahal-mulku lillah, walhamdu lillah, la ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamd wa huwa 'ala kulli shay'in qadir",
+            translation: "We have reached the morning and at this very time the dominion belongs to Allah. All praise is for Allah. None has the right to be worshiped except Allah alone, without any partner. To Him belongs the dominion, and all praise is for Him, and He is capable of all things.",
+            benefit: "Starting the day acknowledging Allah's sovereignty and blessings",
+            timesToRecite: 1,
+            category: .morningAdhkar,
+            source: "Sahih Muslim 2723",
+            hadithCollection: "muslim",
+            hadithNumber: 2723
+        ),
+        DuaAfterPrayer(
+            id: "dua-morning-2",
+            name: "Sayyid al-Istighfar",
+            arabic: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَىٰ عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+            transliteration: "Allahumma anta rabbi la ilaha illa anta, khalaqtani wa ana 'abduka, wa ana 'ala 'ahdika wa wa'dika mastata'tu, a'udhu bika min sharri ma sana'tu, abu'u laka bini'matika 'alayya wa abu'u bi-dhanbi, faghfir li fa-innahu la yaghfirudh-dhunuba illa ant",
+            translation: "O Allah, You are my Lord. There is no deity except You. You created me and I am Your servant. I am on Your covenant and promise as best I can. I seek refuge in You from the evil of what I have done. I acknowledge Your blessings upon me and I confess my sins. Forgive me, for none forgives sins but You.",
+            benefit: "The master supplication for forgiveness — whoever says it with conviction in the morning and dies that day enters Paradise",
+            timesToRecite: 1,
+            category: .morningAdhkar,
+            source: "Sahih al-Bukhari 6306",
+            hadithCollection: "bukhari",
+            hadithNumber: 6306
+        ),
+        DuaAfterPrayer(
+            id: "dua-morning-3",
+            name: "Morning Protection",
+            arabic: "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
+            transliteration: "Bismillahil-ladhi la yadurru ma'asmihi shay'un fil-ardi wa la fis-sama'i wa huwas-Sami'ul-'Alim",
+            translation: "In the name of Allah, with whose name nothing on earth or in heaven can harm, and He is the All-Hearing, All-Knowing.",
+            benefit: "Protection from all harm throughout the day — nothing will harm the one who says this three times",
+            timesToRecite: 3,
+            category: .morningAdhkar,
+            source: "Sunan Abu Dawud 5088 / Jami' at-Tirmidhi 3388",
+            hadithCollection: "abu-daud",
+            hadithNumber: 5088
+        ),
+        DuaAfterPrayer(
+            id: "dua-morning-4",
+            name: "Contentment with Allah",
+            arabic: "رَضِيتُ بِاللَّهِ رَبًّا وَبِالْإِسْلَامِ دِينًا وَبِمُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ نَبِيًّا",
+            transliteration: "Raditu billahi rabba, wa bil-islami dina, wa bi-Muhammadin sallallahu 'alayhi wa sallama nabiyya",
+            translation: "I am pleased with Allah as my Lord, with Islam as my religion, and with Muhammad ﷺ as my Prophet.",
+            benefit: "Whoever says this three times in the morning, it is Allah's promise to please them on the Day of Judgment",
+            timesToRecite: 3,
+            category: .morningAdhkar,
+            source: "Sunan Abu Dawud 5072",
+            hadithCollection: "abu-daud",
+            hadithNumber: 5072
+        ),
+        
+        // MARK: - Evening Adhkar
+        DuaAfterPrayer(
+            id: "dua-evening-1",
+            name: "Evening Remembrance",
+            arabic: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ",
+            transliteration: "Amsayna wa amsal-mulku lillah, walhamdu lillah, la ilaha illallahu wahdahu la sharika lah, lahul-mulku wa lahul-hamd wa huwa 'ala kulli shay'in qadir",
+            translation: "We have reached the evening and at this very time the dominion belongs to Allah. All praise is for Allah. None has the right to be worshiped except Allah alone, without any partner. To Him belongs the dominion, and all praise is for Him, and He is capable of all things.",
+            benefit: "Ending the day acknowledging Allah's sovereignty, mirroring the morning adhkar",
+            timesToRecite: 1,
+            category: .eveningAdhkar,
+            source: "Sahih Muslim 2723",
+            hadithCollection: "muslim",
+            hadithNumber: 2723
+        ),
+        DuaAfterPrayer(
+            id: "dua-evening-2",
+            name: "Seeking Refuge (Al-Mu'awwidhatan)",
+            arabic: "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ● قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
+            transliteration: "Qul a'udhu bi rabbil-falaq... Qul a'udhu bi rabbin-nas...",
+            translation: "Say: I seek refuge in the Lord of daybreak... Say: I seek refuge in the Lord of mankind...",
+            benefit: "The Prophet ﷺ would recite these surahs in the morning and evening for protection",
+            timesToRecite: 3,
+            category: .eveningAdhkar,
+            source: "Sunan Abu Dawud 5082",
+            hadithCollection: "abu-daud",
+            hadithNumber: 5082
+        ),
+        DuaAfterPrayer(
+            id: "dua-evening-3",
+            name: "Evening Protection",
+            arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+            transliteration: "A'udhu bi kalimatillahit-tammat min sharri ma khalaq",
+            translation: "I seek refuge in the perfect words of Allah from the evil of what He has created.",
+            benefit: "Protection from all harm — whoever says this in the evening, no poison or sting will harm them that night",
+            timesToRecite: 3,
+            category: .eveningAdhkar,
+            source: "Sahih Muslim 2709",
+            hadithCollection: "muslim",
+            hadithNumber: 2709
+        ),
+        
+        // MARK: - Protection Duas
+        DuaAfterPrayer(
+            id: "dua-protect-1",
+            name: "Dua for Leaving Home",
+            arabic: "بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+            transliteration: "Bismillah, tawakkaltu 'alallah, la hawla wa la quwwata illa billah",
+            translation: "In the name of Allah, I place my trust in Allah. There is no power and no strength except with Allah.",
+            benefit: "An angel says: You are guided, defended and protected. And the devil turns away from you.",
+            timesToRecite: 1,
+            category: .protection,
+            source: "Sunan Abu Dawud 5095 / Jami' at-Tirmidhi 3426",
+            hadithCollection: "abu-daud",
+            hadithNumber: 5095
+        ),
+        DuaAfterPrayer(
+            id: "dua-protect-2",
+            name: "Dua Before Sleeping",
+            arabic: "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+            transliteration: "Bismika Allahumma amutu wa ahya",
+            translation: "In Your name, O Allah, I die and I live.",
+            benefit: "The Prophet ﷺ would say this when lying down to sleep, acknowledging that sleep is like death",
+            timesToRecite: 1,
+            category: .protection,
+            source: "Sahih al-Bukhari 6324",
+            hadithCollection: "bukhari",
+            hadithNumber: 6324
+        ),
+        DuaAfterPrayer(
+            id: "dua-protect-3",
+            name: "Dua When Waking Up",
+            arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
+            transliteration: "Alhamdu lillahil-ladhi ahyana ba'da ma amatana wa ilayhinnushur",
+            translation: "All praise is for Allah who gave us life after having taken it from us, and unto Him is the resurrection.",
+            benefit: "Starting your day with gratitude for being given another day of life",
+            timesToRecite: 1,
+            category: .protection,
+            source: "Sahih al-Bukhari 6312",
+            hadithCollection: "bukhari",
+            hadithNumber: 6312
+        ),
+        DuaAfterPrayer(
+            id: "dua-protect-4",
+            name: "Dua for Entering the Masjid",
+            arabic: "اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+            transliteration: "Allahumma-ftah li abwaba rahmatik",
+            translation: "O Allah, open for me the gates of Your mercy.",
+            benefit: "Asking Allah's mercy when entering His house of worship",
+            timesToRecite: 1,
+            category: .protection,
+            source: "Sahih Muslim 713",
+            hadithCollection: "muslim",
+            hadithNumber: 713
+        ),
+        
+        // MARK: - General Duas
+        DuaAfterPrayer(
+            id: "dua-general-1",
+            name: "Dua Before Eating",
+            arabic: "بِسْمِ اللَّهِ",
+            transliteration: "Bismillah",
+            translation: "In the name of Allah.",
+            benefit: "The Prophet ﷺ said: When one of you eats, let him mention the name of Allah",
+            timesToRecite: 1,
+            category: .general,
+            source: "Sunan Abu Dawud 3767",
+            hadithCollection: "abu-daud",
+            hadithNumber: 3767
+        ),
+        DuaAfterPrayer(
+            id: "dua-general-2",
+            name: "Dua After Eating",
+            arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَٰذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
+            transliteration: "Alhamdu lillahil-ladhi at'amani hadha wa razaqanihi min ghayri hawlin minni wa la quwwah",
+            translation: "All praise is for Allah who fed me this and provided it for me without any power or might from myself.",
+            benefit: "Whoever says this after eating, all previous sins are forgiven",
+            timesToRecite: 1,
+            category: .general,
+            source: "Sunan Abu Dawud 4023 / Jami' at-Tirmidhi 3458",
+            hadithCollection: "abu-daud",
+            hadithNumber: 4023
+        ),
+        DuaAfterPrayer(
+            id: "dua-general-3",
+            name: "Dua When in Distress",
+            arabic: "لَا إِلَٰهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
+            transliteration: "La ilaha illa anta subhanaka inni kuntu minaz-zalimin",
+            translation: "There is no deity except You; exalted are You. Indeed, I have been of the wrongdoers.",
+            benefit: "The dua of Prophet Yunus (Jonah) — no Muslim calls upon Allah with this except that Allah answers",
+            timesToRecite: 1,
+            category: .general,
+            source: "Jami' at-Tirmidhi 3505 / Al-Anbiya 21:87",
+            hadithCollection: "tirmidhi",
+            hadithNumber: 3505
+        ),
+        DuaAfterPrayer(
+            id: "dua-general-4",
+            name: "Istikhara (Seeking Guidance)",
+            arabic: "اللَّهُمَّ إِنِّي أَسْتَخِيرُكَ بِعِلْمِكَ وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ وَأَسْأَلُكَ مِنْ فَضْلِكَ الْعَظِيمِ",
+            transliteration: "Allahumma inni astakhiruka bi 'ilmika wa astaqdiruka bi qudratika wa as'aluka min fadlikal-'azim",
+            translation: "O Allah, I seek Your guidance through Your knowledge, and I seek strength through Your power, and I ask You from Your immense favor.",
+            benefit: "The Prophet ﷺ taught this dua for seeking Allah's guidance in all matters of life",
+            timesToRecite: 1,
+            category: .general,
+            source: "Sahih al-Bukhari 1166",
+            hadithCollection: "bukhari",
+            hadithNumber: 1166
+        ),
+        DuaAfterPrayer(
+            id: "dua-general-5",
+            name: "Dua for Parents",
+            arabic: "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",
+            transliteration: "Rabbir-hamhuma kama rabbayani saghira",
+            translation: "My Lord, have mercy upon them as they brought me up when I was small.",
+            benefit: "A beautiful Quranic dua showing gratitude and love for parents",
+            timesToRecite: 1,
+            category: .general,
+            source: "Surah Al-Isra 17:24"
         )
     ]
+    
+    /// Get duas filtered by category
+    static func duas(for category: DuaCategory) -> [DuaAfterPrayer] {
+        allDuas.filter { $0.category == category }
+    }
 }
 
 extension PrayerMistake {

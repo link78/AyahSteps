@@ -1177,28 +1177,132 @@ struct MistakeCard: View {
 
 struct DuasSectionView: View {
     let isKidsMode: Bool
+    @State private var selectedCategory: DuaCategory = .afterPrayer
+    @State private var searchText = ""
+    @State private var favoriteDuaIDs: Set<String> = {
+        Set(UserDefaults.standard.stringArray(forKey: "favoriteDuas") ?? [])
+    }()
+    @State private var showFavoritesOnly = false
+    
+    var filteredDuas: [DuaAfterPrayer] {
+        var duas = showFavoritesOnly
+            ? DuaAfterPrayer.allDuas.filter { favoriteDuaIDs.contains($0.id) }
+            : DuaAfterPrayer.duas(for: selectedCategory)
+        
+        if !searchText.isEmpty {
+            duas = duas.filter {
+                $0.name.localizedCaseInsensitiveContains(searchText) ||
+                $0.translation.localizedCaseInsensitiveContains(searchText) ||
+                $0.transliteration.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+        return duas
+    }
     
     var body: some View {
         if isKidsMode {
             DuaKidsView(isKidsMode: true)
         } else {
             VStack(spacing: 16) {
-                Text("Adhkar After Prayer")
-                    .font(.headline)
+                // Header with search and favorites toggle
+                HStack {
+                    Text("Duas & Adhkar")
+                        .font(.headline)
+                    
+                    Spacer()
+                    
+                    Button(action: { withAnimation { showFavoritesOnly.toggle() } }) {
+                        Image(systemName: showFavoritesOnly ? "heart.fill" : "heart")
+                            .foregroundColor(showFavoritesOnly ? .red : .secondary)
+                    }
+                }
+                .padding(.horizontal)
+                
+                // Search bar
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.secondary)
+                    TextField("Search duas...", text: $searchText)
+                        .textFieldStyle(PlainTextFieldStyle())
+                }
+                .padding(10)
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                // Category tabs
+                if !showFavoritesOnly {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            ForEach(DuaCategory.allCases) { category in
+                                Button(action: { withAnimation { selectedCategory = category } }) {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: category.icon)
+                                            .font(.caption2)
+                                        Text(category.rawValue)
+                                            .font(.caption)
+                                            .fontWeight(.medium)
+                                    }
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 8)
+                                    .background(selectedCategory == category ? Color.blue : Color(.systemGray5))
+                                    .foregroundColor(selectedCategory == category ? .white : .primary)
+                                    .cornerRadius(20)
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                }
+                
+                // Dua count
+                Text("\(filteredDuas.count) dua\(filteredDuas.count == 1 ? "" : "s")")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
                     .padding(.horizontal)
                 
-                ForEach(DuaAfterPrayer.allDuas) { dua in
-                    DuaCard(dua: dua, isKidsMode: isKidsMode)
+                // Duas list
+                if filteredDuas.isEmpty {
+                    VStack(spacing: 8) {
+                        Image(systemName: showFavoritesOnly ? "heart.slash" : "magnifyingglass")
+                            .font(.title)
+                            .foregroundColor(.secondary)
+                        Text(showFavoritesOnly ? "No favorite duas yet" : "No duas found")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.vertical, 40)
+                } else {
+                    ForEach(filteredDuas) { dua in
+                        DuaCard(
+                            dua: dua,
+                            isKidsMode: isKidsMode,
+                            isFavorite: favoriteDuaIDs.contains(dua.id),
+                            onToggleFavorite: { toggleFavorite(dua.id) }
+                        )
+                    }
                 }
             }
         }
+    }
+    
+    private func toggleFavorite(_ id: String) {
+        if favoriteDuaIDs.contains(id) {
+            favoriteDuaIDs.remove(id)
+        } else {
+            favoriteDuaIDs.insert(id)
+        }
+        UserDefaults.standard.set(Array(favoriteDuaIDs), forKey: "favoriteDuas")
     }
 }
 
 struct DuaCard: View {
     let dua: DuaAfterPrayer
     let isKidsMode: Bool
+    var isFavorite: Bool = false
+    var onToggleFavorite: (() -> Void)? = nil
     @State private var isExpanded = false
+    @State private var apiArabicText: String?
     @StateObject private var ttsService = TextToSpeechService.shared
     
     var body: some View {
@@ -1210,30 +1314,49 @@ struct DuaCard: View {
                             .font(.headline)
                             .foregroundColor(.primary)
                         
-                        HStack {
-                            Image(systemName: "repeat")
-                                .font(.caption)
-                            Text(dua.timesToRecite == 1 ? "Once" : "×\(dua.timesToRecite)")
-                                .font(.caption)
+                        HStack(spacing: 8) {
+                            HStack(spacing: 2) {
+                                Image(systemName: "repeat")
+                                    .font(.caption2)
+                                Text(dua.timesToRecite == 1 ? "Once" : "×\(dua.timesToRecite)")
+                                    .font(.caption)
+                            }
+                            .foregroundColor(.secondary)
+                            
+                            Text("·")
+                                .foregroundColor(.secondary)
+                            
+                            Text(dua.source)
+                                .font(.caption2)
+                                .foregroundColor(.blue)
                         }
-                        .foregroundColor(.secondary)
                     }
                     
                     Spacer()
                     
-                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .foregroundColor(.secondary)
+                    HStack(spacing: 12) {
+                        if let onToggleFavorite = onToggleFavorite {
+                            Button(action: onToggleFavorite) {
+                                Image(systemName: isFavorite ? "heart.fill" : "heart")
+                                    .foregroundColor(isFavorite ? .red : .secondary)
+                                    .font(.subheadline)
+                            }
+                        }
+                        
+                        Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
             .buttonStyle(PlainButtonStyle())
             
             if isExpanded {
                 VStack(alignment: .leading, spacing: 12) {
-                    // Speakable Arabic dua
+                    // Arabic text (API-enriched or local)
                     HStack {
                         Spacer()
                         SpeakableArabicText(
-                            text: dua.arabic,
+                            text: apiArabicText ?? dua.arabic,
                             font: .title3
                         )
                     }
@@ -1249,7 +1372,8 @@ struct DuaCard: View {
                     
                     Divider()
                     
-                    HStack(spacing: 4) {
+                    // Benefit
+                    HStack(alignment: .top, spacing: 4) {
                         Image(systemName: "lightbulb.fill")
                             .foregroundColor(.yellow)
                             .font(.caption)
@@ -1258,9 +1382,19 @@ struct DuaCard: View {
                             .foregroundColor(.secondary)
                     }
                     
+                    // Source reference
+                    HStack(spacing: 4) {
+                        Image(systemName: "book.fill")
+                            .foregroundColor(.green)
+                            .font(.caption2)
+                        Text("Source: \(dua.source)")
+                            .font(.caption2)
+                            .foregroundColor(.green)
+                    }
+                    
                     // Listen button
                     Button(action: {
-                        ttsService.speak(dua.arabic, language: "ar-SA")
+                        ttsService.speak(apiArabicText ?? dua.arabic, language: "ar-SA")
                     }) {
                         HStack {
                             Image(systemName: ttsService.isSpeaking ? "speaker.wave.3.fill" : "speaker.wave.2.fill")
@@ -1278,12 +1412,25 @@ struct DuaCard: View {
                 .padding()
                 .background(Color.blue.opacity(0.05))
                 .cornerRadius(12)
+                .task {
+                    await enrichFromAPI()
+                }
             }
         }
         .padding()
         .background(Color(.systemBackground))
         .cornerRadius(16)
         .padding(.horizontal)
+    }
+    
+    private func enrichFromAPI() async {
+        guard apiArabicText == nil,
+              let collection = dua.hadithCollection,
+              let number = dua.hadithNumber else { return }
+        
+        if let hadith = await HadithAPIService.shared.fetchHadith(collection: collection, number: number) {
+            apiArabicText = hadith.arab
+        }
     }
 }
 
