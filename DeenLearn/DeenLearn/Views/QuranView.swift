@@ -876,7 +876,7 @@ struct WordByWordView: View {
                 // Word display
                 VStack(spacing: 20) {
                     Text(allWords[currentWordIndex].arabic)
-                        .font(.system(size: 80))
+                        .font(.system(size: DeviceLayout.scaledFont(80)))
                     
                     Text(allWords[currentWordIndex].transliteration)
                         .font(.title)
@@ -1449,7 +1449,7 @@ struct SurahAdventureView: View {
                     // Header
                     VStack(spacing: 16) {
                         Text(adventure.emoji)
-                            .font(.system(size: 80))
+                            .font(.system(size: DeviceLayout.scaledFont(80)))
                         
                         Text(adventure.surahNameArabic)
                             .font(.largeTitle)

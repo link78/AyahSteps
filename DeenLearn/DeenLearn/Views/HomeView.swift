@@ -186,10 +186,10 @@ struct HomeView: View {
                     ZStack {
                         Circle()
                             .fill(Color.white.opacity(0.3))
-                            .frame(width: 80, height: 80)
+                            .responsiveFrame(width: 80, height: 80)
                         
                         Text("🌟")
-                            .font(.system(size: 50))
+                            .font(.system(size: DeviceLayout.scaledFont(50)))
                             .scaleEffect(showCharacterAnimation ? 1.1 : 0.9)
                             .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: showCharacterAnimation)
                     }
@@ -463,7 +463,7 @@ struct HomeView: View {
                 ZStack {
                     Circle()
                         .fill(Color.yellow.opacity(0.3))
-                        .frame(width: 60, height: 60)
+                        .responsiveFrame(width: 60, height: 60)
                     
                     Text("🚀")
                         .font(.largeTitle)
@@ -814,7 +814,7 @@ struct DailyGoalCard: View {
             }
         }
         .padding(16)
-        .frame(width: isKidsMode ? 160 : nil, height: isKidsMode ? 150 : nil)
+        .frame(width: isKidsMode ? DeviceLayout.scaled(160) : nil, height: isKidsMode ? DeviceLayout.scaled(150) : nil)
         .background(Color(.systemBackground))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
@@ -980,7 +980,7 @@ struct QuickActionCard: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .frame(width: 100, height: 140)
+            .frame(width: DeviceLayout.scaled(100), height: DeviceLayout.scaled(140))
             .background(Color(.systemBackground))
             .cornerRadius(16)
             .shadow(color: .black.opacity(0.05), radius: 5, y: 2)

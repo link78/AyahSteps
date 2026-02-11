@@ -22,6 +22,7 @@
 		AAAAAAAAAAAAAAAAAAAAAA13 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111133 /* ProgressView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA14 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111135 /* SettingsView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA15 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111140 /* Extensions.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAB01 /* ResponsiveLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111B01 /* ResponsiveLayout.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA16 /* Arabic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111141 /* Arabic.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA17 /* Pillar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111142 /* Pillar.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA18 /* Prayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111143 /* Prayer.swift */; };
@@ -73,6 +74,7 @@
 		111111111111111111111133 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		111111111111111111111135 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		111111111111111111111140 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		111111111111111111111B01 /* ResponsiveLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveLayout.swift; sourceTree = "<group>"; };
 		111111111111111111111141 /* Arabic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arabic.swift; sourceTree = "<group>"; };
 		111111111111111111111142 /* Pillar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pillar.swift; sourceTree = "<group>"; };
 		111111111111111111111143 /* Prayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prayer.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				11111111111111111111111B /* DeenLearnApp.swift */,
 				11111111111111111111111D /* ContentView.swift */,
 				111111111111111111111140 /* Extensions.swift */,
+				111111111111111111111B01 /* ResponsiveLayout.swift */,
 				111111111111111111111136 /* Models */,
 				111111111111111111111137 /* Views */,
 				11111111111111111111115A /* Services */,
@@ -294,6 +297,7 @@
 				AAAAAAAAAAAAAAAAAAAAAA02 /* ContentView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA01 /* DeenLearnApp.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA15 /* Extensions.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAB01 /* ResponsiveLayout.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA05 /* AppState.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA06 /* LearningModule.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA16 /* Arabic.swift in Sources */,

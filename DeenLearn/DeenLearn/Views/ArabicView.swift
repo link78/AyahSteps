@@ -97,7 +97,7 @@ struct AlphabetSectionView: View {
     @ObservedObject private var ttsService = TextToSpeechService.shared
     
     let columns = [
-        GridItem(.adaptive(minimum: 70), spacing: 12)
+        GridItem(.adaptive(minimum: DeviceLayout.scaled(70)), spacing: DeviceLayout.scaled(12))
     ]
     
     var body: some View {
@@ -155,7 +155,7 @@ struct LetterCardView: View {
     var body: some View {
         VStack(spacing: 4) {
             Text(letter.isolated)
-                .font(.system(size: isKidsMode ? 36 : 32))
+            .font(.system(size: DeviceLayout.scaledFont(isKidsMode ? 36 : 32)))
             
             HStack(spacing: 2) {
                 Text(letter.name)
@@ -167,7 +167,7 @@ struct LetterCardView: View {
                     .foregroundColor(isCurrentlySpeaking ? .blue : .gray.opacity(0.5))
             }
         }
-        .frame(width: 70, height: 70)
+        .responsiveFrame(width: 70, height: 70)
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(isCurrentlySpeaking ? Color.blue.opacity(0.1) : Color(.systemBackground))
@@ -189,7 +189,7 @@ struct LetterDetailView: View {
                     // Large Letter Display with tap-to-listen
                     VStack(spacing: 8) {
                         Text(letter.isolated)
-                            .font(.system(size: 120))
+                            .font(.system(size: DeviceLayout.scaledFont(120)))
                         Text(letter.name)
                             .font(.title)
                             .fontWeight(.bold)
@@ -407,7 +407,7 @@ struct TracingSectionView: View {
                             .fill(Color(.systemGray6))
                         
                         Text("ا")
-                            .font(.system(size: 150))
+                            .font(.system(size: DeviceLayout.scaledFont(150)))
                             .foregroundColor(.gray.opacity(0.3))
                         
                         Text(appState.isKidsMode ? "Tap a letter to start!" : "Select a letter")
@@ -448,7 +448,7 @@ struct TracingCanvasView: View {
             ZStack {
                 // Background letter (guide)
                 Text(letter.isolated)
-                    .font(.system(size: 150))
+                    .font(.system(size: DeviceLayout.scaledFont(150)))
                     .foregroundColor(.gray.opacity(0.2))
                 
                 // Drawing canvas
@@ -638,10 +638,10 @@ struct VocabularyDetailView: View {
                 // Icon and Word
                 VStack(spacing: 12) {
                     Text(word.icon)
-                        .font(.system(size: 80))
+                        .font(.system(size: DeviceLayout.scaledFont(80)))
                     
                     Text(word.arabic)
-                        .font(.system(size: 48))
+                        .font(.system(size: DeviceLayout.scaledFont(48)))
                     
                     Text(word.transliteration)
                         .font(.title2)
@@ -995,7 +995,7 @@ struct SoundRecognitionGameContent: View {
                     Text("Tap to Listen")
                         .font(.headline)
                 }
-                .frame(width: 150, height: 150)
+                .responsiveFrame(width: 150, height: 150)
                 .background(Color.blue.opacity(0.1))
                 .foregroundColor(.blue)
                 .cornerRadius(20)

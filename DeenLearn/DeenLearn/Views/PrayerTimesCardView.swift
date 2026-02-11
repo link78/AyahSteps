@@ -221,7 +221,7 @@ struct PrayerTimeRow: View {
             ZStack {
                 Circle()
                     .fill(prayer.isPrayer ? (isNext ? primaryColor : (isPast ? Color.gray.opacity(0.3) : Color(.systemGray5))) : Color(.systemGray6))
-                    .frame(width: 40, height: 40)
+                    .responsiveFrame(width: 40, height: 40)
                 
                 Image(systemName: prayer.icon)
                     .font(.body)

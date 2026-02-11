@@ -84,10 +84,10 @@ struct ProfileView: View {
             ZStack {
                 Circle()
                     .fill(appState.isKidsMode ? Color.orange.opacity(0.2) : Color.green.opacity(0.2))
-                    .frame(width: 100, height: 100)
+                    .responsiveFrame(width: 100, height: 100)
                 
                 Text(profile.avatarEmoji)
-                    .font(.system(size: 50))
+                    .font(.system(size: DeviceLayout.scaledFont(50)))
             }
             
             // Name

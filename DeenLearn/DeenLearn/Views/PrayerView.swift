@@ -173,7 +173,7 @@ struct PrayerSectionButton: View {
                 Text(section.rawValue)
                     .font(.caption)
             }
-            .frame(width: 70, height: 70)
+            .frame(width: DeviceLayout.scaled(70), height: DeviceLayout.scaled(70))
             .background(isSelected ? 
                 (isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e")) :
                 Color(.systemBackground)
@@ -485,7 +485,7 @@ struct StepDetailView: View {
             ZStack {
                 Circle()
                     .fill(Color.blue.opacity(0.2))
-                    .frame(width: 100, height: 100)
+                    .responsiveFrame(width: 100, height: 100)
                 
                 if isKidsMode {
                     Text(wuduStep?.kidsEmoji ?? salahStep?.kidsEmoji ?? "🙏")
@@ -823,7 +823,7 @@ struct PracticeModeView: View {
             ZStack {
                 Circle()
                     .fill(Color.green.opacity(0.2))
-                    .frame(width: 120, height: 120)
+                    .responsiveFrame(width: 120, height: 120)
                 
                 Image(systemName: "play.circle.fill")
                     .font(.system(size: 60))
