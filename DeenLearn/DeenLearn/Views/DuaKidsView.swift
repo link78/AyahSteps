@@ -757,7 +757,7 @@ struct DuaQuizGameView: View {
             VStack(spacing: 20) {
                 if currentQuestion < quizzes.count {
                     // Progress
-                    ProgressView(value: Double(currentQuestion), total: Double(quizzes.count))
+                    SwiftUI.ProgressView(value: Double(currentQuestion), total: Double(quizzes.count))
                         .tint(Color(hex: "FF6B6B"))
                         .padding(.horizontal)
 
