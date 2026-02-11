@@ -269,6 +269,7 @@ struct HadithAdultView: View {
             }
             .navigationTitle("Hadith")
         }
+        .navigationViewStyle(.stack)
     }
 }
 

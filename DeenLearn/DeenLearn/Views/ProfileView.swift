@@ -62,6 +62,7 @@ struct ProfileView: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
         .sheet(isPresented: $showingEditProfile) {
             EditProfileSheet(profile: $profile)
         }
@@ -857,6 +858,7 @@ struct EditProfileSheet: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
     }
 }
 
@@ -922,6 +924,7 @@ struct AddChildSheet: View {
                             name: name,
                             avatarEmoji: avatar,
                             age: age,
+
                             createdAt: Date(),
                             totalLearningMinutes: 0,
                             currentStreak: 0,
@@ -948,6 +951,7 @@ struct AddChildSheet: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
     }
 }
 
@@ -997,6 +1001,7 @@ struct AddGoalSheet: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
     }
 }
 
@@ -1061,6 +1066,7 @@ struct ChildDetailSheet: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
     }
     
     private func detailStatCard(title: String, value: String, unit: String, color: Color) -> some View {
