@@ -1179,20 +1179,17 @@ struct DuasSectionView: View {
     let isKidsMode: Bool
     
     var body: some View {
-        VStack(spacing: 16) {
-            Text(isKidsMode ? "🤲 Duas After Prayer" : "Adhkar After Prayer")
-                .font(.headline)
-                .padding(.horizontal)
-            
-            if isKidsMode {
-                Text("Say these special words after you finish praying!")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+        if isKidsMode {
+            DuaKidsView(isKidsMode: true)
+        } else {
+            VStack(spacing: 16) {
+                Text("Adhkar After Prayer")
+                    .font(.headline)
                     .padding(.horizontal)
-            }
-            
-            ForEach(DuaAfterPrayer.allDuas) { dua in
-                DuaCard(dua: dua, isKidsMode: isKidsMode)
+                
+                ForEach(DuaAfterPrayer.allDuas) { dua in
+                    DuaCard(dua: dua, isKidsMode: isKidsMode)
+                }
             }
         }
     }

@@ -52,6 +52,7 @@
 		AAAAAAAAAAAAAAAAAAAAAA43 /* HadithKidsWorldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111162 /* HadithKidsWorldView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA44 /* KidsHadith.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111163 /* KidsHadith.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA45 /* HadithKidsDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111164 /* HadithKidsDataService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA46 /* DuaKidsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111165 /* DuaKidsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -101,6 +102,7 @@
 		111111111111111111111162 /* HadithKidsWorldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithKidsWorldView.swift; sourceTree = "<group>"; };
 		111111111111111111111163 /* KidsHadith.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KidsHadith.swift; sourceTree = "<group>"; };
 		111111111111111111111164 /* HadithKidsDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithKidsDataService.swift; sourceTree = "<group>"; };
+		111111111111111111111165 /* DuaKidsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaKidsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +204,7 @@
 				111111111111111111111155 /* SubscriptionView.swift */,
 				111111111111111111111156 /* PrayerTimesCardView.swift */,
 				111111111111111111111162 /* HadithKidsWorldView.swift */,
+				111111111111111111111165 /* DuaKidsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				AAAAAAAAAAAAAAAAAAAAAA43 /* HadithKidsWorldView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA44 /* KidsHadith.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA45 /* HadithKidsDataService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA46 /* DuaKidsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
