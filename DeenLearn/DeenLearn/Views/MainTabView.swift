@@ -28,7 +28,13 @@ struct MainTabView: View {
                 }
                 .tag(1)
             
-            HadithKidsWorldView()
+            Group {
+                if isKidsMode {
+                    HadithKidsWorldView()
+                } else {
+                    HadithAdultView()
+                }
+            }
                 .tabItem {
                     Label("Hadith", systemImage: "sparkles")
                 }
