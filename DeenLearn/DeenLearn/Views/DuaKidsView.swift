@@ -147,7 +147,7 @@ struct DuaKidsData {
                 DuaLearningCard(question: "What did Zayd learn?", emoji: "💡", options: ["Life is boring", "He has many blessings to be grateful for", "He should sleep more", "Nothing important"], correctAnswer: 1),
                 DuaLearningCard(question: "How many times after prayer?", emoji: "🔢", options: ["3 times", "33 times", "7 times", "Once"], correctAnswer: 1)
             ],
-            situationEmoji: "🌈",
+            situationEmoji: "✨",
             timesToRecite: 33,
             relatedHadithCollection: "muslim",
             relatedHadithNumber: 597
@@ -900,7 +900,7 @@ struct DuaMiniGameView: View {
     // Situation Picker data
     private let situations: [(scenario: String, correctDua: String, options: [String], emoji: String)] = [
         ("You just finished praying. What do you say first?", "Astaghfirullah", ["SubhanAllah", "Astaghfirullah", "Bismillah"], "🕌"),
-        ("You see a beautiful rainbow. What do you say?", "SubhanAllah", ["Astaghfirullah", "SubhanAllah", "Allahu Akbar"], "🌈"),
+        ("You see something beautiful in nature. What do you say?", "SubhanAllah", ["Astaghfirullah", "SubhanAllah", "Allahu Akbar"], "🌿"),
         ("You passed your test! What do you say?", "Alhamdulillah", ["Alhamdulillah", "Astaghfirullah", "La ilaha illallah"], "📝"),
         ("You feel nervous before a big event. What helps?", "Allahu Akbar", ["SubhanAllah", "Alhamdulillah", "Allahu Akbar"], "😰"),
         ("You want protection before sleeping. What do you recite?", "Ayatul Kursi", ["SubhanAllah", "Ayatul Kursi", "Astaghfirullah"], "🌙")

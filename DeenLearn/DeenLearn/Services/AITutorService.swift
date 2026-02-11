@@ -102,7 +102,7 @@ class AITutorService: ObservableObject {
         }
         
         // Default response for kids
-        return "🌈 That's a great question! Islam teaches us to be kind, honest, and helpful. Allah loves children who ask questions and want to learn more! Keep being curious! 💫"
+        return "⭐ That's a great question! Islam teaches us to be kind, honest, and helpful. Allah loves children who ask questions and want to learn more! Keep being curious! 💫"
     }
     
     // MARK: - Adult Mode Responses

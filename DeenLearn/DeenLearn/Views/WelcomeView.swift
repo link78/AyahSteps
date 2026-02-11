@@ -203,7 +203,7 @@ struct AgeSelectionSheet: View {
     
     var ageGroupEmoji: String {
         switch selectedAge {
-        case 4...6: return "🌈"
+        case 4...6: return "🧸"
         case 7...9: return "⭐"
         case 10...12: return "🌟"
         case 13...17: return "📚"

@@ -807,7 +807,7 @@ struct WordDetailView: View {
                             }
                             
                             if isKidsMode {
-                                Text("🌈 Colors help you remember how to recite beautifully!")
+                                Text("🎨 Colors help you remember how to recite beautifully!")
                                     .font(.caption)
                                     .foregroundColor(.purple)
                                     .padding(.top, 8)

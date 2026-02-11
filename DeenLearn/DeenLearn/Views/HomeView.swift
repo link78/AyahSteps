@@ -29,7 +29,7 @@ struct HomeView: View {
         case 5..<12:
             if isKidsMode {
                 return appState.ageGroup == .earlyChildhood 
-                    ? "Good Morning, \(ageGreeting)! ☀️🌈" 
+                    ? "Good Morning, \(ageGreeting)! ☀️⭐" 
                     : "Good Morning, \(ageGreeting)! ☀️"
             } else {
                 return "Good Morning, \(ageGreeting)"
@@ -660,6 +660,16 @@ struct HomeView: View {
                     }
                     
                     QuickActionCard(
+                        title: "Hadith",
+                        titleArabic: "الحديث",
+                        icon: "sparkles",
+                        color: .teal,
+                        isKidsMode: isKidsMode
+                    ) {
+                        appState.selectedTab = 2 // Hadith tab
+                    }
+                    
+                    QuickActionCard(
                         title: "Practice Arabic",
                         titleArabic: "العربية",
                         icon: "character.textbox",
@@ -689,7 +699,9 @@ struct HomeView: View {
                     icon: "clock.fill",
                     color: .green,
                     isKidsMode: true
-                )
+                ) {
+                    appState.selectedTab = 3 // Prayer tab
+                }
                 
                 ReminderCard(
                     title: "5-Minute Qur'an Session 📖",
@@ -697,7 +709,9 @@ struct HomeView: View {
                     icon: "book.fill",
                     color: .purple,
                     isKidsMode: true
-                )
+                ) {
+                    appState.selectedTab = 4 // Quran tab
+                }
             }
             .padding(.horizontal)
         }
@@ -730,7 +744,9 @@ struct HomeView: View {
                         icon: "clock.fill",
                         color: Color(hex: "2d8b6e"),
                         isKidsMode: false
-                    )
+                    ) {
+                        appState.selectedTab = 3 // Prayer tab
+                    }
                     
                     ReminderCard(
                         title: "5-Minute Qur'an Session",
@@ -738,7 +754,9 @@ struct HomeView: View {
                         icon: "book.fill",
                         color: .purple,
                         isKidsMode: false
-                    )
+                    ) {
+                        appState.selectedTab = 4 // Quran tab
+                    }
                 }
                 .padding(.horizontal)
             }
@@ -1001,37 +1019,41 @@ struct ReminderCard: View {
     let icon: String
     let color: Color
     let isKidsMode: Bool
+    var action: (() -> Void)? = nil
     
     var body: some View {
-        HStack(spacing: 16) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(color.opacity(0.15))
-                    .frame(width: 44, height: 44)
+        Button(action: { action?() }) {
+            HStack(spacing: 16) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(color.opacity(0.15))
+                        .frame(width: 44, height: 44)
+                    
+                    Image(systemName: icon)
+                        .foregroundColor(color)
+                }
                 
-                Image(systemName: icon)
-                    .foregroundColor(color)
-            }
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(isKidsMode ? .headline : .subheadline)
-                    .fontWeight(.semibold)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(isKidsMode ? .headline : .subheadline)
+                        .fontWeight(.semibold)
+                    
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
                 
-                Text(subtitle)
-                    .font(.caption)
+                Spacer()
+                
+                Image(systemName: "chevron.right")
                     .foregroundColor(.secondary)
             }
-            
-            Spacer()
-            
-            Image(systemName: "chevron.right")
-                .foregroundColor(.secondary)
+            .padding(16)
+            .background(Color(.systemBackground))
+            .cornerRadius(16)
+            .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
         }
-        .padding(16)
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
+        .buttonStyle(.plain)
     }
 }
 
