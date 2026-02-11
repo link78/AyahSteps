@@ -294,7 +294,7 @@ struct HomeView: View {
                         isCompleted: appState.dailyGoal.quranSessionCompleted,
                         isKidsMode: true,
                         onTap: {
-                            appState.selectedTab = 3 // Navigate to Quran tab
+                            appState.selectedTab = 4 // Navigate to Quran tab
                         },
                         onToggleComplete: {
                             appState.dailyGoal.quranSessionCompleted.toggle()
@@ -310,7 +310,7 @@ struct HomeView: View {
                         isCompleted: appState.dailyGoal.salahPractice,
                         isKidsMode: true,
                         onTap: {
-                            appState.selectedTab = 2 // Navigate to Prayer tab
+                            appState.selectedTab = 3 // Navigate to Prayer tab
                         },
                         onToggleComplete: {
                             appState.dailyGoal.salahPractice.toggle()
@@ -326,7 +326,7 @@ struct HomeView: View {
                         isCompleted: appState.dailyGoal.arabicPractice,
                         isKidsMode: true,
                         onTap: {
-                            appState.selectedTab = 4 // Navigate to Arabic tab
+                            appState.selectedTab = 5 // Navigate to Arabic tab
                         },
                         onToggleComplete: {
                             appState.dailyGoal.arabicPractice.toggle()
@@ -356,7 +356,7 @@ struct HomeView: View {
                     isCompleted: appState.dailyGoal.quranSessionCompleted,
                     isKidsMode: false,
                     onTap: {
-                        appState.selectedTab = 3 // Navigate to Quran tab
+                        appState.selectedTab = 4 // Navigate to Quran tab
                     },
                     onToggleComplete: {
                         appState.dailyGoal.quranSessionCompleted.toggle()
@@ -374,7 +374,7 @@ struct HomeView: View {
                     isCompleted: appState.dailyGoal.salahPractice,
                     isKidsMode: false,
                     onTap: {
-                        appState.selectedTab = 2 // Navigate to Prayer tab
+                        appState.selectedTab = 3 // Navigate to Prayer tab
                     },
                     onToggleComplete: {
                         appState.dailyGoal.salahPractice.toggle()
@@ -390,7 +390,7 @@ struct HomeView: View {
                     isCompleted: appState.dailyGoal.arabicPractice,
                     isKidsMode: false,
                     onTap: {
-                        appState.selectedTab = 4 // Navigate to Arabic tab
+                        appState.selectedTab = 5 // Navigate to Arabic tab
                     },
                     onToggleComplete: {
                         appState.dailyGoal.arabicPractice.toggle()
@@ -636,7 +636,7 @@ struct HomeView: View {
                         color: .green,
                         isKidsMode: isKidsMode
                     ) {
-                        appState.selectedTab = 2 // Prayer tab
+                        appState.selectedTab = 3 // Prayer tab
                     }
                     
                     QuickActionCard(
@@ -646,7 +646,7 @@ struct HomeView: View {
                         color: .purple,
                         isKidsMode: isKidsMode
                     ) {
-                        appState.selectedTab = 3 // Quran tab
+                        appState.selectedTab = 4 // Quran tab
                     }
                     
                     QuickActionCard(
@@ -666,7 +666,7 @@ struct HomeView: View {
                         color: .blue,
                         isKidsMode: isKidsMode
                     ) {
-                        appState.selectedTab = 4 // Arabic tab
+                        appState.selectedTab = 5 // Arabic tab
                     }
                 }
                 .padding(.horizontal)

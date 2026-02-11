@@ -28,36 +28,35 @@ struct MainTabView: View {
                 }
                 .tag(1)
             
+            HadithKidsWorldView()
+                .tabItem {
+                    Label("Hadith", systemImage: "sparkles")
+                }
+                .tag(2)
+            
             PrayerView()
                 .tabItem {
                     Label("Prayer", systemImage: "person.fill")
                 }
-                .tag(2)
+                .tag(3)
             
             QuranView()
                 .tabItem {
                     Label("Quran", systemImage: "text.book.closed.fill")
                 }
-                .tag(3)
+                .tag(4)
             
-            Group {
-                if isKidsMode {
-                    HadithKidsWorldView()
-                } else {
-                    ArabicView()
+            ArabicView()
+                .tabItem {
+                    Label("Arabic", systemImage: "textformat.abc")
                 }
-            }
-            .tabItem {
-                Label(isKidsMode ? "Hadith" : "Arabic",
-                      systemImage: isKidsMode ? "sparkles" : "textformat.abc")
-            }
-            .tag(4)
+                .tag(5)
             
             ProfileView()
                 .tabItem {
                     Label(isKidsMode ? "Me" : "Profile", systemImage: "person.crop.circle.fill")
                 }
-                .tag(5)
+                .tag(6)
         }
         .tint(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
     }
