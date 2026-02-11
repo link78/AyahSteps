@@ -93,20 +93,6 @@ struct FiqhDifference: Identifiable {
     let hanbali: String
 }
 
-// MARK: - Kids Hadith
-
-struct KidsHadith: Identifiable {
-    let id: String
-    let emoji: String
-    let title: String
-    let arabicText: String
-    let simpleMeaning: String
-    let funFact: String
-    let collection: String      // e.g., "bukhari"
-    let hadithNumber: Int       // API hadith number for enrichment
-    let reference: String       // e.g., "Sahih al-Bukhari, Hadith 13"
-}
-
 // MARK: - Sample Data
 
 extension Pillar {

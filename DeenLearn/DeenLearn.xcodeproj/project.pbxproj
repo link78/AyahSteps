@@ -50,6 +50,8 @@
 		AAAAAAAAAAAAAAAAAAAAAA41 /* QuranAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111160 /* QuranAPIService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA42 /* HadithAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111161 /* HadithAPIService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA43 /* HadithKidsWorldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111162 /* HadithKidsWorldView.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA44 /* KidsHadith.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111163 /* KidsHadith.swift */; };
+		AAAAAAAAAAAAAAAAAAAAAA45 /* HadithKidsDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111164 /* HadithKidsDataService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,6 +99,8 @@
 		111111111111111111111160 /* QuranAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranAPIService.swift; sourceTree = "<group>"; };
 		111111111111111111111161 /* HadithAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithAPIService.swift; sourceTree = "<group>"; };
 		111111111111111111111162 /* HadithKidsWorldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithKidsWorldView.swift; sourceTree = "<group>"; };
+		111111111111111111111163 /* KidsHadith.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KidsHadith.swift; sourceTree = "<group>"; };
+		111111111111111111111164 /* HadithKidsDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithKidsDataService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +160,7 @@
 				111111111111111111111159 /* IslamicAPIService.swift */,
 				111111111111111111111160 /* QuranAPIService.swift */,
 				111111111111111111111161 /* HadithAPIService.swift */,
+				111111111111111111111164 /* HadithKidsDataService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -170,6 +175,7 @@
 				111111111111111111111143 /* Prayer.swift */,
 				111111111111111111111144 /* Profile.swift */,
 				111111111111111111111145 /* Quran.swift */,
+				111111111111111111111163 /* KidsHadith.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -320,6 +326,8 @@
 				AAAAAAAAAAAAAAAAAAAAAA41 /* QuranAPIService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA42 /* HadithAPIService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA43 /* HadithKidsWorldView.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA44 /* KidsHadith.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAAA45 /* HadithKidsDataService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

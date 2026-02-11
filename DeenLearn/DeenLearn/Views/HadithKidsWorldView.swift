@@ -449,6 +449,7 @@ struct HadithWorldData {
 
 struct HadithKidsWorldView: View {
     @EnvironmentObject var appState: AppState
+    @StateObject private var dataService = HadithKidsDataService.shared
     @State private var selectedZone: HadithZone?
 
     private let zones = HadithWorldData.zones
@@ -483,6 +484,9 @@ struct HadithKidsWorldView: View {
                 if let zone = zones.first(where: { $0.id == zoneId }) {
                     HadithZoneView(zone: zone)
                 }
+            }
+            .task {
+                await dataService.prefetchAllZoneHadiths()
             }
         }
     }
@@ -702,11 +706,11 @@ struct HadithZoneView: View {
 struct HadithStoryView: View {
     @EnvironmentObject var appState: AppState
     @ObservedObject private var ttsService = TextToSpeechService.shared
+    @StateObject private var dataService = HadithKidsDataService.shared
     let story: KidsHadithStory
     let zoneGradient: [Color]
 
     @State private var currentPage = 0
-    @State private var fetchedArabic: String?
     @State private var showLearningCards = false
     @State private var glowAnimation = false
 
@@ -729,7 +733,10 @@ struct HadithStoryView: View {
         .navigationTitle(story.storyTitle)
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            await fetchArabicText()
+            _ = await dataService.fetchArabicText(
+                collection: story.hadith.collection,
+                number: story.hadith.hadithNumber
+            )
         }
         .onDisappear {
             ttsService.stop()
@@ -830,7 +837,7 @@ struct HadithStoryView: View {
                     .font(.headline)
                     .foregroundColor(Color(hex: "FFD700"))
 
-                let arabicDisplay = fetchedArabic ?? story.hadith.arabicText
+                let arabicDisplay = dataService.arabicText(for: story.hadith)
                 Text(arabicDisplay)
                     .font(.title2)
                     .multilineTextAlignment(.center)
@@ -929,18 +936,6 @@ struct HadithStoryView: View {
             }
         }
         .padding(.bottom, 8)
-    }
-
-    private func fetchArabicText() async {
-        let result = await HadithAPIService.shared.fetchHadith(
-            collection: story.hadith.collection,
-            number: story.hadith.hadithNumber
-        )
-        if let content = result {
-            await MainActor.run {
-                fetchedArabic = content.arab
-            }
-        }
     }
 }
 
