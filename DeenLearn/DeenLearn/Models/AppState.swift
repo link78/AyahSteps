@@ -12,6 +12,28 @@ enum UserMode: String, Codable {
     case adults
 }
 
+enum AppearanceMode: String, CaseIterable, Codable {
+    case system = "System"
+    case light = "Light"
+    case dark = "Dark"
+    
+    var colorScheme: ColorScheme? {
+        switch self {
+        case .system: return nil
+        case .light: return .light
+        case .dark: return .dark
+        }
+    }
+    
+    var icon: String {
+        switch self {
+        case .system: return "circle.lefthalf.filled"
+        case .light: return "sun.max.fill"
+        case .dark: return "moon.fill"
+        }
+    }
+}
+
 // MARK: - Age Group System
 
 enum AgeGroup: String, Codable, CaseIterable {
@@ -309,6 +331,11 @@ class AppState: ObservableObject {
     @Published var badges: [Badge] = []
     @Published var remindersEnabled: Bool = true
     @Published var prayerTimesEnabled: Bool = false
+    @Published var appearanceMode: AppearanceMode = .system {
+        didSet {
+            UserDefaults.standard.set(appearanceMode.rawValue, forKey: "appearanceMode")
+        }
+    }
     
     // Arabic letters for tracking
     static let arabicLetters = ["ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز", "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"]
@@ -379,6 +406,12 @@ class AppState: ObservableObject {
             self.remindersEnabled = true // Default value
         }
         self.prayerTimesEnabled = UserDefaults.standard.bool(forKey: "prayerTimesEnabled")
+        
+        // Load appearance mode (default to system)
+        if let savedAppearance = UserDefaults.standard.string(forKey: "appearanceMode"),
+           let mode = AppearanceMode(rawValue: savedAppearance) {
+            self.appearanceMode = mode
+        }
     }
     
     private func initializeBadges() {

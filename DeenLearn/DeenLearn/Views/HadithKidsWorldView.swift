@@ -80,7 +80,7 @@ struct HadithWorldData {
         // MARK: Zone 1 - Kindness Valley
         HadithZone(
             name: "Kindness Valley",
-            emoji: "\u{1F308}",
+            emoji: "💝",
             color: Color(hex: "FF69B4"),
             gradient: [Color(hex: "FFB6C1"), Color(hex: "FF69B4")],
             description: "A magical valley where kindness blooms like flowers!",

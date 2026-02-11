@@ -46,6 +46,25 @@ struct SettingsView: View {
                     Text("Learning Mode")
                 }
                 
+                // Appearance Section
+                Section {
+                    Picker(selection: $appState.appearanceMode) {
+                        ForEach(AppearanceMode.allCases, id: \.self) { mode in
+                            Label(mode.rawValue, systemImage: mode.icon)
+                                .tag(mode)
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: appState.appearanceMode.icon)
+                                .foregroundColor(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
+                                .font(.title2)
+                            Text("Appearance")
+                        }
+                    }
+                } header: {
+                    Text("Display")
+                }
+                
                 // Progress Section
                 Section {
                     HStack {
