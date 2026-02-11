@@ -57,6 +57,7 @@ struct ArabicView: View {
             .navigationTitle(appState.isKidsMode ? "🔤 Arabic Fun!" : "Arabic Language")
             .background(Color(.systemGroupedBackground))
         }
+        .navigationViewStyle(.stack)
         .environmentObject(appState)
     }
     
@@ -321,6 +322,7 @@ struct LetterDetailView: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
     }
 }
 
@@ -704,6 +706,7 @@ struct VocabularyDetailView: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
     }
 }
 
@@ -834,6 +837,7 @@ struct MiniGameView: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
     }
 }
 
@@ -1391,6 +1395,7 @@ struct ConceptMapDetailView: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
     }
 }
 

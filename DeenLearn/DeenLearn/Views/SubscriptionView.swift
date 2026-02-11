@@ -64,6 +64,7 @@ struct SubscriptionView: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
         .alert("Error", isPresented: $showError) {
             Button("OK", role: .cancel) {}
         } message: {
@@ -572,6 +573,7 @@ struct TermsOfServiceView: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
     }
 }
 
@@ -627,6 +629,7 @@ struct PrivacyPolicyView: View {
                 }
             }
         }
+        .navigationViewStyle(.stack)
     }
 }
 

@@ -102,7 +102,9 @@ struct WelcomeView: View {
                     // Adults Mode Button
                     Button(action: {
                         selectedMode = .adults
-                        showAgeSelection = true
+                        withAnimation(.spring(response: 0.3)) {
+                            appState.userMode = .adults
+                        }
                     }) {
                         HStack(spacing: 16) {
                             Image(systemName: "person.fill")
