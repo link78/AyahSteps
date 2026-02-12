@@ -46,23 +46,29 @@ struct MainTabView: View {
                 }
                 .tag(3)
             
+            QiblaCompassView()
+                .tabItem {
+                    Label("Qibla", systemImage: "location.north.circle.fill")
+                }
+                .tag(4)
+            
             QuranView()
                 .tabItem {
                     Label("Quran", systemImage: "text.book.closed.fill")
                 }
-                .tag(4)
+                .tag(5)
             
             ArabicView()
                 .tabItem {
                     Label("Arabic", systemImage: "textformat.abc")
                 }
-                .tag(5)
+                .tag(6)
             
             ProfileView()
                 .tabItem {
                     Label(isKidsMode ? "Me" : "Profile", systemImage: "person.crop.circle.fill")
                 }
-                .tag(6)
+                .tag(7)
         }
         .tint(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
     }

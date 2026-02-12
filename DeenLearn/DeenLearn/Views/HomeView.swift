@@ -256,7 +256,7 @@ struct HomeView: View {
                         isCompleted: appState.dailyGoal.quranSessionCompleted,
                         isKidsMode: true,
                         onTap: {
-                            appState.selectedTab = 4 // Navigate to Quran tab
+                            appState.selectedTab = 5 // Navigate to Quran tab
                         },
                         onToggleComplete: {
                             appState.dailyGoal.quranSessionCompleted.toggle()
@@ -288,7 +288,7 @@ struct HomeView: View {
                         isCompleted: appState.dailyGoal.arabicPractice,
                         isKidsMode: true,
                         onTap: {
-                            appState.selectedTab = 5 // Navigate to Arabic tab
+                            appState.selectedTab = 6 // Navigate to Arabic tab
                         },
                         onToggleComplete: {
                             appState.dailyGoal.arabicPractice.toggle()
@@ -319,7 +319,7 @@ struct HomeView: View {
                         isCompleted: appState.dailyGoal.quranSessionCompleted,
                         isKidsMode: false,
                         onTap: {
-                            appState.selectedTab = 4
+                            appState.selectedTab = 5
                         },
                         onToggleComplete: {
                             appState.dailyGoal.quranSessionCompleted.toggle()
@@ -351,7 +351,7 @@ struct HomeView: View {
                         isCompleted: appState.dailyGoal.arabicPractice,
                         isKidsMode: false,
                         onTap: {
-                            appState.selectedTab = 5
+                            appState.selectedTab = 6
                         },
                         onToggleComplete: {
                             appState.dailyGoal.arabicPractice.toggle()
@@ -658,7 +658,7 @@ struct HomeView: View {
             color: .purple,
             isKidsMode: isKidsMode
         ) {
-            appState.selectedTab = 4
+            appState.selectedTab = 5
         }
         
         QuickActionCard(
@@ -682,13 +682,23 @@ struct HomeView: View {
         }
         
         QuickActionCard(
+            title: "Qibla",
+            titleArabic: "القبلة",
+            icon: "location.north.circle.fill",
+            color: .indigo,
+            isKidsMode: isKidsMode
+        ) {
+            appState.selectedTab = 4
+        }
+        
+        QuickActionCard(
             title: "Practice Arabic",
             titleArabic: "العربية",
             icon: "character.textbox",
             color: .blue,
             isKidsMode: isKidsMode
         ) {
-            appState.selectedTab = 5
+            appState.selectedTab = 6
         }
     }
     
@@ -718,7 +728,7 @@ struct HomeView: View {
                     color: .purple,
                     isKidsMode: true
                 ) {
-                    appState.selectedTab = 4 // Quran tab
+                    appState.selectedTab = 5 // Quran tab
                 }
             }
             .padding(.horizontal)
@@ -763,7 +773,7 @@ struct HomeView: View {
                         color: .purple,
                         isKidsMode: false
                     ) {
-                        appState.selectedTab = 4 // Quran tab
+                        appState.selectedTab = 5 // Quran tab
                     }
                 }
                 .padding(.horizontal)
