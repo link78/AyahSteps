@@ -2,7 +2,8 @@
 //  LocationService.swift
 //  DeenLearn
 //
-//  Location service for getting user coordinates for prayer times
+//  Location service for getting user coordinates for prayer times.
+//  Uses native CoreLocation (CLLocationManager) for iOS geolocation.
 //
 
 import SwiftUI
@@ -11,7 +12,8 @@ import CoreLocation
 // MARK: - Location Service
 
 /// A singleton service that provides location functionality
-/// for calculating accurate prayer times based on user's position
+/// for calculating accurate prayer times based on user's position.
+/// Uses native iOS CoreLocation for accurate, battery-efficient geolocation.
 @MainActor
 final class LocationService: NSObject, ObservableObject {
     static let shared = LocationService()
@@ -27,11 +29,26 @@ final class LocationService: NSObject, ObservableObject {
     // Default location (Mecca) if user location is not available
     static let defaultLocation = CLLocation(latitude: 21.4225, longitude: 39.8262)
     
+    // Location cache keys
+    private static let cachedLatKey = "cachedLocationLat"
+    private static let cachedLonKey = "cachedLocationLon"
+    private static let cachedNameKey = "cachedLocationName"
+    private static let hasCachedLocationKey = "hasCachedLocation"
+    
+    // Maximum age for a location fix (5 minutes)
+    private static let maxLocationAge: TimeInterval = 300
+    
+    // Retry tracking
+    private var retryCount = 0
+    private static let maxRetries = 2
+    private static let retryDelayNanoseconds: UInt64 = 1_000_000_000
+    
     private override init() {
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
         authorizationStatus = locationManager.authorizationStatus
+        loadCachedLocation()
     }
     
     /// Request location permission
@@ -43,6 +60,7 @@ final class LocationService: NSObject, ObservableObject {
     func requestLocation() {
         isLoading = true
         error = nil
+        retryCount = 0
         
         switch authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
@@ -52,9 +70,10 @@ final class LocationService: NSObject, ObservableObject {
         case .denied, .restricted:
             isLoading = false
             error = "Location access denied. Please enable in Settings."
-            // Use default location
-            currentLocation = LocationService.defaultLocation
-            locationName = "Mecca (Default)"
+            if currentLocation == nil {
+                currentLocation = LocationService.defaultLocation
+                locationName = "Mecca (Default)"
+            }
         @unknown default:
             isLoading = false
             error = "Unknown location status"
@@ -64,6 +83,28 @@ final class LocationService: NSObject, ObservableObject {
     /// Get the best available location (user's or default)
     var bestLocation: CLLocation {
         currentLocation ?? LocationService.defaultLocation
+    }
+    
+    // MARK: - Location Cache
+    
+    /// Save location to UserDefaults for faster startup
+    private func cacheLocation(_ location: CLLocation, name: String) {
+        UserDefaults.standard.set(location.coordinate.latitude, forKey: Self.cachedLatKey)
+        UserDefaults.standard.set(location.coordinate.longitude, forKey: Self.cachedLonKey)
+        UserDefaults.standard.set(name, forKey: Self.cachedNameKey)
+        UserDefaults.standard.set(true, forKey: Self.hasCachedLocationKey)
+    }
+    
+    /// Load previously cached location for instant availability
+    private func loadCachedLocation() {
+        guard UserDefaults.standard.bool(forKey: Self.hasCachedLocationKey) else { return }
+        let lat = UserDefaults.standard.double(forKey: Self.cachedLatKey)
+        let lon = UserDefaults.standard.double(forKey: Self.cachedLonKey)
+        let name = UserDefaults.standard.string(forKey: Self.cachedNameKey)
+        
+        // Only use cache if values were actually stored
+        currentLocation = CLLocation(latitude: lat, longitude: lon)
+        locationName = name ?? "Cached Location"
     }
     
     /// Reverse geocode to get location name
@@ -81,15 +122,17 @@ final class LocationService: NSObject, ObservableObject {
                     let city = placemark.locality ?? ""
                     let country = placemark.country ?? ""
                     
+                    var name = "Location Found"
                     if !city.isEmpty && !country.isEmpty {
-                        self?.locationName = "\(city), \(country)"
+                        name = "\(city), \(country)"
                     } else if !city.isEmpty {
-                        self?.locationName = city
+                        name = city
                     } else if !country.isEmpty {
-                        self?.locationName = country
-                    } else {
-                        self?.locationName = "Location Found"
+                        name = country
                     }
+                    
+                    self?.locationName = name
+                    self?.cacheLocation(location, name: name)
                 }
             }
         }
@@ -100,23 +143,43 @@ final class LocationService: NSObject, ObservableObject {
 
 extension LocationService: CLLocationManagerDelegate {
     nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
+        // Filter for recent, accurate locations
+        let validLocations = locations.filter { location in
+            let age = abs(location.timestamp.timeIntervalSinceNow)
+            return age < LocationService.maxLocationAge
+                && location.horizontalAccuracy >= 0
+                && location.horizontalAccuracy < 10000
+        }
+        
+        guard let location = validLocations.last ?? locations.last else { return }
         
         Task { @MainActor in
             self.currentLocation = location
             self.isLoading = false
             self.error = nil
+            self.retryCount = 0
             self.reverseGeocode(location)
         }
     }
     
     nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         Task { @MainActor in
+            // Retry on transient errors
+            if self.retryCount < LocationService.maxRetries {
+                self.retryCount += 1
+                print("Location retry \(self.retryCount): \(error.localizedDescription)")
+                try? await Task.sleep(nanoseconds: Self.retryDelayNanoseconds)
+                manager.requestLocation()
+                return
+            }
+            
             self.isLoading = false
             self.error = "Failed to get location"
-            // Use default location on error
-            self.currentLocation = LocationService.defaultLocation
-            self.locationName = "Mecca (Default)"
+            // Only fall back to default if no cached location
+            if self.currentLocation == nil {
+                self.currentLocation = LocationService.defaultLocation
+                self.locationName = "Mecca (Default)"
+            }
             print("Location error: \(error.localizedDescription)")
         }
     }
@@ -127,12 +190,15 @@ extension LocationService: CLLocationManagerDelegate {
             
             switch manager.authorizationStatus {
             case .authorizedWhenInUse, .authorizedAlways:
+                self.retryCount = 0
                 manager.requestLocation()
             case .denied, .restricted:
                 self.isLoading = false
                 self.error = "Location access denied"
-                self.currentLocation = LocationService.defaultLocation
-                self.locationName = "Mecca (Default)"
+                if self.currentLocation == nil {
+                    self.currentLocation = LocationService.defaultLocation
+                    self.locationName = "Mecca (Default)"
+                }
             default:
                 break
             }
