@@ -140,26 +140,29 @@ struct HomeView: View {
     
     var adultsHomeContent: some View {
         VStack(spacing: 20) {
-            // Header with Greeting
-            adultsHeaderCard
+            // Animated Character Greeting (same structure as kids)
+            animatedCharacterGreeting
             
-            // Prayer Times Card
-            PrayerTimesCardView()
+            // Prayer Times Card (compact widget, same as kids)
+            CompactPrayerTimesWidget()
             
-            // Daily Goal Cards
+            // Daily Goal Cards (horizontal scroll, same layout as kids)
             dailyGoalCardsAdults
             
             // Progress Rings
             progressRingsSection
             
-            // Resume Last Lesson
+            // Resume Last Lesson / Next Adventure
             resumeLastLessonCard
             
-            // Reflection Prompt
-            reflectionPromptCard
+            // Achievements & Stats (same as kids)
+            adultsStatsSection
             
             // Quick Actions
             quickActionsSection
+            
+            // Reflection Prompt
+            reflectionPromptCard
             
             // Reminders
             adultsRemindersSection
@@ -234,47 +237,6 @@ struct HomeView: View {
         .padding(.horizontal)
     }
     
-    // MARK: - Adults Header Card
-    
-    var adultsHeaderCard: some View {
-        VStack(spacing: 16) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(greeting)
-                        .font(.title3.bold())
-                        .foregroundColor(.white)
-                    
-                    // Tappable Arabic greeting
-                    SpeakableArabicGreeting(text: "السلام عليكم", isKidsMode: false)
-                }
-                
-                Spacer()
-                
-                // Streak badge
-                VStack(spacing: 4) {
-                    Image(systemName: "flame.fill")
-                        .font(.title2)
-                        .foregroundColor(.orange)
-                    Text("\(appState.currentStreak)")
-                        .font(.caption.bold())
-                        .foregroundColor(.white)
-                }
-                .padding(DeviceLayout.scaled(12))
-                .background(Color.white.opacity(0.2))
-                .cornerRadius(DeviceLayout.scaled(12))
-            }
-        }
-        .padding(DeviceLayout.scaled(20))
-        .background(
-            LinearGradient(
-                colors: [Color(hex: "1a5f4a"), Color(hex: "2d8b6e")],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .cornerRadius(DeviceLayout.scaled(20))
-        .padding(.horizontal)
-    }
     
     // MARK: - Daily Goal Cards (Kids)
     
@@ -339,64 +301,66 @@ struct HomeView: View {
         }
     }
     
-    // MARK: - Daily Goal Cards (Adults)
+    // MARK: - Daily Goal Cards (Adults) — horizontal scroll, same layout as kids
     
     var dailyGoalCardsAdults: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Daily Goals")
+            Text("🎯 Daily Goals")
                 .font(.headline)
                 .padding(.horizontal)
             
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: DeviceLayout.scaled(10)) {
-                DailyGoalCard(
-                    title: appState.dailyGoalText(for: "quran"),
-                    subtitle: "\(appState.recommendedSessionMinutes)-min session",
-                    icon: "book.fill",
-                    color: .purple,
-                    isCompleted: appState.dailyGoal.quranSessionCompleted,
-                    isKidsMode: false,
-                    onTap: {
-                        appState.selectedTab = 4
-                    },
-                    onToggleComplete: {
-                        appState.dailyGoal.quranSessionCompleted.toggle()
-                        appState.updateStreakIfAllGoalsComplete()
-                    }
-                )
-                
-                DailyGoalCard(
-                    title: appState.dailyGoalText(for: "salah"),
-                    subtitle: "Step \(appState.learningProgress.currentSalahStep)",
-                    icon: "person.fill",
-                    color: Color(hex: "2d8b6e"),
-                    isCompleted: appState.dailyGoal.salahPractice,
-                    isKidsMode: false,
-                    onTap: {
-                        appState.selectedTab = 3
-                    },
-                    onToggleComplete: {
-                        appState.dailyGoal.salahPractice.toggle()
-                        appState.updateStreakIfAllGoalsComplete()
-                    }
-                )
-                
-                DailyGoalCard(
-                    title: appState.dailyGoalText(for: "arabic"),
-                    subtitle: appState.currentArabicLetter,
-                    icon: "character.textbox",
-                    color: .blue,
-                    isCompleted: appState.dailyGoal.arabicPractice,
-                    isKidsMode: false,
-                    onTap: {
-                        appState.selectedTab = 5
-                    },
-                    onToggleComplete: {
-                        appState.dailyGoal.arabicPractice.toggle()
-                        appState.updateStreakIfAllGoalsComplete()
-                    }
-                )
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    DailyGoalCard(
+                        title: appState.dailyGoalText(for: "quran"),
+                        subtitle: "\(appState.recommendedSessionMinutes)-min session",
+                        icon: "book.fill",
+                        color: .purple,
+                        isCompleted: appState.dailyGoal.quranSessionCompleted,
+                        isKidsMode: false,
+                        onTap: {
+                            appState.selectedTab = 4
+                        },
+                        onToggleComplete: {
+                            appState.dailyGoal.quranSessionCompleted.toggle()
+                            appState.updateStreakIfAllGoalsComplete()
+                        }
+                    )
+                    
+                    DailyGoalCard(
+                        title: appState.dailyGoalText(for: "salah"),
+                        subtitle: "Step \(appState.learningProgress.currentSalahStep)",
+                        icon: "person.fill",
+                        color: Color(hex: "2d8b6e"),
+                        isCompleted: appState.dailyGoal.salahPractice,
+                        isKidsMode: false,
+                        onTap: {
+                            appState.selectedTab = 3
+                        },
+                        onToggleComplete: {
+                            appState.dailyGoal.salahPractice.toggle()
+                            appState.updateStreakIfAllGoalsComplete()
+                        }
+                    )
+                    
+                    DailyGoalCard(
+                        title: appState.dailyGoalText(for: "arabic"),
+                        subtitle: appState.currentArabicLetter,
+                        icon: "character.textbox",
+                        color: .blue,
+                        isCompleted: appState.dailyGoal.arabicPractice,
+                        isKidsMode: false,
+                        onTap: {
+                            appState.selectedTab = 5
+                        },
+                        onToggleComplete: {
+                            appState.dailyGoal.arabicPractice.toggle()
+                            appState.updateStreakIfAllGoalsComplete()
+                        }
+                    )
+                }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
         }
     }
     
@@ -532,6 +496,49 @@ struct HomeView: View {
                 HStack(spacing: 12) {
                     ForEach(appState.badges) { badge in
                         BadgeView(badge: badge, isKidsMode: true)
+                    }
+                }
+                .padding(.horizontal)
+            }
+        }
+    }
+    
+    // MARK: - Adults Stats Section (same structure as kids)
+    
+    var adultsStatsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("🏆 Your Achievements")
+                .font(.headline)
+                .padding(.horizontal)
+            
+            HStack(spacing: 12) {
+                KidsStatBadge(
+                    title: "Stars",
+                    value: "\(appState.totalStars)",
+                    icon: "star.fill",
+                    color: .yellow
+                )
+                
+                KidsStatBadge(
+                    title: "Badges",
+                    value: "\(appState.badges.filter { $0.isEarned }.count)",
+                    icon: "medal.fill",
+                    color: .orange
+                )
+                
+                KidsStatBadge(
+                    title: "Streak",
+                    value: "\(appState.currentStreak)",
+                    icon: "flame.fill",
+                    color: .red
+                )
+            }
+            .padding(.horizontal)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(appState.badges) { badge in
+                        BadgeView(badge: badge, isKidsMode: false)
                     }
                 }
                 .padding(.horizontal)
@@ -778,25 +785,26 @@ struct DailyGoalCard: View {
     var onToggleComplete: (() -> Void)? = nil
     
     var body: some View {
-        HStack(spacing: DeviceLayout.scaled(10)) {
+        VStack(spacing: DeviceLayout.scaled(10)) {
             ZStack {
                 Circle()
                     .fill(color.opacity(0.2))
-                    .frame(width: DeviceLayout.scaled(isKidsMode ? 40 : 32), height: DeviceLayout.scaled(isKidsMode ? 40 : 32))
+                    .frame(width: DeviceLayout.scaled(40), height: DeviceLayout.scaled(40))
                 
                 Image(systemName: icon)
-                    .font(isKidsMode ? .body : .caption)
+                    .font(.body)
                     .foregroundColor(color)
             }
             
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(spacing: 4) {
                 Text(title)
-                    .font(isKidsMode ? .headline : .caption)
+                    .font(.headline)
                     .fontWeight(.semibold)
                     .lineLimit(2)
+                    .multilineTextAlignment(.center)
                 
                 Text(subtitle)
-                    .font(.caption2)
+                    .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(1)
                 
@@ -816,17 +824,17 @@ struct DailyGoalCard: View {
                 if isCompleted {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.green)
-                        .font(isKidsMode ? .title2 : .body)
+                        .font(.title2)
                 } else {
                     Circle()
                         .stroke(Color.gray.opacity(0.3), lineWidth: 2)
-                        .frame(width: DeviceLayout.scaled(isKidsMode ? 24 : 20), height: DeviceLayout.scaled(isKidsMode ? 24 : 20))
+                        .frame(width: DeviceLayout.scaled(24), height: DeviceLayout.scaled(24))
                 }
             }
             .buttonStyle(PlainButtonStyle())
         }
-        .padding(DeviceLayout.scaled(isKidsMode ? 16 : 10))
-        .frame(maxWidth: isKidsMode ? DeviceLayout.scaled(160) : .infinity, minHeight: isKidsMode ? DeviceLayout.scaled(150) : nil)
+        .padding(DeviceLayout.scaled(16))
+        .frame(width: DeviceLayout.scaled(160), minHeight: DeviceLayout.scaled(150))
         .background(Color(.systemBackground))
         .cornerRadius(DeviceLayout.scaled(16))
         .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
