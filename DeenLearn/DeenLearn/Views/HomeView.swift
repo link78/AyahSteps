@@ -558,7 +558,7 @@ struct HomeView: View {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 12)
                                     .fill(Color(hex: "2d8b6e").opacity(0.15))
-                                    .frame(width: 50, height: 50)
+                                    .frame(width: DeviceLayout.scaled(50), height: DeviceLayout.scaled(50))
                                 
                                 Image(systemName: "play.circle.fill")
                                     .font(.title2)
@@ -832,7 +832,7 @@ struct DailyGoalCard: View {
             }
         }
         .padding(16)
-        .frame(width: DeviceLayout.scaled(160), height: DeviceLayout.scaled(150))
+        .frame(maxWidth: isKidsMode ? DeviceLayout.scaled(160) : .infinity, minHeight: DeviceLayout.scaled(isKidsMode ? 150 : 100))
         .background(Color(.systemBackground))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
@@ -858,13 +858,13 @@ struct ProgressRingCard: View {
                 // Background ring
                 Circle()
                     .stroke(color.opacity(0.2), lineWidth: isKidsMode ? 10 : 8)
-                    .frame(width: 70, height: 70)
+                    .frame(width: DeviceLayout.scaled(70), height: DeviceLayout.scaled(70))
                 
                 // Progress ring
                 Circle()
                     .trim(from: 0, to: progress)
                     .stroke(color, style: StrokeStyle(lineWidth: isKidsMode ? 10 : 8, lineCap: .round))
-                    .frame(width: 70, height: 70)
+                    .frame(width: DeviceLayout.scaled(70), height: DeviceLayout.scaled(70))
                     .rotationEffect(.degrees(-90))
                 
                 // Center content
@@ -910,7 +910,7 @@ struct KidsStatBadge: View {
             ZStack {
                 Circle()
                     .fill(color.opacity(0.2))
-                    .frame(width: 50, height: 50)
+                    .frame(width: DeviceLayout.scaled(50), height: DeviceLayout.scaled(50))
                 
                 Image(systemName: icon)
                     .font(.title2)
@@ -941,7 +941,7 @@ struct BadgeView: View {
             ZStack {
                 Circle()
                     .fill(badge.isEarned ? Color.yellow.opacity(0.2) : Color.gray.opacity(0.1))
-                    .frame(width: 50, height: 50)
+                    .frame(width: DeviceLayout.scaled(50), height: DeviceLayout.scaled(50))
                 
                 Image(systemName: badge.icon)
                     .font(.title3)
@@ -953,7 +953,7 @@ struct BadgeView: View {
                 .foregroundColor(badge.isEarned ? .primary : .secondary)
                 .lineLimit(1)
         }
-        .frame(width: 70)
+        .frame(width: DeviceLayout.scaled(70))
         .opacity(badge.isEarned ? 1 : 0.5)
     }
 }
@@ -978,7 +978,7 @@ struct QuickActionCard: View {
                 ZStack {
                     Circle()
                         .fill(color.opacity(0.2))
-                        .frame(width: 60, height: 60)
+                        .frame(width: DeviceLayout.scaled(60), height: DeviceLayout.scaled(60))
                     
                     Image(systemName: icon)
                         .font(.title2)
@@ -1027,7 +1027,7 @@ struct ReminderCard: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(color.opacity(0.15))
-                        .frame(width: 44, height: 44)
+                        .frame(width: DeviceLayout.scaled(44), height: DeviceLayout.scaled(44))
                     
                     Image(systemName: icon)
                         .foregroundColor(color)
