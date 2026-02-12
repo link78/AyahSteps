@@ -454,6 +454,32 @@ struct CompactPrayerTimesWidget: View {
                 }
             }
             
+            // Location and Qibla info
+            HStack {
+                HStack(spacing: 4) {
+                    Image(systemName: "location.fill")
+                        .font(.caption2)
+                        .foregroundColor(primaryColor)
+                    Text(locationService.locationName)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                }
+                
+                Spacer()
+                
+                if prayerTimeService.qiblaDirection > 0 {
+                    HStack(spacing: 4) {
+                        Image(systemName: "location.north.circle")
+                            .font(.caption2)
+                            .foregroundColor(primaryColor)
+                        Text("Qibla: \(String(format: "%.1f", prayerTimeService.qiblaDirection))°")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+            
             // Quick view of all prayers (only actual prayers, not reference times)
             HStack(spacing: 0) {
                 ForEach(prayerTimeService.prayerTimes.filter { $0.isPrayer }) { prayer in
