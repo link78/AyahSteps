@@ -347,16 +347,16 @@ struct HomeView: View {
                 .font(.headline)
                 .padding(.horizontal)
             
-            VStack(spacing: 12) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: DeviceLayout.scaled(10)) {
                 DailyGoalCard(
                     title: appState.dailyGoalText(for: "quran"),
-                    subtitle: "\(appState.recommendedSessionMinutes)-minute session",
+                    subtitle: "\(appState.recommendedSessionMinutes)-min session",
                     icon: "book.fill",
                     color: .purple,
                     isCompleted: appState.dailyGoal.quranSessionCompleted,
                     isKidsMode: false,
                     onTap: {
-                        appState.selectedTab = 4 // Navigate to Quran tab
+                        appState.selectedTab = 4
                     },
                     onToggleComplete: {
                         appState.dailyGoal.quranSessionCompleted.toggle()
@@ -366,15 +366,13 @@ struct HomeView: View {
                 
                 DailyGoalCard(
                     title: appState.dailyGoalText(for: "salah"),
-                    subtitle: appState.shouldShowScholarlyContent 
-                        ? "Practice step \(appState.learningProgress.currentSalahStep) with tajweed" 
-                        : "Practice step \(appState.learningProgress.currentSalahStep)",
+                    subtitle: "Step \(appState.learningProgress.currentSalahStep)",
                     icon: "person.fill",
                     color: Color(hex: "2d8b6e"),
                     isCompleted: appState.dailyGoal.salahPractice,
                     isKidsMode: false,
                     onTap: {
-                        appState.selectedTab = 3 // Navigate to Prayer tab
+                        appState.selectedTab = 3
                     },
                     onToggleComplete: {
                         appState.dailyGoal.salahPractice.toggle()
@@ -384,13 +382,13 @@ struct HomeView: View {
                 
                 DailyGoalCard(
                     title: appState.dailyGoalText(for: "arabic"),
-                    subtitle: "\(appState.currentArabicLetter) - \(appState.shouldShowScholarlyContent ? "Grammar & pronunciation" : "Learn pronunciation")",
+                    subtitle: appState.currentArabicLetter,
                     icon: "character.textbox",
                     color: .blue,
                     isCompleted: appState.dailyGoal.arabicPractice,
                     isKidsMode: false,
                     onTap: {
-                        appState.selectedTab = 5 // Navigate to Arabic tab
+                        appState.selectedTab = 5
                     },
                     onToggleComplete: {
                         appState.dailyGoal.arabicPractice.toggle()
@@ -410,7 +408,7 @@ struct HomeView: View {
                 .font(.headline)
                 .padding(.horizontal)
             
-            LazyVGrid(columns: DeviceLayout.fixedColumns(), spacing: 16) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: DeviceLayout.scaled(100)), spacing: DeviceLayout.scaled(10))], spacing: DeviceLayout.scaled(10)) {
                 ProgressRingCard(
                     title: "Salah",
                     titleArabic: "الصلاة",
@@ -780,62 +778,55 @@ struct DailyGoalCard: View {
     var onToggleComplete: (() -> Void)? = nil
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                ZStack {
-                    Circle()
-                        .fill(color.opacity(0.2))
-                        .frame(width: DeviceLayout.scaled(40), height: DeviceLayout.scaled(40))
-                    
-                    Image(systemName: icon)
-                        .foregroundColor(color)
-                }
+        HStack(spacing: DeviceLayout.scaled(10)) {
+            ZStack {
+                Circle()
+                    .fill(color.opacity(0.2))
+                    .frame(width: DeviceLayout.scaled(isKidsMode ? 40 : 32), height: DeviceLayout.scaled(isKidsMode ? 40 : 32))
                 
-                Spacer()
-                
-                // Completion toggle button
-                Button(action: {
-                    onToggleComplete?()
-                }) {
-                    if isCompleted {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green)
-                            .font(.title2)
-                    } else {
-                        Circle()
-                            .stroke(Color.gray.opacity(0.3), lineWidth: 2)
-                            .frame(width: DeviceLayout.scaled(24), height: DeviceLayout.scaled(24))
-                            .overlay(
-                                Image(systemName: "circle")
-                                    .foregroundColor(.clear)
-                            )
-                    }
-                }
-                .buttonStyle(PlainButtonStyle())
+                Image(systemName: icon)
+                    .font(isKidsMode ? .body : .caption)
+                    .foregroundColor(color)
             }
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(isKidsMode ? .headline : .subheadline)
+                    .font(isKidsMode ? .headline : .caption)
                     .fontWeight(.semibold)
                     .lineLimit(2)
                 
                 Text(subtitle)
-                    .font(.caption)
+                    .font(.caption2)
                     .foregroundColor(.secondary)
+                    .lineLimit(1)
                 
-                // "Start" button for incomplete goals
                 if !isCompleted {
                     Text(isKidsMode ? "Let's Go! →" : "Start →")
-                        .font(.caption)
+                        .font(.caption2)
                         .fontWeight(.medium)
                         .foregroundColor(color)
-                        .padding(.top, 4)
                 }
             }
+            
+            Spacer(minLength: 0)
+            
+            Button(action: {
+                onToggleComplete?()
+            }) {
+                if isCompleted {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.green)
+                        .font(isKidsMode ? .title2 : .body)
+                } else {
+                    Circle()
+                        .stroke(Color.gray.opacity(0.3), lineWidth: 2)
+                        .frame(width: DeviceLayout.scaled(isKidsMode ? 24 : 20), height: DeviceLayout.scaled(isKidsMode ? 24 : 20))
+                }
+            }
+            .buttonStyle(PlainButtonStyle())
         }
-        .padding(DeviceLayout.scaled(16))
-        .frame(maxWidth: isKidsMode ? DeviceLayout.scaled(160) : .infinity, minHeight: DeviceLayout.scaled(isKidsMode ? 150 : 100))
+        .padding(DeviceLayout.scaled(isKidsMode ? 16 : 10))
+        .frame(maxWidth: isKidsMode ? DeviceLayout.scaled(160) : .infinity, minHeight: isKidsMode ? DeviceLayout.scaled(150) : nil)
         .background(Color(.systemBackground))
         .cornerRadius(DeviceLayout.scaled(16))
         .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
