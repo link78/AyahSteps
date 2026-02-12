@@ -410,7 +410,7 @@ struct HomeView: View {
                 .font(.headline)
                 .padding(.horizontal)
             
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+            LazyVGrid(columns: DeviceLayout.fixedColumns(), spacing: 16) {
                 ProgressRingCard(
                     title: "Salah",
                     titleArabic: "الصلاة",
@@ -627,60 +627,72 @@ struct HomeView: View {
                 .font(.headline)
                 .padding(.horizontal)
             
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    QuickActionCard(
-                        title: "Salah Trainer",
-                        titleArabic: "الصلاة",
-                        icon: "person.fill",
-                        color: .green,
-                        isKidsMode: isKidsMode
-                    ) {
-                        appState.selectedTab = 3 // Prayer tab
-                    }
-                    
-                    QuickActionCard(
-                        title: "Open Mushaf",
-                        titleArabic: "المصحف",
-                        icon: "book.fill",
-                        color: .purple,
-                        isKidsMode: isKidsMode
-                    ) {
-                        appState.selectedTab = 4 // Quran tab
-                    }
-                    
-                    QuickActionCard(
-                        title: "Review Pillars",
-                        titleArabic: "الأركان",
-                        icon: "building.columns.fill",
-                        color: .orange,
-                        isKidsMode: isKidsMode
-                    ) {
-                        appState.selectedTab = 1 // Pillars tab
-                    }
-                    
-                    QuickActionCard(
-                        title: "Hadith",
-                        titleArabic: "الحديث",
-                        icon: "sparkles",
-                        color: .teal,
-                        isKidsMode: isKidsMode
-                    ) {
-                        appState.selectedTab = 2 // Hadith tab
-                    }
-                    
-                    QuickActionCard(
-                        title: "Practice Arabic",
-                        titleArabic: "العربية",
-                        icon: "character.textbox",
-                        color: .blue,
-                        isKidsMode: isKidsMode
-                    ) {
-                        appState.selectedTab = 5 // Arabic tab
-                    }
+            if DeviceLayout.isIPad {
+                LazyVGrid(columns: DeviceLayout.fixedColumns(), spacing: 16) {
+                    quickActionCards
                 }
                 .padding(.horizontal)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 16) {
+                        quickActionCards
+                    }
+                    .padding(.horizontal)
+                }
             }
+        }
+    }
+    
+    @ViewBuilder
+    var quickActionCards: some View {
+        QuickActionCard(
+            title: "Salah Trainer",
+            titleArabic: "الصلاة",
+            icon: "person.fill",
+            color: .green,
+            isKidsMode: isKidsMode
+        ) {
+            appState.selectedTab = 3
+        }
+        
+        QuickActionCard(
+            title: "Open Mushaf",
+            titleArabic: "المصحف",
+            icon: "book.fill",
+            color: .purple,
+            isKidsMode: isKidsMode
+        ) {
+            appState.selectedTab = 4
+        }
+        
+        QuickActionCard(
+            title: "Review Pillars",
+            titleArabic: "الأركان",
+            icon: "building.columns.fill",
+            color: .orange,
+            isKidsMode: isKidsMode
+        ) {
+            appState.selectedTab = 1
+        }
+        
+        QuickActionCard(
+            title: "Hadith",
+            titleArabic: "الحديث",
+            icon: "sparkles",
+            color: .teal,
+            isKidsMode: isKidsMode
+        ) {
+            appState.selectedTab = 2
+        }
+        
+        QuickActionCard(
+            title: "Practice Arabic",
+            titleArabic: "العربية",
+            icon: "character.textbox",
+            color: .blue,
+            isKidsMode: isKidsMode
+        ) {
+            appState.selectedTab = 5
         }
     }
     
@@ -998,7 +1010,7 @@ struct QuickActionCard: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .frame(minWidth: DeviceLayout.scaled(100), maxWidth: DeviceLayout.scaled(160), minHeight: DeviceLayout.scaled(140), maxHeight: DeviceLayout.scaled(180))
+            .frame(minWidth: DeviceLayout.scaled(100), maxWidth: .infinity, minHeight: DeviceLayout.scaled(140), maxHeight: DeviceLayout.scaled(180))
             .background(Color(.systemBackground))
             .cornerRadius(16)
             .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
