@@ -117,6 +117,19 @@ struct PrayerTimesCardView: View {
                                 .foregroundColor(.white.opacity(0.7))
                         }
                     }
+                    
+                    // Qibla direction
+                    if let qibla = prayerTimeService.qiblaDirection {
+                        HStack(spacing: 4) {
+                            Image(systemName: "safari")
+                                .font(.caption2)
+                                .foregroundColor(.white.opacity(0.7))
+                            
+                            Text("Qibla: \(String(format: "%.1f", qibla))°")
+                                .font(.caption2)
+                                .foregroundColor(.white.opacity(0.7))
+                        }
+                    }
                 }
                 
                 Spacer()
