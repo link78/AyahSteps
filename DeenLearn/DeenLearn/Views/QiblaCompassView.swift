@@ -340,12 +340,12 @@ struct QiblaCompassView: View {
         let location = locationService.bestLocation
         
         // Calculate distance to Kaaba
-        let userLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
+        let userLocation = CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         distanceToKaaba = userLocation.distance(from: kaabaLocation)
         
         // Calculate Qibla bearing using great circle formula
-        let lat1 = location.latitude * .pi / 180
-        let lon1 = location.longitude * .pi / 180
+        let lat1 = location.coordinate.latitude * .pi / 180
+        let lon1 = location.coordinate.longitude * .pi / 180
         let lat2 = kaabaLocation.coordinate.latitude * .pi / 180
         let lon2 = kaabaLocation.coordinate.longitude * .pi / 180
         
@@ -359,7 +359,7 @@ struct QiblaCompassView: View {
         
         // Also fetch from API for verification
         Task {
-            await islamicAPI.fetchQiblaDirection(latitude: location.latitude, longitude: location.longitude)
+            await islamicAPI.fetchQiblaDirection(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
             if let apiDirection = islamicAPI.qiblaDirection {
                 await MainActor.run { qiblaAngle = apiDirection }
             }
