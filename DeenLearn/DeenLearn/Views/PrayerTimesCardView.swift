@@ -46,18 +46,15 @@ struct PrayerTimesCardView: View {
                 locationService.requestLocation()
             }
             // Always calculate prayer times on appear
-            // This ensures times are shown even if location was already available
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                if prayerTimeService.prayerTimes.isEmpty {
-                    prayerTimeService.calculatePrayerTimes()
-                }
-            }
+            prayerTimeService.calculatePrayerTimes()
         }
         .onChange(of: locationService.currentLocation) { _ in
             prayerTimeService.calculatePrayerTimes()
         }
-        .onChange(of: locationService.authorizationStatus) { _ in
-            // Also trigger calculation when authorization changes
+        .onChange(of: locationService.authorizationStatus) { newStatus in
+            if newStatus == .authorizedWhenInUse || newStatus == .authorizedAlways {
+                locationService.requestLocation()
+            }
             prayerTimeService.calculatePrayerTimes()
         }
         .sheet(isPresented: $showSettings) {
@@ -89,6 +86,17 @@ struct PrayerTimesCardView: View {
                         Text(locationService.locationName)
                             .font(.caption)
                             .foregroundColor(.white.opacity(0.8))
+                        
+                        if locationService.isUsingDefaultLocation && !locationService.isLoading {
+                            Button {
+                                locationService.requestLocation()
+                            } label: {
+                                Image(systemName: "location.circle")
+                                    .font(.caption)
+                                    .foregroundColor(.white.opacity(0.9))
+                            }
+                            .accessibilityLabel("Detect current location")
+                        }
                         
                         if locationService.isLoading {
                             ProgressView()
@@ -464,18 +472,15 @@ struct CompactPrayerTimesWidget: View {
                 locationService.requestLocation()
             }
             // Always calculate prayer times on appear
-            // This ensures times are shown even if location was already available
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                if prayerTimeService.prayerTimes.isEmpty {
-                    prayerTimeService.calculatePrayerTimes()
-                }
-            }
+            prayerTimeService.calculatePrayerTimes()
         }
         .onChange(of: locationService.currentLocation) { _ in
             prayerTimeService.calculatePrayerTimes()
         }
-        .onChange(of: locationService.authorizationStatus) { _ in
-            // Also trigger calculation when authorization changes
+        .onChange(of: locationService.authorizationStatus) { newStatus in
+            if newStatus == .authorizedWhenInUse || newStatus == .authorizedAlways {
+                locationService.requestLocation()
+            }
             prayerTimeService.calculatePrayerTimes()
         }
     }

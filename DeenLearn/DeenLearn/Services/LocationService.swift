@@ -21,10 +21,11 @@ final class LocationService: NSObject, ObservableObject {
     private let locationManager = CLLocationManager()
     
     @Published var currentLocation: CLLocation?
-    @Published var locationName: String = "Mecca"
+    @Published var locationName: String = "Detecting location..."
     @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
     @Published var isLoading = false
     @Published var error: String?
+    @Published var isUsingDefaultLocation = true
     
     // Default location (Mecca) if user location is not available
     static let defaultLocation = CLLocation(latitude: 21.4225, longitude: 39.8262)
@@ -49,6 +50,11 @@ final class LocationService: NSObject, ObservableObject {
         locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
         authorizationStatus = locationManager.authorizationStatus
         loadCachedLocation()
+        
+        // Proactively request location on startup if already authorized
+        if authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways {
+            locationManager.requestLocation()
+        }
     }
     
     /// Request location permission
@@ -85,6 +91,11 @@ final class LocationService: NSObject, ObservableObject {
         currentLocation ?? LocationService.defaultLocation
     }
     
+    /// Start monitoring for significant location changes (battery-efficient)
+    func startMonitoringSignificantLocationChanges() {
+        locationManager.startMonitoringSignificantLocationChanges()
+    }
+    
     // MARK: - Location Cache
     
     /// Save location to UserDefaults for faster startup
@@ -105,6 +116,7 @@ final class LocationService: NSObject, ObservableObject {
         // Only use cache if values were actually stored
         currentLocation = CLLocation(latitude: lat, longitude: lon)
         locationName = name ?? "Cached Location"
+        isUsingDefaultLocation = false
     }
     
     /// Reverse geocode to get location name
@@ -156,8 +168,10 @@ extension LocationService: CLLocationManagerDelegate {
         Task { @MainActor in
             self.currentLocation = location
             self.isLoading = false
+            self.isUsingDefaultLocation = false
             self.error = nil
             self.retryCount = 0
+            self.startMonitoringSignificantLocationChanges()
             self.reverseGeocode(location)
         }
     }
