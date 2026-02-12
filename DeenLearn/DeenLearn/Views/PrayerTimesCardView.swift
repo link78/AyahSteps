@@ -468,12 +468,12 @@ struct CompactPrayerTimesWidget: View {
                 
                 Spacer()
                 
-                if prayerTimeService.qiblaDirection > 0 {
+                if let qibla = prayerTimeService.qiblaDirection, qibla > 0 {
                     HStack(spacing: 4) {
                         Image(systemName: "location.north.circle")
                             .font(.caption2)
                             .foregroundColor(primaryColor)
-                        Text("Qibla: \(String(format: "%.1f", prayerTimeService.qiblaDirection))°")
+                        Text("Qibla: \(String(format: "%.1f", qibla))°")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

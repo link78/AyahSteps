@@ -37,7 +37,7 @@ final class LocationService: NSObject, ObservableObject {
     private static let hasCachedLocationKey = "hasCachedLocation"
     
     // Maximum age for a location fix (5 minutes)
-    private static let maxLocationAge: TimeInterval = 300
+    nonisolated(unsafe) private static let maxLocationAge: TimeInterval = 300
     
     // Retry tracking
     private var retryCount = 0
