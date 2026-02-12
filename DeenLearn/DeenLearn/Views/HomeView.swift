@@ -179,7 +179,7 @@ struct HomeView: View {
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
-                .cornerRadius(24)
+                .cornerRadius(DeviceLayout.scaled(24))
                 
                 HStack(spacing: 16) {
                     // Animated character
@@ -224,11 +224,11 @@ struct HomeView: View {
                             .font(.caption2)
                             .foregroundColor(.white.opacity(0.8))
                     }
-                    .padding(10)
+                    .padding(DeviceLayout.scaled(10))
                     .background(Color.white.opacity(0.2))
-                    .cornerRadius(12)
+                    .cornerRadius(DeviceLayout.scaled(12))
                 }
-                .padding(20)
+                .padding(DeviceLayout.scaled(20))
             }
         }
         .padding(.horizontal)
@@ -259,12 +259,12 @@ struct HomeView: View {
                         .font(.caption.bold())
                         .foregroundColor(.white)
                 }
-                .padding(12)
+                .padding(DeviceLayout.scaled(12))
                 .background(Color.white.opacity(0.2))
-                .cornerRadius(12)
+                .cornerRadius(DeviceLayout.scaled(12))
             }
         }
-        .padding(20)
+        .padding(DeviceLayout.scaled(20))
         .background(
             LinearGradient(
                 colors: [Color(hex: "1a5f4a"), Color(hex: "2d8b6e")],
@@ -272,7 +272,7 @@ struct HomeView: View {
                 endPoint: .bottomTrailing
             )
         )
-        .cornerRadius(20)
+        .cornerRadius(DeviceLayout.scaled(20))
         .padding(.horizontal)
     }
     
@@ -485,9 +485,9 @@ struct HomeView: View {
                     .font(.title2)
                     .foregroundColor(Color(hex: "FF6B6B"))
             }
-            .padding(16)
+            .padding(DeviceLayout.scaled(16))
             .background(Color(.systemBackground))
-            .cornerRadius(16)
+            .cornerRadius(DeviceLayout.scaled(16))
             .shadow(color: .black.opacity(0.08), radius: 10, y: 5)
         }
         .buttonStyle(PlainButtonStyle())
@@ -556,7 +556,7 @@ struct HomeView: View {
                     }) {
                         HStack(spacing: 16) {
                             ZStack {
-                                RoundedRectangle(cornerRadius: 12)
+                                RoundedRectangle(cornerRadius: DeviceLayout.scaled(12))
                                     .fill(Color(hex: "2d8b6e").opacity(0.15))
                                     .frame(width: DeviceLayout.scaled(50), height: DeviceLayout.scaled(50))
                                 
@@ -580,9 +580,9 @@ struct HomeView: View {
                             Image(systemName: "chevron.right")
                                 .foregroundColor(.secondary)
                         }
-                        .padding(16)
+                        .padding(DeviceLayout.scaled(16))
                         .background(Color(.systemBackground))
-                        .cornerRadius(16)
+                        .cornerRadius(DeviceLayout.scaled(16))
                     }
                     .buttonStyle(PlainButtonStyle())
                     .padding(.horizontal)
@@ -611,10 +611,10 @@ struct HomeView: View {
                         .italic()
                 }
             }
-            .padding(16)
+            .padding(DeviceLayout.scaled(16))
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(hex: "2d8b6e").opacity(0.1))
-            .cornerRadius(16)
+            .cornerRadius(DeviceLayout.scaled(16))
             .padding(.horizontal)
         }
     }
@@ -627,19 +627,10 @@ struct HomeView: View {
                 .font(.headline)
                 .padding(.horizontal)
             
-            if DeviceLayout.isIPad {
-                LazyVGrid(columns: DeviceLayout.fixedColumns(), spacing: 16) {
-                    quickActionCards
-                }
-                .padding(.horizontal)
-            } else {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 16) {
-                        quickActionCards
-                    }
-                    .padding(.horizontal)
-                }
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: DeviceLayout.scaled(140), maximum: DeviceLayout.scaled(200)), spacing: DeviceLayout.scaled(12))], spacing: DeviceLayout.scaled(12)) {
+                quickActionCards
             }
+            .padding(.horizontal)
         }
     }
     
@@ -794,7 +785,7 @@ struct DailyGoalCard: View {
                 ZStack {
                     Circle()
                         .fill(color.opacity(0.2))
-                        .frame(width: 40, height: 40)
+                        .frame(width: DeviceLayout.scaled(40), height: DeviceLayout.scaled(40))
                     
                     Image(systemName: icon)
                         .foregroundColor(color)
@@ -813,7 +804,7 @@ struct DailyGoalCard: View {
                     } else {
                         Circle()
                             .stroke(Color.gray.opacity(0.3), lineWidth: 2)
-                            .frame(width: 24, height: 24)
+                            .frame(width: DeviceLayout.scaled(24), height: DeviceLayout.scaled(24))
                             .overlay(
                                 Image(systemName: "circle")
                                     .foregroundColor(.clear)
@@ -843,10 +834,10 @@ struct DailyGoalCard: View {
                 }
             }
         }
-        .padding(16)
+        .padding(DeviceLayout.scaled(16))
         .frame(maxWidth: isKidsMode ? DeviceLayout.scaled(160) : .infinity, minHeight: DeviceLayout.scaled(isKidsMode ? 150 : 100))
         .background(Color(.systemBackground))
-        .cornerRadius(16)
+        .cornerRadius(DeviceLayout.scaled(16))
         .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
         .contentShape(Rectangle())
         .onTapGesture {
@@ -904,9 +895,10 @@ struct ProgressRingCard: View {
                 }
             }
         }
-        .padding(12)
+        .padding(DeviceLayout.scaled(12))
+        .frame(maxWidth: .infinity)
         .background(Color(.systemBackground))
-        .cornerRadius(16)
+        .cornerRadius(DeviceLayout.scaled(16))
         .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
     }
 }
@@ -937,9 +929,9 @@ struct KidsStatBadge: View {
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity)
-        .padding(12)
+        .padding(DeviceLayout.scaled(12))
         .background(Color(.systemBackground))
-        .cornerRadius(16)
+        .cornerRadius(DeviceLayout.scaled(16))
         .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
     }
 }
@@ -1010,9 +1002,10 @@ struct QuickActionCard: View {
                         .foregroundColor(.secondary)
                 }
             }
-            .frame(minWidth: DeviceLayout.scaled(100), maxWidth: .infinity, minHeight: DeviceLayout.scaled(140), maxHeight: DeviceLayout.scaled(180))
+            .padding(DeviceLayout.scaled(12))
+            .frame(maxWidth: .infinity, minHeight: DeviceLayout.scaled(140))
             .background(Color(.systemBackground))
-            .cornerRadius(16)
+            .cornerRadius(DeviceLayout.scaled(16))
             .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
             .scaleEffect(isPressed ? 0.95 : 1.0)
         }
@@ -1060,9 +1053,9 @@ struct ReminderCard: View {
                 Image(systemName: "chevron.right")
                     .foregroundColor(.secondary)
             }
-            .padding(16)
+            .padding(DeviceLayout.scaled(16))
             .background(Color(.systemBackground))
-            .cornerRadius(16)
+            .cornerRadius(DeviceLayout.scaled(16))
             .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
         }
         .buttonStyle(.plain)
