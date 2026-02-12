@@ -19,6 +19,7 @@ struct UserProfile: Identifiable {
     var isParent: Bool
     var preferredLanguage: AppLanguage
     var createdAt: Date
+    var profileImagePath: String?
     
     // Learning preferences
     var showArabicScript: Bool
@@ -28,6 +29,40 @@ struct UserProfile: Identifiable {
     var dailyGoalMinutes: Int
     var reminderTime: Date?
     var remindersEnabled: Bool
+    
+    /// Load the saved profile image from documents directory
+    var profileImage: UIImage? {
+        guard let path = profileImagePath else { return nil }
+        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(path)
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return UIImage(data: data)
+    }
+    
+    /// Save a profile image and return the file name
+    @discardableResult
+    mutating func saveProfileImage(_ image: UIImage) -> String? {
+        guard let data = image.jpegData(compressionQuality: 0.8) else { return nil }
+        // Delete previous image if it exists
+        removeProfileImage()
+        let fileName = "profile_\(id.uuidString).jpg"
+        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(fileName)
+        do {
+            try data.write(to: url)
+            profileImagePath = fileName
+            return fileName
+        } catch {
+            return nil
+        }
+    }
+    
+    /// Remove the saved profile image file from disk
+    mutating func removeProfileImage() {
+        if let path = profileImagePath {
+            let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(path)
+            try? FileManager.default.removeItem(at: url)
+            profileImagePath = nil
+        }
+    }
     
     static let sampleAdult = UserProfile(
         id: UUID(),

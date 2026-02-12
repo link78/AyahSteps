@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct ProfileView: View {
     @EnvironmentObject var appState: AppState
@@ -23,6 +24,10 @@ struct ProfileView: View {
     @State private var showingAddGoal = false
     @State private var selectedChild: ChildProfile?
     @State private var selectedAchievementCategory: AchievementCategory?
+    
+    // Photo picker
+    @State private var selectedPhotoItem: PhotosPickerItem?
+    @State private var profileUIImage: UIImage?
     
     var body: some View {
         NavigationView {
@@ -81,14 +86,47 @@ struct ProfileView: View {
     
     private var profileHeaderCard: some View {
         VStack(spacing: 16) {
-            // Avatar
-            ZStack {
-                Circle()
-                    .fill(appState.isKidsMode ? Color.orange.opacity(0.2) : Color.green.opacity(0.2))
-                    .responsiveFrame(width: 100, height: 100)
-                
-                Text(profile.avatarEmoji)
-                    .font(.system(size: DeviceLayout.scaledFont(50)))
+            // Avatar with photo picker
+            PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+                ZStack {
+                    if let image = profileUIImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: DeviceLayout.scaled(100), height: DeviceLayout.scaled(100))
+                            .clipShape(Circle())
+                    } else {
+                        Circle()
+                            .fill(appState.isKidsMode ? Color.orange.opacity(0.2) : Color.green.opacity(0.2))
+                            .responsiveFrame(width: 100, height: 100)
+                        
+                        Text(profile.avatarEmoji)
+                            .font(.system(size: DeviceLayout.scaledFont(50)))
+                    }
+                    
+                    // Camera badge
+                    Circle()
+                        .fill(Color.accentColor)
+                        .frame(width: DeviceLayout.scaled(28), height: DeviceLayout.scaled(28))
+                        .overlay(
+                            Image(systemName: "camera.fill")
+                                .font(.system(size: DeviceLayout.scaledFont(13)))
+                                .foregroundColor(.white)
+                        )
+                        .offset(x: DeviceLayout.scaled(35), y: DeviceLayout.scaled(35))
+                }
+            }
+            .onChange(of: selectedPhotoItem) { newItem in
+                Task {
+                    if let data = try? await newItem?.loadTransferable(type: Data.self),
+                       let uiImage = UIImage(data: data) {
+                        profileUIImage = uiImage
+                        profile.saveProfileImage(uiImage)
+                    }
+                }
+            }
+            .onAppear {
+                profileUIImage = profile.profileImage
             }
             
             // Name
@@ -820,6 +858,8 @@ enum ProfileSection: String, CaseIterable {
 struct EditProfileSheet: View {
     @Environment(\.dismiss) var dismiss
     @Binding var profile: UserProfile
+    @State private var selectedPhotoItem: PhotosPickerItem?
+    @State private var previewImage: UIImage?
     
     var body: some View {
         NavigationView {
@@ -833,7 +873,47 @@ struct EditProfileSheet: View {
                     ))
                 }
                 
-                Section("Avatar") {
+                Section("Profile Photo") {
+                    HStack {
+                        if let image = previewImage ?? profile.profileImage {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 60, height: 60)
+                                .clipShape(Circle())
+                        } else {
+                            Circle()
+                                .fill(Color.green.opacity(0.2))
+                                .frame(width: 60, height: 60)
+                                .overlay(Text(profile.avatarEmoji).font(.title))
+                        }
+                        
+                        Spacer()
+                        
+                        PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+                            Label("Choose Photo", systemImage: "photo.on.rectangle")
+                        }
+                    }
+                    
+                    if previewImage != nil || profile.profileImage != nil {
+                        Button(role: .destructive) {
+                            previewImage = nil
+                            profile.removeProfileImage()
+                        } label: {
+                            Label("Remove Photo", systemImage: "trash")
+                        }
+                    }
+                }
+                .onChange(of: selectedPhotoItem) { newItem in
+                    Task {
+                        if let data = try? await newItem?.loadTransferable(type: Data.self),
+                           let uiImage = UIImage(data: data) {
+                            previewImage = uiImage
+                        }
+                    }
+                }
+                
+                Section("Avatar Emoji (used when no photo)") {
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 6), spacing: 10) {
                         ForEach(["👨", "👩", "👦", "👧", "🧔", "👵", "👴", "🧕", "👳‍♂️", "👳‍♀️", "🙂", "😊"], id: \.self) { emoji in
                             Button(action: { profile.avatarEmoji = emoji }) {
@@ -854,7 +934,12 @@ struct EditProfileSheet: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { dismiss() }
+                    Button("Save") {
+                        if let image = previewImage {
+                            profile.saveProfileImage(image)
+                        }
+                        dismiss()
+                    }
                 }
             }
         }

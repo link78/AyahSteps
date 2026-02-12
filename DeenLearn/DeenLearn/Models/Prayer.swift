@@ -67,6 +67,8 @@ enum DuaCategory: String, CaseIterable, Identifiable {
     case morningAdhkar = "Morning Adhkar"
     case eveningAdhkar = "Evening Adhkar"
     case protection = "Protection"
+    case travel = "Travel"
+    case healing = "Healing & Sickness"
     case general = "General Duas"
     
     var id: String { rawValue }
@@ -77,6 +79,8 @@ enum DuaCategory: String, CaseIterable, Identifiable {
         case .morningAdhkar: return "sunrise.fill"
         case .eveningAdhkar: return "sunset.fill"
         case .protection: return "shield.fill"
+        case .travel: return "airplane"
+        case .healing: return "heart.fill"
         case .general: return "star.fill"
         }
     }
@@ -87,6 +91,8 @@ enum DuaCategory: String, CaseIterable, Identifiable {
         case .morningAdhkar: return "orange"
         case .eveningAdhkar: return "purple"
         case .protection: return "green"
+        case .travel: return "indigo"
+        case .healing: return "red"
         case .general: return "teal"
         }
     }
@@ -943,6 +949,249 @@ extension DuaAfterPrayer {
             timesToRecite: 1,
             category: .general,
             source: "Surah Al-Isra 17:24"
+        ),
+        
+        // MARK: - Travel Duas
+        
+        DuaAfterPrayer(
+            id: "dua-travel-1",
+            name: "Dua When Starting a Journey",
+            arabic: "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنقَلِبُونَ",
+            transliteration: "Subhanalladhi sakhkhara lana hadha wa ma kunna lahu muqrinin wa inna ila Rabbina lamunqalibun",
+            translation: "Glory be to Him who has subjected this to us, and we could never have it by our efforts. And to our Lord we shall surely return.",
+            benefit: "Recited when boarding any means of transport — acknowledges Allah's blessing of travel",
+            timesToRecite: 1,
+            category: .travel,
+            source: "Surah Az-Zukhruf 43:13-14"
+        ),
+        DuaAfterPrayer(
+            id: "dua-travel-2",
+            name: "Dua for Travel",
+            arabic: "اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى وَمِنَ الْعَمَلِ مَا تَرْضَى",
+            transliteration: "Allahumma inna nas'aluka fi safarina hadha al-birra wat-taqwa wa minal-'amali ma tarda",
+            translation: "O Allah, we ask You in this journey of ours for righteousness, piety, and deeds which are pleasing to You.",
+            benefit: "Comprehensive travel supplication taught by the Prophet ﷺ",
+            timesToRecite: 1,
+            category: .travel,
+            source: "Sahih Muslim 1342",
+            hadithCollection: "muslim",
+            hadithNumber: 1342
+        ),
+        DuaAfterPrayer(
+            id: "dua-travel-3",
+            name: "Dua When Returning from Travel",
+            arabic: "آيِبُونَ تَائِبُونَ عَابِدُونَ لِرَبِّنَا حَامِدُونَ",
+            transliteration: "Ayibuna ta'ibuna 'abiduna li Rabbina hamidun",
+            translation: "We return, repenting, worshipping, and praising our Lord.",
+            benefit: "Said upon returning home safely from a journey",
+            timesToRecite: 1,
+            category: .travel,
+            source: "Sahih al-Bukhari 1797",
+            hadithCollection: "bukhari",
+            hadithNumber: 1797
+        ),
+        DuaAfterPrayer(
+            id: "dua-travel-4",
+            name: "Dua When Entering a Town",
+            arabic: "اللَّهُمَّ رَبَّ السَّمَاوَاتِ السَّبْعِ وَمَا أَظْلَلْنَ وَرَبَّ الْأَرَضِينَ السَّبْعِ وَمَا أَقْلَلْنَ أَسْأَلُكَ خَيْرَ هَذِهِ الْقَرْيَةِ وَخَيْرَ أَهْلِهَا",
+            transliteration: "Allahumma Rabbas-samawatis-sab'i wa ma adhlaln, wa Rabbal-aradeenas-sab'i wa ma aqlal, as'aluka khayra hadhihil-qaryah wa khayra ahliha",
+            translation: "O Allah, Lord of the seven heavens and all that they envelop, Lord of the seven earths and all that they carry, I ask You for the goodness of this town and the goodness of its people.",
+            benefit: "Said when entering a new city or town for protection and blessings",
+            timesToRecite: 1,
+            category: .travel,
+            source: "Mustadrak al-Hakim 2/100"
+        ),
+        
+        // MARK: - Healing & Sickness Duas
+        
+        DuaAfterPrayer(
+            id: "dua-healing-1",
+            name: "Dua for Healing (General)",
+            arabic: "اللَّهُمَّ رَبَّ النَّاسِ أَذْهِبِ الْبَأْسَ اشْفِ أَنْتَ الشَّافِي لاَ شِفَاءَ إِلاَّ شِفَاؤُكَ شِفَاءً لاَ يُغَادِرُ سَقَمًا",
+            transliteration: "Allahumma Rabban-naas, adhibil-ba's, ishfi antash-Shafee la shifa'a illa shifa'uka shifa'an la yughadiru saqama",
+            translation: "O Allah, Lord of mankind, remove the illness, cure the disease. You are the One Who cures. There is no cure except Your cure, a cure that leaves no illness.",
+            benefit: "The Prophet ﷺ would recite this when visiting the sick — the most powerful healing dua",
+            timesToRecite: 3,
+            category: .healing,
+            source: "Sahih al-Bukhari 5675",
+            hadithCollection: "bukhari",
+            hadithNumber: 5675
+        ),
+        DuaAfterPrayer(
+            id: "dua-healing-2",
+            name: "Dua When Visiting the Sick",
+            arabic: "أَسْأَلُ اللَّهَ الْعَظِيمَ رَبَّ الْعَرْشِ الْعَظِيمِ أَنْ يَشْفِيَكَ",
+            transliteration: "As'alullaahal-'Adheema Rabbal-'Arshil-'Adheemi an yashfiyak",
+            translation: "I ask Allah the Almighty, Lord of the Magnificent Throne, to cure you.",
+            benefit: "Recited 7 times when visiting the sick — the Prophet ﷺ said whoever recites this 7 times, Allah will cure them if their time has not yet come",
+            timesToRecite: 7,
+            category: .healing,
+            source: "Abu Dawud 3106",
+            hadithCollection: "abu-dawud",
+            hadithNumber: 3106
+        ),
+        DuaAfterPrayer(
+            id: "dua-healing-3",
+            name: "Placing Hand on Pain",
+            arabic: "بِسْمِ اللَّهِ ثَلاَثًا أَعُوذُ بِاللَّهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا أَجِدُ وَأُحَاذِرُ",
+            transliteration: "Bismillahi (three times), a'udhu billahi wa qudratihi min sharri ma ajidu wa uhadhiru",
+            translation: "In the name of Allah (three times). I seek refuge in Allah and His Power from the evil of what I find and fear.",
+            benefit: "Place your hand on the area of pain and say Bismillah three times, then recite this dua seven times",
+            timesToRecite: 7,
+            category: .healing,
+            source: "Sahih Muslim 2202",
+            hadithCollection: "muslim",
+            hadithNumber: 2202
+        ),
+        DuaAfterPrayer(
+            id: "dua-healing-4",
+            name: "Dua for Relief from Anxiety",
+            arabic: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ وَالْعَجْزِ وَالْكَسَلِ وَالْبُخْلِ وَالْجُبْنِ وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ",
+            transliteration: "Allahumma inni a'udhu bika minal-hammi wal-hazani wal-'ajzi wal-kasali wal-bukhli wal-jubni wa dala'id-dayni wa ghalabatir-rijal",
+            translation: "O Allah, I seek refuge in You from worry and grief, from helplessness and laziness, from miserliness and cowardice, from being overcome by debt and overpowered by men.",
+            benefit: "One of the most comprehensive duas for mental health — covers anxiety, depression, laziness, and financial distress",
+            timesToRecite: 1,
+            category: .healing,
+            source: "Sahih al-Bukhari 6369",
+            hadithCollection: "bukhari",
+            hadithNumber: 6369
+        ),
+        
+        // MARK: - More Morning Adhkar
+        
+        DuaAfterPrayer(
+            id: "dua-morning-5",
+            name: "Morning Dua: Entering a New Day",
+            arabic: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ",
+            transliteration: "Asbahna wa asbahal-mulku lillah, wal-hamdu lillah, la ilaha illallahu wahdahu la sharika lah",
+            translation: "We have reached the morning and at this very time the whole kingdom belongs to Allah. All praise is due to Allah. None has the right to be worshipped except Allah alone, without any partner.",
+            benefit: "Comprehensive morning remembrance acknowledging Allah's sovereignty",
+            timesToRecite: 1,
+            category: .morningAdhkar,
+            source: "Sahih Muslim 2723",
+            hadithCollection: "muslim",
+            hadithNumber: 2723
+        ),
+        DuaAfterPrayer(
+            id: "dua-morning-6",
+            name: "Morning Dua: Seeking Well-being",
+            arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ",
+            transliteration: "Allahumma inni as'alukal-'afwa wal-'afiyata fid-dunya wal-akhirah",
+            translation: "O Allah, I ask You for pardon and well-being in this life and the next.",
+            benefit: "The Prophet ﷺ never left this dua in the morning or evening",
+            timesToRecite: 1,
+            category: .morningAdhkar,
+            source: "Sunan Ibn Majah 3871",
+            hadithCollection: "ibnu-majah",
+            hadithNumber: 3871
+        ),
+        
+        // MARK: - More Evening Adhkar
+        
+        DuaAfterPrayer(
+            id: "dua-evening-4",
+            name: "Evening Dua: Seeking Refuge",
+            arabic: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+            transliteration: "A'udhu bi kalimatillahit-tammati min sharri ma khalaq",
+            translation: "I seek refuge in the perfect words of Allah from the evil of what He has created.",
+            benefit: "Protection from every harm — especially recommended in the evening and when staying somewhere new",
+            timesToRecite: 3,
+            category: .eveningAdhkar,
+            source: "Sahih Muslim 2708",
+            hadithCollection: "muslim",
+            hadithNumber: 2708
+        ),
+        DuaAfterPrayer(
+            id: "dua-evening-5",
+            name: "Evening Dua: Before Sleeping",
+            arabic: "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+            transliteration: "Bismika Allahumma amutu wa ahya",
+            translation: "In Your name, O Allah, I die and I live.",
+            benefit: "Said before sleeping — sleep is a minor death and waking is a rebirth",
+            timesToRecite: 1,
+            category: .eveningAdhkar,
+            source: "Sahih al-Bukhari 6324",
+            hadithCollection: "bukhari",
+            hadithNumber: 6324
+        ),
+        
+        // MARK: - More General Duas
+        
+        DuaAfterPrayer(
+            id: "dua-general-6",
+            name: "Dua for Knowledge",
+            arabic: "رَبِّ زِدْنِي عِلْمًا",
+            transliteration: "Rabbi zidni 'ilma",
+            translation: "My Lord, increase me in knowledge.",
+            benefit: "A concise Quranic dua that the Prophet ﷺ was commanded to recite",
+            timesToRecite: 1,
+            category: .general,
+            source: "Surah Ta-Ha 20:114"
+        ),
+        DuaAfterPrayer(
+            id: "dua-general-7",
+            name: "Dua for Guidance",
+            arabic: "اللَّهُمَّ اهْدِنِي وَسَدِّدْنِي",
+            transliteration: "Allahummah-dini wa saddidni",
+            translation: "O Allah, guide me and keep me on the right path.",
+            benefit: "A simple yet powerful dua asking Allah for guidance in all matters",
+            timesToRecite: 1,
+            category: .general,
+            source: "Sahih Muslim 2725",
+            hadithCollection: "muslim",
+            hadithNumber: 2725
+        ),
+        DuaAfterPrayer(
+            id: "dua-general-8",
+            name: "Dua When Entering the Mosque",
+            arabic: "اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+            transliteration: "Allahummaf-tah li abwaba rahmatik",
+            translation: "O Allah, open for me the doors of Your mercy.",
+            benefit: "Recited when entering a mosque — seeking Allah's mercy in His house",
+            timesToRecite: 1,
+            category: .general,
+            source: "Sahih Muslim 713",
+            hadithCollection: "muslim",
+            hadithNumber: 713
+        ),
+        DuaAfterPrayer(
+            id: "dua-general-9",
+            name: "Dua When Leaving the Mosque",
+            arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",
+            transliteration: "Allahumma inni as'aluka min fadlik",
+            translation: "O Allah, I ask You from Your bounty.",
+            benefit: "Recited when leaving a mosque — asking for Allah's bounty in daily life",
+            timesToRecite: 1,
+            category: .general,
+            source: "Sahih Muslim 713",
+            hadithCollection: "muslim",
+            hadithNumber: 713
+        ),
+        DuaAfterPrayer(
+            id: "dua-general-10",
+            name: "Dua Before Eating",
+            arabic: "بِسْمِ اللَّهِ وَعَلَى بَرَكَةِ اللَّهِ",
+            transliteration: "Bismillahi wa 'ala barakatillah",
+            translation: "In the name of Allah and with the blessing of Allah.",
+            benefit: "Mentioning Allah's name before eating brings barakah (blessing) to the food",
+            timesToRecite: 1,
+            category: .general,
+            source: "Sunan Abu Dawud 3767",
+            hadithCollection: "abu-dawud",
+            hadithNumber: 3767
+        ),
+        DuaAfterPrayer(
+            id: "dua-general-11",
+            name: "Dua After Eating",
+            arabic: "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلاَ قُوَّةٍ",
+            transliteration: "Alhamdu lillahil-ladhi at'amani hadha wa razaqanihi min ghayri hawlin minni wa la quwwah",
+            translation: "All praise is due to Allah who fed me this and provided it for me without any might or power from myself.",
+            benefit: "Whoever says this after eating, all their previous sins are forgiven",
+            timesToRecite: 1,
+            category: .general,
+            source: "Sunan at-Tirmidhi 3458",
+            hadithCollection: "tirmidzi",
+            hadithNumber: 3458
         )
     ]
     
