@@ -834,7 +834,7 @@ struct DailyGoalCard: View {
             .buttonStyle(PlainButtonStyle())
         }
         .padding(DeviceLayout.scaled(16))
-        .frame(width: DeviceLayout.scaled(160), minHeight: DeviceLayout.scaled(150))
+        .frame(width: DeviceLayout.scaled(160), height: DeviceLayout.scaled(150))
         .background(Color(.systemBackground))
         .cornerRadius(DeviceLayout.scaled(16))
         .shadow(color: .black.opacity(0.05), radius: 5, y: 2)
