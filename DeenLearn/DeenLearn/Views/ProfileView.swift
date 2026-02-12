@@ -283,6 +283,23 @@ struct ProfileView: View {
                 }
             }
             
+            // Appearance
+            settingsCard(title: "Appearance", icon: appState.appearanceMode.icon) {
+                VStack(spacing: 12) {
+                    Picker("Appearance", selection: $appState.appearanceMode) {
+                        ForEach(AppearanceMode.allCases, id: \.self) { mode in
+                            Label(mode.rawValue, systemImage: mode.icon)
+                                .tag(mode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    
+                    Text("Choose System to follow your device settings, or select Light/Dark mode manually.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            
             // Mode Toggle
             settingsCard(title: "Learning Mode", icon: "person.2.fill") {
                 VStack(spacing: 12) {
