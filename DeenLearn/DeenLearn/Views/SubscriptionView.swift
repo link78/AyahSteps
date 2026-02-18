@@ -83,21 +83,10 @@ struct SubscriptionView: View {
     private var headerSection: some View {
         VStack(spacing: 16) {
             // Logo/Icon
-            ZStack {
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [.purple, .blue],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 80, height: 80)
-                
-                Image(systemName: "star.circle.fill")
-                    .font(.system(size: 40))
-                    .foregroundColor(.white)
-            }
+            Image("DeenLearnLogo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 80, height: 80)
             
             Text("Upgrade to DeenLearn Plus")
                 .font(.title2.bold())

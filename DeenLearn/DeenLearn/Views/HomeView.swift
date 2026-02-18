@@ -193,8 +193,8 @@ struct HomeView: View {
                         
                         Text("🌟")
                             .font(.system(size: DeviceLayout.scaledFont(50)))
-                            .scaleEffect(showCharacterAnimation ? 1.1 : 0.9)
-                            .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: showCharacterAnimation)
+                            .scaleEffect(isKidsMode ? (showCharacterAnimation ? 1.1 : 0.9) : 1.0)
+                            .animation(isKidsMode ? .easeInOut(duration: 1).repeatForever(autoreverses: true) : nil, value: showCharacterAnimation)
                     }
                     
                     VStack(alignment: .leading, spacing: 8) {
@@ -218,8 +218,8 @@ struct HomeView: View {
                         Image(systemName: "flame.fill")
                             .font(.title)
                             .foregroundColor(.orange)
-                            .scaleEffect(showCharacterAnimation ? 1.2 : 1.0)
-                            .animation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true), value: showCharacterAnimation)
+                            .scaleEffect(isKidsMode && showCharacterAnimation ? 1.2 : 1.0)
+                            .animation(isKidsMode ? .easeInOut(duration: 0.5).repeatForever(autoreverses: true) : nil, value: showCharacterAnimation)
                         Text("\(appState.currentStreak)")
                             .font(.caption.bold())
                             .foregroundColor(.white)

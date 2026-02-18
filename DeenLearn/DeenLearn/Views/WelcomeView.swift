@@ -28,22 +28,11 @@ struct WelcomeView: View {
                 
                 // App Logo and Title
                 VStack(spacing: 20) {
-                    // Crescent and star symbol
-                    ZStack {
-                        Circle()
-                            .fill(Color.white.opacity(0.15))
-                            .frame(width: 140, height: 140)
-                        
-                        Image(systemName: "moon.stars.fill")
-                            .font(.system(size: 70))
-                            .foregroundStyle(
-                                LinearGradient(
-                                    colors: [.white, Color(hex: "ffd700")],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                    }
+                    // DeenLearn logo
+                    Image("DeenLearnLogo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 140, height: 140)
                     
                     VStack(spacing: 8) {
                         Text("DeenLearn")
