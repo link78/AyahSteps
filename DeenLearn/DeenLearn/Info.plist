@@ -6,5 +6,7 @@
     <string>DeenLearn needs your location to calculate accurate prayer times for your area.</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>DeenLearn needs your location to calculate accurate prayer times and send prayer time notifications.</string>
+    <key>NSLocationUsageDescription</key>
+    <string>DeenLearn needs your location to calculate accurate prayer times for your area.</string>
 </dict>
 </plist>
