@@ -157,7 +157,7 @@ struct QiblaCompassView: View {
                     Text("Heading")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text("\(String(format: "%.0f", headingManager.heading))°")
+                    Text(headingManager.isAvailable ? "\(String(format: "%.0f", headingManager.heading))°" : "--")
                         .font(.title3.monospacedDigit().bold())
                 }
                 
@@ -244,24 +244,40 @@ struct QiblaCompassView: View {
     // MARK: - Alignment Status
     
     private var alignmentStatus: some View {
-        let diff = abs(normalizeAngle(qiblaAngle - headingManager.heading))
-        let aligned = diff < 5
-        
-        return HStack {
-            Image(systemName: aligned ? "checkmark.circle.fill" : "arrow.triangle.turn.up.right.circle")
-                .foregroundColor(aligned ? .green : .orange)
-            Text(aligned ? "You are facing the Qibla! 🕋" : "Turn \(turnDirection) to face Qibla")
-                .font(.subheadline.bold())
-                .foregroundColor(aligned ? .green : .primary)
-        }
-        .padding(DeviceLayout.scaled(12))
-        .frame(maxWidth: .infinity)
-        .background((aligned ? Color.green : Color.orange).opacity(0.1))
-        .cornerRadius(DeviceLayout.scaled(10))
-        .onAppear { isAligned = aligned }
-        .onChange(of: headingManager.heading) { _ in
-            let d = abs(normalizeAngle(qiblaAngle - headingManager.heading))
-            withAnimation { isAligned = d < 5 }
+        Group {
+            if headingManager.isAvailable {
+                let diff = abs(normalizeAngle(qiblaAngle - headingManager.heading))
+                let aligned = diff < 5
+                
+                HStack {
+                    Image(systemName: aligned ? "checkmark.circle.fill" : "arrow.triangle.turn.up.right.circle")
+                        .foregroundColor(aligned ? .green : .orange)
+                    Text(aligned ? "You are facing the Qibla! 🕋" : "Turn \(turnDirection) to face Qibla")
+                        .font(.subheadline.bold())
+                        .foregroundColor(aligned ? .green : .primary)
+                }
+                .padding(DeviceLayout.scaled(12))
+                .frame(maxWidth: .infinity)
+                .background((aligned ? Color.green : Color.orange).opacity(0.1))
+                .cornerRadius(DeviceLayout.scaled(10))
+                .onAppear { isAligned = aligned }
+                .onChange(of: headingManager.heading) { _ in
+                    let d = abs(normalizeAngle(qiblaAngle - headingManager.heading))
+                    withAnimation { isAligned = d < 5 }
+                }
+            } else {
+                HStack {
+                    Image(systemName: "safari")
+                        .foregroundColor(primaryColor)
+                    Text("Qibla is \(String(format: "%.1f", qiblaAngle))° from North 🕋")
+                        .font(.subheadline.bold())
+                        .foregroundColor(.primary)
+                }
+                .padding(DeviceLayout.scaled(12))
+                .frame(maxWidth: .infinity)
+                .background(primaryColor.opacity(0.1))
+                .cornerRadius(DeviceLayout.scaled(10))
+            }
         }
     }
     
@@ -299,19 +315,19 @@ struct QiblaCompassView: View {
     
     private var calibrationNotice: some View {
         VStack(spacing: 8) {
-            Image(systemName: "exclamationmark.triangle.fill")
+            Image(systemName: "info.circle.fill")
                 .font(.title2)
-                .foregroundColor(.orange)
-            Text("Compass Not Available")
+                .foregroundColor(primaryColor)
+            Text("Static Qibla Direction")
                 .font(.headline)
-            Text("Your device doesn't support heading detection. The Qibla direction is shown based on your location.")
+            Text("Live compass rotation requires a magnetometer. The Qibla bearing is calculated from your location and is accurate.")
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
         }
         .padding(DeviceLayout.scaled(16))
         .frame(maxWidth: .infinity)
-        .background(Color.orange.opacity(0.1))
+        .background(primaryColor.opacity(0.1))
         .cornerRadius(DeviceLayout.scaled(12))
     }
     
