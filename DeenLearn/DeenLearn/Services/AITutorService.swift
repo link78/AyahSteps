@@ -47,7 +47,8 @@ class AITutorService: ObservableObject {
                     isKidsMode: isKidsMode
                 )
             } catch {
-                // Fall back to hardcoded responses on error
+                // Log error and fall back to hardcoded responses
+                print("Gemini AI error: \(error.localizedDescription)")
                 response = generateResponse(for: question, topic: topic, isKidsMode: isKidsMode)
             }
         } else {

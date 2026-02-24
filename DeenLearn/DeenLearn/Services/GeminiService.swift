@@ -105,7 +105,7 @@ class GeminiService: ObservableObject {
             throw GeminiError.notConfigured
         }
 
-        guard let url = URL(string: "\(baseURL)?key=\(apiKey)") else {
+        guard let url = URL(string: "\(baseURL)") else {
             throw GeminiError.invalidURL
         }
 
@@ -160,6 +160,7 @@ class GeminiService: ObservableObject {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
         urlRequest.httpBody = try JSONEncoder().encode(request)
 
         let (data, response) = try await session.data(for: urlRequest)
