@@ -57,6 +57,8 @@
 		AAAAAAAAAAAAAAAAAAAAAA46 /* DuaKidsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111165 /* DuaKidsView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA47 /* HadithAdultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111166 /* HadithAdultView.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA48 /* QiblaCompassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111167 /* QiblaCompassView.swift */; };
+		BBBBBBBBBBBBBBBBBBBBB001 /* GeminiServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCCCCCCCCCCCCCCCCCCC001 /* GeminiServiceTests.swift */; };
+		BBBBBBBBBBBBBBBBBBBBB002 /* AITutorServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCCCCCCCCCCCCCCCCCCC002 /* AITutorServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -111,10 +113,30 @@
 		111111111111111111111165 /* DuaKidsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuaKidsView.swift; sourceTree = "<group>"; };
 		111111111111111111111166 /* HadithAdultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithAdultView.swift; sourceTree = "<group>"; };
 		111111111111111111111167 /* QiblaCompassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCompassView.swift; sourceTree = "<group>"; };
+		EEEEEEEEEEEEEEEEEEEEE001 /* DeenLearnTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeenLearnTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CCCCCCCCCCCCCCCCCCCCC001 /* GeminiServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiServiceTests.swift; sourceTree = "<group>"; };
+		CCCCCCCCCCCCCCCCCCCCC002 /* AITutorServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITutorServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXContainerItemProxy section */
+		DDDDDDDDDDDDDDDDDDDDD001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 111111111111111111111110 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 111111111111111111111117;
+			remoteInfo = DeenLearn;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		111111111111111111111115 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EEEEEEEEEEEEEEEEEEEEE004 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -128,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				11111111111111111111111A /* DeenLearn */,
+				FFFFF0000000000000000001 /* DeenLearnTests */,
 				111111111111111111111119 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -136,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				111111111111111111111118 /* DeenLearn.app */,
+				EEEEEEEEEEEEEEEEEEEEE001 /* DeenLearnTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -229,6 +253,15 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		FFFFF0000000000000000001 /* DeenLearnTests */ = {
+			isa = PBXGroup;
+			children = (
+				CCCCCCCCCCCCCCCCCCCCC001 /* GeminiServiceTests.swift */,
+				CCCCCCCCCCCCCCCCCCCCC002 /* AITutorServiceTests.swift */,
+			);
+			path = DeenLearnTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -249,6 +282,24 @@
 			productReference = 111111111111111111111118 /* DeenLearn.app */;
 			productType = "com.apple.product-type.application";
 		};
+		EEEEEEEEEEEEEEEEEEEEE002 /* DeenLearnTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EEEEEEEEEEEEEEEEEEEEE010 /* Build configuration list for PBXNativeTarget "DeenLearnTests" */;
+			buildPhases = (
+				EEEEEEEEEEEEEEEEEEEEE003 /* Sources */,
+				EEEEEEEEEEEEEEEEEEEEE004 /* Frameworks */,
+				EEEEEEEEEEEEEEEEEEEEE005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EEEEEEEEEEEEEEEEEEEEE006 /* PBXTargetDependency */,
+			);
+			name = DeenLearnTests;
+			productName = DeenLearnTests;
+			productReference = EEEEEEEEEEEEEEEEEEEEE001 /* DeenLearnTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -261,6 +312,10 @@
 				TargetAttributes = {
 					111111111111111111111117 = {
 						CreatedOnToolsVersion = 15.0;
+					};
+					EEEEEEEEEEEEEEEEEEEEE002 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 111111111111111111111117;
 					};
 				};
 			};
@@ -279,6 +334,7 @@
 			projectRoot = "";
 			targets = (
 				111111111111111111111117 /* DeenLearn */,
+				EEEEEEEEEEEEEEEEEEEEE002 /* DeenLearnTests */,
 			);
 		};
 /* End PBXProject section */
@@ -293,7 +349,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EEEEEEEEEEEEEEEEEEEEE005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EEEEEEEEEEEEEEEEEEEEE006 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 111111111111111111111117 /* DeenLearn */;
+			targetProxy = DDDDDDDDDDDDDDDDDDDDD001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXSourcesBuildPhase section */
 		111111111111111111111114 /* Sources */ = {
@@ -348,6 +419,15 @@
 				AAAAAAAAAAAAAAAAAAAAAA46 /* DuaKidsView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA47 /* HadithAdultView.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA48 /* QiblaCompassView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EEEEEEEEEEEEEEEEEEEEE003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBBBBBBBBBBBBBBBBBBBB001 /* GeminiServiceTests.swift in Sources */,
+				BBBBBBBBBBBBBBBBBBBBB002 /* AITutorServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,6 +615,42 @@
 			};
 			name = Release;
 		};
+		EEEEEEEEEEEEEEEEEEEEE007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ayahsteps.DeenLearnTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DeenLearn.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DeenLearn";
+			};
+			name = Debug;
+		};
+		EEEEEEEEEEEEEEEEEEEEE008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ayahsteps.DeenLearnTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DeenLearn.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DeenLearn";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -552,6 +668,15 @@
 			buildConfigurations = (
 				11111111111111111111113C /* Debug */,
 				11111111111111111111113D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EEEEEEEEEEEEEEEEEEEEE010 /* Build configuration list for PBXNativeTarget "DeenLearnTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EEEEEEEEEEEEEEEEEEEEE007 /* Debug */,
+				EEEEEEEEEEEEEEEEEEEEE008 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
