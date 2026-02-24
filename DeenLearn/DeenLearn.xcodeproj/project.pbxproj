@@ -37,6 +37,7 @@
 		AAAAAAAAAAAAAAAAAAAAAA27 /* TextToSpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114C /* TextToSpeechService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA28 /* QuranDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114D /* QuranDataService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA29 /* AITutorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114E /* AITutorService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAGE01 /* GeminiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111GE1 /* GeminiService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA30 /* AIQuranCoachService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114F /* AIQuranCoachService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA31 /* AILearningAssistantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111150 /* AILearningAssistantService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA32 /* AIQuestionGeneratorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111151 /* AIQuestionGeneratorService.swift */; };
@@ -90,6 +91,7 @@
 		11111111111111111111114C /* TextToSpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToSpeechService.swift; sourceTree = "<group>"; };
 		11111111111111111111114D /* QuranDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranDataService.swift; sourceTree = "<group>"; };
 		11111111111111111111114E /* AITutorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITutorService.swift; sourceTree = "<group>"; };
+		111111111111111111111GE1 /* GeminiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
 		11111111111111111111114F /* AIQuranCoachService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIQuranCoachService.swift; sourceTree = "<group>"; };
 		111111111111111111111150 /* AILearningAssistantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AILearningAssistantService.swift; sourceTree = "<group>"; };
 		111111111111111111111151 /* AIQuestionGeneratorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIQuestionGeneratorService.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				11111111111111111111114C /* TextToSpeechService.swift */,
 				11111111111111111111114D /* QuranDataService.swift */,
 				11111111111111111111114E /* AITutorService.swift */,
+				111111111111111111111GE1 /* GeminiService.swift */,
 				11111111111111111111114F /* AIQuranCoachService.swift */,
 				111111111111111111111150 /* AILearningAssistantService.swift */,
 				111111111111111111111151 /* AIQuestionGeneratorService.swift */,
@@ -325,6 +328,7 @@
 				AAAAAAAAAAAAAAAAAAAAAA27 /* TextToSpeechService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA28 /* QuranDataService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA29 /* AITutorService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAGE01 /* GeminiService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA30 /* AIQuranCoachService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA31 /* AILearningAssistantService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA32 /* AIQuestionGeneratorService.swift in Sources */,

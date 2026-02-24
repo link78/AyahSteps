@@ -36,10 +36,25 @@ class AITutorService: ObservableObject {
             conversationHistory.append(ChatMessage(content: question, isUser: true, timestamp: Date()))
         }
         
-        // Simulate AI processing delay
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        var response: String
         
-        let response = generateResponse(for: question, topic: topic, isKidsMode: isKidsMode)
+        // Use Gemini AI if configured, otherwise fall back to hardcoded responses
+        if GeminiService.shared.isConfigured {
+            do {
+                response = try await GeminiService.shared.generateIslamicResponse(
+                    question: question,
+                    topic: topic.rawValue,
+                    isKidsMode: isKidsMode
+                )
+            } catch {
+                // Fall back to hardcoded responses on error
+                response = generateResponse(for: question, topic: topic, isKidsMode: isKidsMode)
+            }
+        } else {
+            // Simulate processing delay for hardcoded responses
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            response = generateResponse(for: question, topic: topic, isKidsMode: isKidsMode)
+        }
         
         await MainActor.run {
             conversationHistory.append(ChatMessage(content: response, isUser: false, timestamp: Date()))
