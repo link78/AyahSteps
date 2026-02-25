@@ -107,7 +107,7 @@ enum AppLanguage: String, CaseIterable {
 
 // MARK: - Child Profile (for Parent Dashboard)
 
-struct ChildProfile: Identifiable {
+struct ChildProfile: Identifiable, Codable {
     let id: UUID
     var name: String
     var avatarEmoji: String
@@ -201,7 +201,7 @@ struct ChildProfile: Identifiable {
     ]
 }
 
-enum ContentCategory: String, CaseIterable {
+enum ContentCategory: String, CaseIterable, Codable {
     case quran = "Qur'an"
     case arabic = "Arabic"
     case pillars = "Pillars"
@@ -310,7 +310,7 @@ enum GoalCategory: String, CaseIterable {
 
 // MARK: - Achievements
 
-struct Achievement: Identifiable {
+struct Achievement: Identifiable, Codable {
     let id: UUID
     var title: String
     var description: String
@@ -453,7 +453,7 @@ struct Achievement: Identifiable {
     ]
 }
 
-enum AchievementCategory: String, CaseIterable {
+enum AchievementCategory: String, CaseIterable, Codable {
     case quran = "Qur'an"
     case prayer = "Prayer"
     case arabic = "Arabic"

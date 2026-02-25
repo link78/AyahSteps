@@ -12,7 +12,6 @@ struct ProfileView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedSection: ProfileSection = .profile
     @State private var profile = UserProfile.sampleAdult
-    @State private var children = ChildProfile.sampleChildren
     @State private var goals = LearningGoal.sampleGoals
     @State private var achievements = Achievement.sampleAchievements
     @State private var bookmarks = Bookmark.sampleBookmarks
@@ -72,7 +71,7 @@ struct ProfileView: View {
             EditProfileSheet(profile: $profile)
         }
         .sheet(isPresented: $showingAddChild) {
-            AddChildSheet(children: $children)
+            AddChildSheet(appState: appState)
         }
         .sheet(isPresented: $showingAddGoal) {
             AddGoalSheet(goals: $goals)
@@ -719,9 +718,24 @@ struct ProfileView: View {
                 .cornerRadius(12)
             }
             
-            // Children Cards
-            ForEach(children) { child in
-                childProgressCard(child)
+            if appState.childProfiles.isEmpty {
+                emptyStateView(
+                    icon: "person.2.fill",
+                    title: "No Child Profiles",
+                    message: "Add a child profile to track their learning progress and set parental controls."
+                )
+            } else {
+                // Children Cards
+                ForEach(appState.childProfiles) { child in
+                    childProgressCard(child)
+                        .contextMenu {
+                            Button(role: .destructive) {
+                                appState.removeChildProfile(id: child.id)
+                            } label: {
+                                Label("Remove", systemImage: "trash")
+                            }
+                        }
+                }
             }
             
             // Quick Settings
@@ -966,16 +980,31 @@ struct EditProfileSheet: View {
 
 struct AddChildSheet: View {
     @Environment(\.dismiss) var dismiss
-    @Binding var children: [ChildProfile]
+    @ObservedObject var appState: AppState
     @State private var name = ""
     @State private var age = 6
     @State private var avatar = "👦"
     @State private var dailyGoal = 15
     @State private var screenTimeLimit = 30
     
+    private var isAtProfileLimit: Bool {
+        appState.childProfiles.count >= SubscriptionService.shared.childProfileLimit
+    }
+    
     var body: some View {
         NavigationView {
             Form {
+                if isAtProfileLimit {
+                    Section {
+                        HStack {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.orange)
+                            Text("You've reached the free profile limit. Upgrade to Premium for unlimited child profiles.")
+                                .font(.subheadline)
+                        }
+                    }
+                }
+                
                 Section("Child Info") {
                     TextField("Name", text: $name)
                     Picker("Age", selection: $age) {
@@ -1046,10 +1075,10 @@ struct AddChildSheet: View {
                             totalBadges: 0,
                             achievements: []
                         )
-                        children.append(newChild)
+                        appState.addChildProfile(newChild)
                         dismiss()
                     }
-                    .disabled(name.isEmpty)
+                    .disabled(name.isEmpty || isAtProfileLimit)
                 }
             }
         }

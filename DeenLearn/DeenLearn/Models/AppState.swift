@@ -337,6 +337,9 @@ class AppState: ObservableObject {
         }
     }
     
+    // Child profiles for parent dashboard
+    @Published var childProfiles: [ChildProfile] = []
+    
     // Arabic letters for tracking
     static let arabicLetters = ["ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز", "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"]
     
@@ -411,6 +414,12 @@ class AppState: ObservableObject {
         if let savedAppearance = UserDefaults.standard.string(forKey: "appearanceMode"),
            let mode = AppearanceMode(rawValue: savedAppearance) {
             self.appearanceMode = mode
+        }
+        
+        // Load child profiles
+        if let data = UserDefaults.standard.data(forKey: "childProfiles"),
+           let profiles = try? JSONDecoder().decode([ChildProfile].self, from: data) {
+            self.childProfiles = profiles
         }
     }
     
@@ -548,6 +557,33 @@ class AppState: ObservableObject {
         UserDefaults.standard.removeObject(forKey: "learningProgress")
         UserDefaults.standard.removeObject(forKey: "dailyGoal")
         UserDefaults.standard.removeObject(forKey: "badges")
+    }
+    
+    // MARK: - Child Profile Management
+    
+    /// Add a new child profile and persist to storage
+    func addChildProfile(_ child: ChildProfile) {
+        childProfiles.append(child)
+        saveChildProfiles()
+    }
+    
+    /// Remove a child profile by index set and persist
+    func removeChildProfile(at offsets: IndexSet) {
+        childProfiles.remove(atOffsets: offsets)
+        saveChildProfiles()
+    }
+    
+    /// Remove a child profile by ID and persist
+    func removeChildProfile(id: UUID) {
+        childProfiles.removeAll { $0.id == id }
+        saveChildProfiles()
+    }
+    
+    /// Persist child profiles to UserDefaults
+    private func saveChildProfiles() {
+        if let data = try? JSONEncoder().encode(childProfiles) {
+            UserDefaults.standard.set(data, forKey: "childProfiles")
+        }
     }
     
     /// Updates streak when all daily goals are completed
