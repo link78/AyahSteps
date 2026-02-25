@@ -7,10 +7,12 @@ final class ChildProfileTests: XCTestCase {
         super.setUp()
         // Clear child profiles before each test
         UserDefaults.standard.removeObject(forKey: "childProfiles")
+        UserDefaults.standard.removeObject(forKey: "activeChildProfileId")
     }
 
     override func tearDown() {
         UserDefaults.standard.removeObject(forKey: "childProfiles")
+        UserDefaults.standard.removeObject(forKey: "activeChildProfileId")
         super.tearDown()
     }
 
@@ -274,5 +276,131 @@ final class ChildProfileTests: XCTestCase {
 
         XCTAssertEqual(child.dailyGoalProgress, 1.0, accuracy: 0.01)
         XCTAssertEqual(child.weeklyGoalProgress, 1.0, accuracy: 0.01)
+    }
+
+    // MARK: - Profile Switching Tests
+
+    func testSwitchToChildProfile() {
+        let appState = AppState()
+        let childId = UUID()
+
+        let child = ChildProfile(
+            id: childId,
+            name: "Switch Test",
+            avatarEmoji: "👦",
+            age: 7,
+            createdAt: Date(),
+            totalLearningMinutes: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            surahsMemorized: 0,
+            arabicLettersLearned: 0,
+            pillarsCompleted: 0,
+            prayerStepsLearned: 0,
+            dailyGoalMinutes: 15,
+            weeklyGoalMinutes: 105,
+            todayMinutes: 0,
+            weekMinutes: 0,
+            screenTimeLimit: 30,
+            allowedCategories: [.quran],
+            parentalControlsEnabled: true,
+            totalStars: 0,
+            totalBadges: 0,
+            achievements: []
+        )
+
+        appState.addChildProfile(child)
+        XCTAssertNil(appState.activeChildProfileId)
+        XCTAssertFalse(appState.isChildProfileActive)
+
+        appState.switchToChildProfile(id: childId)
+        XCTAssertEqual(appState.activeChildProfileId, childId)
+        XCTAssertTrue(appState.isChildProfileActive)
+        XCTAssertEqual(appState.activeChildProfile?.name, "Switch Test")
+    }
+
+    func testSwitchToParentProfile() {
+        let appState = AppState()
+        let childId = UUID()
+
+        let child = ChildProfile(
+            id: childId,
+            name: "Parent Switch",
+            avatarEmoji: "👧",
+            age: 6,
+            createdAt: Date(),
+            totalLearningMinutes: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            surahsMemorized: 0,
+            arabicLettersLearned: 0,
+            pillarsCompleted: 0,
+            prayerStepsLearned: 0,
+            dailyGoalMinutes: 15,
+            weeklyGoalMinutes: 105,
+            todayMinutes: 0,
+            weekMinutes: 0,
+            screenTimeLimit: 30,
+            allowedCategories: [.quran],
+            parentalControlsEnabled: true,
+            totalStars: 0,
+            totalBadges: 0,
+            achievements: []
+        )
+
+        appState.addChildProfile(child)
+        appState.switchToChildProfile(id: childId)
+        XCTAssertTrue(appState.isChildProfileActive)
+
+        appState.switchToParentProfile()
+        XCTAssertNil(appState.activeChildProfileId)
+        XCTAssertFalse(appState.isChildProfileActive)
+        XCTAssertNil(appState.activeChildProfile)
+    }
+
+    func testRemoveActiveChildResetsToParent() {
+        let appState = AppState()
+        let childId = UUID()
+
+        let child = ChildProfile(
+            id: childId,
+            name: "To Remove Active",
+            avatarEmoji: "👦",
+            age: 8,
+            createdAt: Date(),
+            totalLearningMinutes: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            surahsMemorized: 0,
+            arabicLettersLearned: 0,
+            pillarsCompleted: 0,
+            prayerStepsLearned: 0,
+            dailyGoalMinutes: 15,
+            weeklyGoalMinutes: 105,
+            todayMinutes: 0,
+            weekMinutes: 0,
+            screenTimeLimit: 30,
+            allowedCategories: [.quran],
+            parentalControlsEnabled: true,
+            totalStars: 0,
+            totalBadges: 0,
+            achievements: []
+        )
+
+        appState.addChildProfile(child)
+        appState.switchToChildProfile(id: childId)
+        XCTAssertTrue(appState.isChildProfileActive)
+
+        appState.removeChildProfile(id: childId)
+        XCTAssertNil(appState.activeChildProfileId, "Removing active child should reset to parent")
+        XCTAssertTrue(appState.childProfiles.isEmpty)
+    }
+
+    func testSwitchToNonExistentChildIsIgnored() {
+        let appState = AppState()
+        let fakeId = UUID()
+
+        appState.switchToChildProfile(id: fakeId)
+        XCTAssertNil(appState.activeChildProfileId, "Should not switch to non-existent child")
     }
 }

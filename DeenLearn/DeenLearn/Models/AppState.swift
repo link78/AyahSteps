@@ -337,8 +337,32 @@ class AppState: ObservableObject {
         }
     }
     
-    // Child profiles for parent dashboard
-    @Published var childProfiles: [ChildProfile] = []
+    // Child profile management
+    @Published var childProfiles: [ChildProfile] = [] {
+        didSet {
+            saveChildProfiles()
+        }
+    }
+    @Published var activeChildProfileId: UUID? {
+        didSet {
+            if let id = activeChildProfileId {
+                UserDefaults.standard.set(id.uuidString, forKey: "activeChildProfileId")
+            } else {
+                UserDefaults.standard.removeObject(forKey: "activeChildProfileId")
+            }
+        }
+    }
+    
+    /// The currently active child profile, if any
+    var activeChildProfile: ChildProfile? {
+        guard let id = activeChildProfileId else { return nil }
+        return childProfiles.first { $0.id == id }
+    }
+    
+    /// Whether a child profile is currently active
+    var isChildProfileActive: Bool {
+        activeChildProfileId != nil
+    }
     
     // Arabic letters for tracking
     static let arabicLetters = ["ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز", "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"]
@@ -420,6 +444,12 @@ class AppState: ObservableObject {
         if let data = UserDefaults.standard.data(forKey: "childProfiles"),
            let profiles = try? JSONDecoder().decode([ChildProfile].self, from: data) {
             self.childProfiles = profiles
+        }
+        
+        // Load active child profile id
+        if let idString = UserDefaults.standard.string(forKey: "activeChildProfileId"),
+           let id = UUID(uuidString: idString) {
+            self.activeChildProfileId = id
         }
     }
     
@@ -564,19 +594,34 @@ class AppState: ObservableObject {
     /// Add a new child profile and persist to storage
     func addChildProfile(_ child: ChildProfile) {
         childProfiles.append(child)
-        saveChildProfiles()
     }
     
     /// Remove a child profile by index set and persist
     func removeChildProfile(at offsets: IndexSet) {
+        let idsToRemove = Set(offsets.map { childProfiles[$0].id })
         childProfiles.remove(atOffsets: offsets)
-        saveChildProfiles()
+        if let activeId = activeChildProfileId, idsToRemove.contains(activeId) {
+            activeChildProfileId = nil
+        }
     }
     
     /// Remove a child profile by ID and persist
     func removeChildProfile(id: UUID) {
         childProfiles.removeAll { $0.id == id }
-        saveChildProfiles()
+        if activeChildProfileId == id {
+            activeChildProfileId = nil
+        }
+    }
+    
+    /// Switch to a child profile
+    func switchToChildProfile(id: UUID) {
+        guard childProfiles.contains(where: { $0.id == id }) else { return }
+        activeChildProfileId = id
+    }
+    
+    /// Switch back to parent profile
+    func switchToParentProfile() {
+        activeChildProfileId = nil
     }
     
     /// Persist child profiles to UserDefaults

@@ -71,7 +71,9 @@ struct ProfileView: View {
             EditProfileSheet(profile: $profile)
         }
         .sheet(isPresented: $showingAddChild) {
-            AddChildSheet(appState: appState)
+            AddChildSheet(onAdd: { child in
+                appState.addChildProfile(child)
+            })
         }
         .sheet(isPresented: $showingAddGoal) {
             AddGoalSheet(goals: $goals)
@@ -980,31 +982,16 @@ struct EditProfileSheet: View {
 
 struct AddChildSheet: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var appState: AppState
+    var onAdd: (ChildProfile) -> Void
     @State private var name = ""
     @State private var age = 6
     @State private var avatar = "👦"
     @State private var dailyGoal = 15
     @State private var screenTimeLimit = 30
     
-    private var isAtProfileLimit: Bool {
-        appState.childProfiles.count >= SubscriptionService.shared.childProfileLimit
-    }
-    
     var body: some View {
         NavigationView {
             Form {
-                if isAtProfileLimit {
-                    Section {
-                        HStack {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundColor(.orange)
-                            Text("You've reached the free profile limit. Upgrade to Premium for unlimited child profiles.")
-                                .font(.subheadline)
-                        }
-                    }
-                }
-                
                 Section("Child Info") {
                     TextField("Name", text: $name)
                     Picker("Age", selection: $age) {
@@ -1075,10 +1062,10 @@ struct AddChildSheet: View {
                             totalBadges: 0,
                             achievements: []
                         )
-                        appState.addChildProfile(newChild)
+                        onAdd(newChild)
                         dismiss()
                     }
-                    .disabled(name.isEmpty || isAtProfileLimit)
+                    .disabled(name.isEmpty)
                 }
             }
         }
