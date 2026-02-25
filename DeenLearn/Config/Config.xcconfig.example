@@ -1,0 +1,17 @@
+// DeenLearn Configuration
+// Copy this file to Debug.xcconfig and Release.xcconfig, then add your API key.
+// The .xcconfig files are git-ignored to keep secrets out of source control.
+//
+// Setup:
+//   1. cp Config.xcconfig.example Debug.xcconfig
+//   2. cp Config.xcconfig.example Release.xcconfig
+//   3. Replace YOUR_API_KEY_HERE with your actual Gemini API key
+//   4. In Xcode, set the project-level configurations to use these files
+//
+// ✅ Correct format (no quotes):
+//   GEMINI_API_KEY = AIzaSyBLGrGhS2hq3HGtBnmUoYwGzeD53qhtQBY
+//
+// ❌ Wrong — do NOT use quotes:
+//   GEMINI_API_KEY = "AIzaSyBLGrGhS2hq3HGtBnmUoYwGzeD53qhtQBY"
+
+GEMINI_API_KEY = AIzaSyBXc4f_aX2Dlb2YiDQPUj-c354fzNjRsyY
