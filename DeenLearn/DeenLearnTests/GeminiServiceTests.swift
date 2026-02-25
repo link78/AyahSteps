@@ -5,14 +5,11 @@ final class GeminiServiceTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Ensure clean state before each test
-        UserDefaults.standard.removeObject(forKey: "geminiAPIKey")
+        // Reset to unconfigured state for testing
         GeminiService.shared.configure(apiKey: "")
     }
 
     override func tearDown() {
-        // Clean up after each test
-        UserDefaults.standard.removeObject(forKey: "geminiAPIKey")
         GeminiService.shared.configure(apiKey: "")
         super.tearDown()
     }
@@ -32,14 +29,6 @@ final class GeminiServiceTests: XCTestCase {
     func testConfigureWithEmptyKey() {
         GeminiService.shared.configure(apiKey: "")
         XCTAssertFalse(GeminiService.shared.isConfigured, "Service should not be configured with empty key")
-    }
-
-    func testAPIKeySavedToUserDefaults() {
-        let testKey = "test-key-for-persistence"
-        GeminiService.shared.configure(apiKey: testKey)
-
-        let savedKey = UserDefaults.standard.string(forKey: "geminiAPIKey")
-        XCTAssertEqual(savedKey, testKey, "API key should be persisted to UserDefaults")
     }
 
     // MARK: - Error Handling Tests

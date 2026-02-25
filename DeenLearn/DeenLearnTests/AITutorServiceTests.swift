@@ -6,7 +6,6 @@ final class AITutorServiceTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Ensure Gemini is not configured so fallback path is used by default
-        UserDefaults.standard.removeObject(forKey: "geminiAPIKey")
         GeminiService.shared.configure(apiKey: "")
         AITutorService.shared.clearConversation()
     }
@@ -14,7 +13,6 @@ final class AITutorServiceTests: XCTestCase {
     override func tearDown() {
         // Clean up shared state
         AITutorService.shared.clearConversation()
-        UserDefaults.standard.removeObject(forKey: "geminiAPIKey")
         GeminiService.shared.configure(apiKey: "")
         super.tearDown()
     }

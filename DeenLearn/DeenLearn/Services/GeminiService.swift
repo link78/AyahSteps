@@ -12,29 +12,31 @@ class GeminiService: ObservableObject {
     private let baseURL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
     private let session: URLSession
 
+    /// The bundled API key, read from Info.plist under the "GeminiAPIKey" key.
+    /// Set the value in Info.plist or via an Xcode build setting / xcconfig file.
+    private static var bundledAPIKey: String {
+        Bundle.main.object(forInfoDictionaryKey: "GeminiAPIKey") as? String ?? ""
+    }
+
     private init() {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 30
         config.timeoutIntervalForResource = 60
         self.session = URLSession(configuration: config)
-        loadAPIKey()
+        loadBundledKey()
     }
 
     // MARK: - Configuration
 
-    /// Configure the service with a Gemini API key
+    /// Configure the service with a Gemini API key (used for testing)
     func configure(apiKey: String) {
         self.apiKey = apiKey
         self.isConfigured = !apiKey.isEmpty
-        saveAPIKey(apiKey)
     }
 
-    private func saveAPIKey(_ key: String) {
-        UserDefaults.standard.set(key, forKey: "geminiAPIKey")
-    }
-
-    private func loadAPIKey() {
-        if let key = UserDefaults.standard.string(forKey: "geminiAPIKey"), !key.isEmpty {
+    private func loadBundledKey() {
+        let key = GeminiService.bundledAPIKey
+        if !key.isEmpty {
             self.apiKey = key
             self.isConfigured = true
         }

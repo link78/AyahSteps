@@ -9,10 +9,8 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var appState: AppState
-    @StateObject private var geminiService = GeminiService.shared
     @State private var showResetAlert = false
     @State private var showModeSwitchAlert = false
-    @State private var geminiAPIKey = ""
     
     var isKidsMode: Bool {
         appState.userMode == .kids
@@ -97,47 +95,6 @@ struct SettingsView: View {
                     }
                 } header: {
                     Text("Your Progress")
-                }
-                
-                // AI Settings Section
-                Section {
-                    HStack {
-                        Image(systemName: "brain.head.profile")
-                            .foregroundColor(geminiService.isConfigured ? .green : .gray)
-                            .font(.title2)
-                        
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Gemini AI")
-                                .font(.headline)
-                            Text(geminiService.isConfigured ? "Connected" : "Not configured")
-                                .font(.subheadline)
-                                .foregroundColor(geminiService.isConfigured ? .green : .secondary)
-                        }
-                    }
-                    .padding(.vertical, 4)
-                    
-                    SecureField("Enter Gemini API Key", text: $geminiAPIKey)
-                        .textFieldStyle(.roundedBorder)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .onAppear {
-                            geminiAPIKey = UserDefaults.standard.string(forKey: "geminiAPIKey") ?? ""
-                        }
-                    
-                    Button(action: {
-                        geminiService.configure(apiKey: geminiAPIKey)
-                    }) {
-                        HStack {
-                            Image(systemName: geminiService.isConfigured ? "checkmark.circle.fill" : "arrow.right.circle.fill")
-                                .foregroundColor(geminiService.isConfigured ? .green : isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
-                            Text(geminiService.isConfigured ? "Update API Key" : "Save API Key")
-                        }
-                    }
-                    .disabled(geminiAPIKey.isEmpty)
-                } header: {
-                    Text("AI Configuration")
-                } footer: {
-                    Text("Add your Google Gemini API key to enable AI-powered responses in the Islamic Tutor. Get your key at ai.google.dev. Without a key, the tutor uses built-in responses.")
                 }
                 
                 // About Section
