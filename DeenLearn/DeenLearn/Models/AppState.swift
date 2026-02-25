@@ -325,6 +325,33 @@ class AppState: ObservableObject {
     @Published var totalPoints: Int = 0
     @Published var totalStars: Int = 0
     
+    // Child profile management
+    @Published var childProfiles: [ChildProfile] = [] {
+        didSet {
+            saveChildProfiles()
+        }
+    }
+    @Published var activeChildProfileId: UUID? {
+        didSet {
+            if let id = activeChildProfileId {
+                UserDefaults.standard.set(id.uuidString, forKey: "activeChildProfileId")
+            } else {
+                UserDefaults.standard.removeObject(forKey: "activeChildProfileId")
+            }
+        }
+    }
+    
+    /// The currently active child profile, if any
+    var activeChildProfile: ChildProfile? {
+        guard let id = activeChildProfileId else { return nil }
+        return childProfiles.first { $0.id == id }
+    }
+    
+    /// Whether a child profile is currently active
+    var isChildProfileActive: Bool {
+        activeChildProfileId != nil
+    }
+    
     // New progress tracking
     @Published var learningProgress = LearningProgress()
     @Published var dailyGoal = DailyGoal()
@@ -411,6 +438,18 @@ class AppState: ObservableObject {
         if let savedAppearance = UserDefaults.standard.string(forKey: "appearanceMode"),
            let mode = AppearanceMode(rawValue: savedAppearance) {
             self.appearanceMode = mode
+        }
+        
+        // Load child profiles
+        if let data = UserDefaults.standard.data(forKey: "childProfiles"),
+           let profiles = try? JSONDecoder().decode([ChildProfile].self, from: data) {
+            self.childProfiles = profiles
+        }
+        
+        // Load active child profile id
+        if let idString = UserDefaults.standard.string(forKey: "activeChildProfileId"),
+           let id = UUID(uuidString: idString) {
+            self.activeChildProfileId = id
         }
     }
     
@@ -529,6 +568,34 @@ class AppState: ObservableObject {
             if let data = try? JSONEncoder().encode(badges) {
                 UserDefaults.standard.set(data, forKey: "badges")
             }
+        }
+    }
+    
+    // MARK: - Child Profile Management
+    
+    func addChildProfile(_ child: ChildProfile) {
+        childProfiles.append(child)
+    }
+    
+    func removeChildProfile(id: UUID) {
+        childProfiles.removeAll { $0.id == id }
+        if activeChildProfileId == id {
+            activeChildProfileId = nil
+        }
+    }
+    
+    func switchToChildProfile(id: UUID) {
+        guard childProfiles.contains(where: { $0.id == id }) else { return }
+        activeChildProfileId = id
+    }
+    
+    func switchToParentProfile() {
+        activeChildProfileId = nil
+    }
+    
+    private func saveChildProfiles() {
+        if let data = try? JSONEncoder().encode(childProfiles) {
+            UserDefaults.standard.set(data, forKey: "childProfiles")
         }
     }
     

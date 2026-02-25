@@ -11,6 +11,7 @@ struct SettingsView: View {
     @EnvironmentObject var appState: AppState
     @State private var showResetAlert = false
     @State private var showModeSwitchAlert = false
+    @State private var showAddChild = false
     
     var isKidsMode: Bool {
         appState.userMode == .kids
@@ -44,6 +45,88 @@ struct SettingsView: View {
                     .padding(.vertical, 8)
                 } header: {
                     Text("Learning Mode")
+                }
+                
+                // Family Profiles Section
+                Section {
+                    // Active profile indicator
+                    if let activeChild = appState.activeChildProfile {
+                        HStack {
+                            Text(activeChild.avatarEmoji)
+                                .font(.title2)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Using: \(activeChild.name)")
+                                    .font(.headline)
+                                Text("Age \(activeChild.age)")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Button("Switch to Parent") {
+                                appState.switchToParentProfile()
+                            }
+                            .font(.subheadline)
+                            .foregroundColor(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
+                        }
+                        .padding(.vertical, 4)
+                    } else {
+                        HStack {
+                            Image(systemName: "person.fill")
+                                .foregroundColor(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
+                                .font(.title2)
+                            Text("Parent Profile (Active)")
+                                .font(.headline)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                    
+                    // Child profiles list
+                    ForEach(appState.childProfiles) { child in
+                        HStack {
+                            Text(child.avatarEmoji)
+                                .font(.title3)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(child.name)
+                                    .font(.subheadline)
+                                Text("Age \(child.age)")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            if appState.activeChildProfileId == child.id {
+                                Text("Active")
+                                    .font(.caption)
+                                    .foregroundColor(.green)
+                            } else {
+                                Button("Use") {
+                                    appState.switchToChildProfile(id: child.id)
+                                }
+                                .font(.subheadline)
+                                .foregroundColor(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
+                            }
+                        }
+                        .padding(.vertical, 2)
+                    }
+                    .onDelete { indexSet in
+                        for index in indexSet {
+                            let child = appState.childProfiles[index]
+                            appState.removeChildProfile(id: child.id)
+                        }
+                    }
+                    
+                    // Add child button
+                    Button(action: { showAddChild = true }) {
+                        HStack {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundColor(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
+                            Text("Add Child Profile")
+                                .foregroundColor(isKidsMode ? Color(hex: "FF6B6B") : Color(hex: "2d8b6e"))
+                        }
+                    }
+                } header: {
+                    Text("Family Profiles")
+                } footer: {
+                    Text("Create profiles for your children to track their learning progress separately. Swipe left on a profile to remove it.")
                 }
                 
                 // Appearance Section
@@ -158,6 +241,11 @@ struct SettingsView: View {
                 }
             } message: {
                 Text("Switch to \(isKidsMode ? "Adults" : "Kids") mode? Your progress will be saved.")
+            }
+            .sheet(isPresented: $showAddChild) {
+                AddChildSheet(onAdd: { child in
+                    appState.addChildProfile(child)
+                })
             }
         }
     }
