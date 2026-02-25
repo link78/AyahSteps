@@ -35,6 +35,8 @@ Pods/
 **/APIKeys.plist
 **/Secrets.plist
 GoogleService-Info.plist
+**/Config/Debug.xcconfig
+**/Config/Release.xcconfig
 
 # Environment files
 .env
