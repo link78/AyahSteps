@@ -994,9 +994,9 @@ struct SoundRecognitionGameContent: View {
             // Play sound button
             Button(action: { /* Play sound */ }) {
                 VStack(spacing: 12) {
-                    Image(systemName: "speaker.wave.3.fill")
+                    Image(systemName: "sparkles")
                         .font(.system(size: 50))
-                    Text("Tap to Listen")
+                    Text("AI Voice")
                         .font(.headline)
                 }
                 .responsiveFrame(width: 150, height: 150)
