@@ -813,8 +813,8 @@ struct HadithStoryView: View {
                 .foregroundColor(.blue)
             } else {
                 HStack(spacing: 4) {
-                    Image(systemName: "speaker.wave.1")
-                    Text("Tap to listen")
+                    Image(systemName: "sparkles")
+                    Text("Tap for AI voice")
                 }
                 .font(.caption)
                 .foregroundColor(.secondary)

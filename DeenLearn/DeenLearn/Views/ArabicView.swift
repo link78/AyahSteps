@@ -94,7 +94,6 @@ struct ArabicView: View {
 struct AlphabetSectionView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedLetter: ArabicLetter?
-    @State private var showLetterDetail = false
     @ObservedObject private var ttsService = TextToSpeechService.shared
     
     let columns = [
@@ -130,16 +129,13 @@ struct AlphabetSectionView: View {
                             ttsService.speakArabic(letter.isolated, rate: 0.3)
                             
                             selectedLetter = letter
-                            showLetterDetail = true
                         }
                 }
             }
         }
-        .sheet(isPresented: $showLetterDetail) {
-            if let letter = selectedLetter {
-                LetterDetailView(letter: letter)
-                    .environmentObject(appState)
-            }
+        .sheet(item: $selectedLetter) { letter in
+            LetterDetailView(letter: letter)
+                .environmentObject(appState)
         }
     }
 }
@@ -237,14 +233,24 @@ struct LetterDetailView: View {
                             .font(.headline)
                         
                         HStack {
-                            Image(systemName: "speaker.wave.2.fill")
-                                .foregroundColor(appState.themeColor)
+                            Image(systemName: ttsService.isSpeaking && ttsService.currentText == letter.pronunciation ? "speaker.wave.3.fill" : "speaker.wave.2.fill")
+                                .foregroundColor(ttsService.isSpeaking && ttsService.currentText == letter.pronunciation ? .blue : appState.themeColor)
                             Text(letter.pronunciation)
+                            Spacer()
+                            Text(appState.isKidsMode ? "👆 Tap!" : "Tap to listen")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                         }
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color(.systemGray6))
                         .cornerRadius(12)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            let impact = UIImpactFeedbackGenerator(style: .light)
+                            impact.impactOccurred()
+                            ttsService.speakEnglish(letter.pronunciation, rate: 0.4)
+                        }
                         
                         // Audio button - NOW WORKING
                         Button(action: {
@@ -546,7 +552,6 @@ struct VocabularySectionView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedCategory: VocabularyCategory = .salahWords
     @State private var selectedWord: VocabularyWord?
-    @State private var showWordDetail = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -594,16 +599,13 @@ struct VocabularySectionView: View {
                     VocabularyCardView(word: word)
                         .onTapGesture {
                             selectedWord = word
-                            showWordDetail = true
                         }
                 }
             }
         }
-        .sheet(isPresented: $showWordDetail) {
-            if let word = selectedWord {
-                VocabularyDetailView(word: word)
-                    .environmentObject(appState)
-            }
+        .sheet(item: $selectedWord) { word in
+            VocabularyDetailView(word: word)
+                .environmentObject(appState)
         }
     }
 }
@@ -633,6 +635,11 @@ struct VocabularyDetailView: View {
     let word: VocabularyWord
     @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) var dismiss
+    @ObservedObject private var ttsService = TextToSpeechService.shared
+    
+    private var isPlayingWord: Bool {
+        ttsService.isSpeaking && ttsService.currentText == word.arabic
+    }
     
     var body: some View {
         NavigationView {
@@ -659,23 +666,25 @@ struct VocabularyDetailView: View {
                 .cornerRadius(20)
                 
                 // Audio Button
-                Button(action: { /* Play audio */ }) {
+                Button(action: {
+                    let impact = UIImpactFeedbackGenerator(style: .medium)
+                    impact.impactOccurred()
+                    if isPlayingWord {
+                        ttsService.stop()
+                    } else {
+                        ttsService.speakArabic(word.arabic, rate: 0.35)
+                    }
+                }) {
                     HStack {
-                        Image(systemName: "speaker.wave.2.fill")
-                        Text("Listen to Pronunciation")
+                        Image(systemName: isPlayingWord ? "stop.circle.fill" : "speaker.wave.2.fill")
+                        Text(isPlayingWord ? "Playing..." : "Tap to Listen")
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(appState.themeColor)
+                    .background(isPlayingWord ? Color.orange : appState.themeColor)
                     .foregroundColor(.white)
                     .cornerRadius(12)
                 }
-                .disabled(true)
-                .opacity(0.6)
-                
-                Text("Audio coming soon")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
                 
                 // Category badge
                 HStack {
@@ -715,7 +724,6 @@ struct VocabularyDetailView: View {
 struct GamesSectionView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedGame: ArabicMiniGameType?
-    @State private var showGame = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -738,15 +746,12 @@ struct GamesSectionView: View {
             ForEach(ArabicMiniGameType.allCases, id: \.self) { gameType in
                 GameCardView(gameType: gameType) {
                     selectedGame = gameType
-                    showGame = true
                 }
             }
         }
-        .sheet(isPresented: $showGame) {
-            if let game = selectedGame {
-                MiniGameView(gameType: game)
-                    .environmentObject(appState)
-            }
+        .sheet(item: $selectedGame) { game in
+            MiniGameView(gameType: game)
+                .environmentObject(appState)
         }
     }
 }
@@ -844,13 +849,16 @@ struct MiniGameView: View {
 struct MatchIconGameContent: View {
     @Binding var score: Int
     let isKidsMode: Bool
-    @State private var items: [(icon: String, arabic: String, english: String)] = [
+    
+    private static let defaultItems: [(icon: String, arabic: String, english: String)] = [
         ("🦁", "أَسَد", "Lion"),
         ("🏠", "بَيْت", "House"),
         ("☀️", "شَمْس", "Sun"),
         ("🌙", "قَمَر", "Moon")
     ]
-    @State private var shuffledArabicItems: [(icon: String, arabic: String, english: String)] = []
+    
+    @State private var items = defaultItems
+    @State private var shuffledArabicItems = defaultItems.shuffled()
     @State private var selectedIcon: String?
     @State private var selectedArabic: String?
     @State private var matchedPairs: Set<String> = []
@@ -994,9 +1002,9 @@ struct SoundRecognitionGameContent: View {
             // Play sound button
             Button(action: { /* Play sound */ }) {
                 VStack(spacing: 12) {
-                    Image(systemName: "speaker.wave.3.fill")
+                    Image(systemName: "sparkles")
                         .font(.system(size: 50))
-                    Text("Tap to Listen")
+                    Text("AI Voice")
                         .font(.headline)
                 }
                 .responsiveFrame(width: 150, height: 150)
@@ -1082,7 +1090,7 @@ struct BuildSentenceGameContent: View {
     let isKidsMode: Bool
     @State private var currentGame = SentenceBuildGame.samples[0]
     @State private var selectedWords: [String] = []
-    @State private var availableWords: [String] = []
+    @State private var availableWords: [String] = SentenceBuildGame.samples[0].shuffledWords
     @State private var showFeedback = false
     @State private var isCorrect = false
     
@@ -1206,7 +1214,6 @@ struct BuildSentenceGameContent: View {
 struct ConceptMapsSectionView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedMap: ConceptMap?
-    @State private var showMapDetail = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -1229,15 +1236,12 @@ struct ConceptMapsSectionView: View {
             ForEach(ConceptMap.allMaps) { map in
                 ConceptMapCardView(map: map) {
                     selectedMap = map
-                    showMapDetail = true
                 }
             }
         }
-        .sheet(isPresented: $showMapDetail) {
-            if let map = selectedMap {
-                ConceptMapDetailView(map: map)
-                    .environmentObject(appState)
-            }
+        .sheet(item: $selectedMap) { map in
+            ConceptMapDetailView(map: map)
+                .environmentObject(appState)
         }
     }
 }

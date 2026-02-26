@@ -38,6 +38,7 @@
 		AAAAAAAAAAAAAAAAAAAAAA28 /* QuranDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114D /* QuranDataService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA29 /* AITutorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114E /* AITutorService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAGE01 /* GeminiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111GE1 /* GeminiService.swift */; };
+		AAAAAAAAAAAAAAAAAAAAGT01 /* GeminiTTSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111GT1 /* GeminiTTSService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA30 /* AIQuranCoachService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11111111111111111111114F /* AIQuranCoachService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA31 /* AILearningAssistantService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111150 /* AILearningAssistantService.swift */; };
 		AAAAAAAAAAAAAAAAAAAAAA32 /* AIQuestionGeneratorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111151 /* AIQuestionGeneratorService.swift */; };
@@ -60,6 +61,7 @@
 		BBBBBBBBBBBBBBBBBBBBB001 /* GeminiServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCCCCCCCCCCCCCCCCCCC001 /* GeminiServiceTests.swift */; };
 		BBBBBBBBBBBBBBBBBBBBB002 /* AITutorServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCCCCCCCCCCCCCCCCCCC002 /* AITutorServiceTests.swift */; };
 		BBBBBBBBBBBBBBBBBBBBB003 /* ProfileManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCCCCCCCCCCCCCCCCCCC003 /* ProfileManagementTests.swift */; };
+		BBBBBBBBBBBBBBBBBBBBB004 /* GeminiTTSServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCCCCCCCCCCCCCCCCCCC004 /* GeminiTTSServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +97,7 @@
 		11111111111111111111114D /* QuranDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranDataService.swift; sourceTree = "<group>"; };
 		11111111111111111111114E /* AITutorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITutorService.swift; sourceTree = "<group>"; };
 		111111111111111111111GE1 /* GeminiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
+		111111111111111111111GT1 /* GeminiTTSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiTTSService.swift; sourceTree = "<group>"; };
 		11111111111111111111114F /* AIQuranCoachService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIQuranCoachService.swift; sourceTree = "<group>"; };
 		111111111111111111111150 /* AILearningAssistantService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AILearningAssistantService.swift; sourceTree = "<group>"; };
 		111111111111111111111151 /* AIQuestionGeneratorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIQuestionGeneratorService.swift; sourceTree = "<group>"; };
@@ -118,6 +121,7 @@
 		CCCCCCCCCCCCCCCCCCCCC001 /* GeminiServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiServiceTests.swift; sourceTree = "<group>"; };
 		CCCCCCCCCCCCCCCCCCCCC002 /* AITutorServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITutorServiceTests.swift; sourceTree = "<group>"; };
 		CCCCCCCCCCCCCCCCCCCCC003 /* ProfileManagementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManagementTests.swift; sourceTree = "<group>"; };
+		CCCCCCCCCCCCCCCCCCCCC004 /* GeminiTTSServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiTTSServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -189,6 +193,7 @@
 				11111111111111111111114D /* QuranDataService.swift */,
 				11111111111111111111114E /* AITutorService.swift */,
 				111111111111111111111GE1 /* GeminiService.swift */,
+				111111111111111111111GT1 /* GeminiTTSService.swift */,
 				11111111111111111111114F /* AIQuranCoachService.swift */,
 				111111111111111111111150 /* AILearningAssistantService.swift */,
 				111111111111111111111151 /* AIQuestionGeneratorService.swift */,
@@ -261,6 +266,7 @@
 				CCCCCCCCCCCCCCCCCCCCC001 /* GeminiServiceTests.swift */,
 				CCCCCCCCCCCCCCCCCCCCC002 /* AITutorServiceTests.swift */,
 				CCCCCCCCCCCCCCCCCCCCC003 /* ProfileManagementTests.swift */,
+				CCCCCCCCCCCCCCCCCCCCC004 /* GeminiTTSServiceTests.swift */,
 			);
 			path = DeenLearnTests;
 			sourceTree = "<group>";
@@ -403,6 +409,7 @@
 				AAAAAAAAAAAAAAAAAAAAAA28 /* QuranDataService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA29 /* AITutorService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAGE01 /* GeminiService.swift in Sources */,
+				AAAAAAAAAAAAAAAAAAAAGT01 /* GeminiTTSService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA30 /* AIQuranCoachService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA31 /* AILearningAssistantService.swift in Sources */,
 				AAAAAAAAAAAAAAAAAAAAAA32 /* AIQuestionGeneratorService.swift in Sources */,
@@ -432,6 +439,7 @@
 				BBBBBBBBBBBBBBBBBBBBB001 /* GeminiServiceTests.swift in Sources */,
 				BBBBBBBBBBBBBBBBBBBBB002 /* AITutorServiceTests.swift in Sources */,
 				BBBBBBBBBBBBBBBBBBBBB003 /* ProfileManagementTests.swift in Sources */,
+				BBBBBBBBBBBBBBBBBBBBB004 /* GeminiTTSServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

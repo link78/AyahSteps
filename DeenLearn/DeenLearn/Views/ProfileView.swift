@@ -79,7 +79,10 @@ struct ProfileView: View {
             AddGoalSheet(goals: $goals)
         }
         .sheet(item: $selectedChild) { child in
-            ChildDetailSheet(child: child)
+            ChildDetailSheet(child: child, onDelete: { id in
+                appState.removeChildProfile(id: id)
+                selectedChild = nil
+            })
         }
     }
     
@@ -191,7 +194,7 @@ struct ProfileView: View {
                 ForEach(ProfileSection.allCases.filter { section in
                     // Filter sections based on mode
                     if appState.isKidsMode {
-                        return section != .parentDashboard && section != .bookmarks
+                        return section != .bookmarks
                     } else {
                         return true
                     }
@@ -707,6 +710,37 @@ struct ProfileView: View {
     
     private var parentDashboardSection: some View {
         VStack(spacing: 16) {
+            // Active child indicator
+            if let activeChild = appState.activeChildProfile {
+                HStack(spacing: 12) {
+                    Text(activeChild.avatarEmoji)
+                        .font(.title2)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Active Profile")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text(activeChild.name)
+                            .font(.headline)
+                    }
+                    Spacer()
+                    Button(action: { appState.switchToParentProfile() }) {
+                        Text("Switch to Parent")
+                            .font(.caption)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color(.systemGray5))
+                            .cornerRadius(8)
+                    }
+                }
+                .padding()
+                .background(Color.green.opacity(0.1))
+                .cornerRadius(12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.green.opacity(0.3), lineWidth: 1)
+                )
+            }
+            
             // Add Child Button
             Button(action: { showingAddChild = true }) {
                 HStack {
@@ -721,8 +755,16 @@ struct ProfileView: View {
             }
             
             // Children Cards
-            ForEach(appState.childProfiles) { child in
-                childProgressCard(child)
+            if appState.childProfiles.isEmpty {
+                emptyStateView(
+                    icon: "person.2.fill",
+                    title: "No Child Profiles",
+                    message: "Add a child profile to track their learning progress and manage their account."
+                )
+            } else {
+                ForEach(appState.childProfiles) { child in
+                    childProgressCard(child)
+                }
             }
             
             // Quick Settings
@@ -737,74 +779,127 @@ struct ProfileView: View {
     }
     
     private func childProgressCard(_ child: ChildProfile) -> some View {
-        Button(action: { selectedChild = child }) {
-            VStack(spacing: 16) {
-                // Header
-                HStack {
-                    Text(child.avatarEmoji)
-                        .font(.system(size: 40))
-                    
-                    VStack(alignment: .leading) {
-                        Text(child.name)
-                            .font(.headline)
-                            .foregroundColor(.primary)
-                        Text("Age \(child.age)")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    Spacer()
-                    
-                    VStack(alignment: .trailing) {
-                        HStack {
-                            Text("🔥")
-                            Text("\(child.currentStreak)")
-                                .fontWeight(.bold)
-                        }
-                        Text("day streak")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                
-                // Today's Progress
-                VStack(alignment: .leading, spacing: 8) {
+        let isActive = appState.activeChildProfileId == child.id
+        return VStack(spacing: 0) {
+            Button(action: { selectedChild = child }) {
+                VStack(spacing: 16) {
+                    // Header
                     HStack {
-                        Text("Today's Goal")
-                            .font(.subheadline)
+                        Text(child.avatarEmoji)
+                            .font(.system(size: 40))
+                        
+                        VStack(alignment: .leading) {
+                            HStack(spacing: 6) {
+                                Text(child.name)
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                if isActive {
+                                    Text("Active")
+                                        .font(.caption2)
+                                        .fontWeight(.semibold)
+                                        .padding(.horizontal, 6)
+                                        .padding(.vertical, 2)
+                                        .background(Color.green)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(4)
+                                }
+                            }
+                            Text("Age \(child.age)")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        
                         Spacer()
-                        Text("\(child.todayMinutes)/\(child.dailyGoalMinutes) min")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    GeometryReader { geometry in
-                        ZStack(alignment: .leading) {
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(Color(.systemGray5))
-                                .frame(height: 8)
-                            
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(child.dailyGoalProgress >= 1.0 ? Color.green : Color.orange)
-                                .frame(width: geometry.size.width * child.dailyGoalProgress, height: 8)
+                        
+                        VStack(alignment: .trailing) {
+                            HStack {
+                                Text("🔥")
+                                Text("\(child.currentStreak)")
+                                    .fontWeight(.bold)
+                            }
+                            Text("day streak")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                         }
                     }
-                    .frame(height: 8)
+                    
+                    // Today's Progress
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text("Today's Goal")
+                                .font(.subheadline)
+                            Spacer()
+                            Text("\(child.todayMinutes)/\(child.dailyGoalMinutes) min")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        GeometryReader { geometry in
+                            ZStack(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color(.systemGray5))
+                                    .frame(height: 8)
+                                
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(child.dailyGoalProgress >= 1.0 ? Color.green : Color.orange)
+                                    .frame(width: geometry.size.width * child.dailyGoalProgress, height: 8)
+                            }
+                        }
+                        .frame(height: 8)
+                    }
+                    
+                    // Quick Stats
+                    HStack(spacing: 20) {
+                        childStatItem(value: "\(child.surahsMemorized)", label: "Surahs", icon: "📖")
+                        childStatItem(value: "\(child.arabicLettersLearned)", label: "Letters", icon: "أ")
+                        childStatItem(value: "\(child.totalStars)", label: "Stars", icon: "⭐")
+                        childStatItem(value: "\(child.totalBadges)", label: "Badges", icon: "🏅")
+                    }
                 }
+                .padding()
+            }
+            .buttonStyle(PlainButtonStyle())
+            
+            // Action buttons row
+            HStack(spacing: 0) {
+                Button(action: { appState.switchToChildProfile(id: child.id) }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: isActive ? "checkmark.circle.fill" : "arrow.right.circle")
+                            .font(.caption)
+                        Text(isActive ? "Active" : "Switch")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .foregroundColor(isActive ? .green : .accentColor)
+                }
+                .disabled(isActive)
                 
-                // Quick Stats
-                HStack(spacing: 20) {
-                    childStatItem(value: "\(child.surahsMemorized)", label: "Surahs", icon: "📖")
-                    childStatItem(value: "\(child.arabicLettersLearned)", label: "Letters", icon: "أ")
-                    childStatItem(value: "\(child.totalStars)", label: "Stars", icon: "⭐")
-                    childStatItem(value: "\(child.totalBadges)", label: "Badges", icon: "🏅")
+                Divider()
+                    .frame(height: 20)
+                
+                Button(action: { selectedChild = child }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chart.bar.fill")
+                            .font(.caption)
+                        Text("Details")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .foregroundColor(.blue)
                 }
             }
-            .padding()
-            .background(Color(.systemBackground))
-            .cornerRadius(12)
+            .background(Color(.systemGray6))
         }
-        .buttonStyle(PlainButtonStyle())
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(isActive ? Color.green.opacity(0.5) : Color.clear, lineWidth: 2)
+        )
     }
     
     private func childStatItem(value: String, label: String, icon: String) -> some View {
@@ -1111,6 +1206,8 @@ struct AddGoalSheet: View {
 struct ChildDetailSheet: View {
     @Environment(\.dismiss) var dismiss
     let child: ChildProfile
+    var onDelete: ((UUID) -> Void)?
+    @State private var showDeleteConfirmation = false
     
     var body: some View {
         NavigationView {
@@ -1137,27 +1234,116 @@ struct ChildDetailSheet: View {
                     }
                     .padding(.horizontal)
                     
-                    // Achievements
+                    // Weekly Progress
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Recent Achievements")
+                        Text("Weekly Progress")
                             .font(.headline)
                             .padding(.horizontal)
                         
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 16) {
-                                ForEach(child.achievements.prefix(5)) { achievement in
-                                    VStack {
-                                        Text(achievement.icon)
-                                            .font(.system(size: 30))
-                                        Text(achievement.title)
-                                            .font(.caption)
-                                            .multilineTextAlignment(.center)
-                                    }
-                                    .frame(width: 80)
+                        VStack(spacing: 8) {
+                            HStack {
+                                Text("This Week")
+                                    .font(.subheadline)
+                                Spacer()
+                                Text("\(child.weekMinutes)/\(child.weeklyGoalMinutes) min")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            GeometryReader { geometry in
+                                ZStack(alignment: .leading) {
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(Color(.systemGray5))
+                                        .frame(height: 10)
+                                    
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(child.weeklyGoalProgress >= 1.0 ? Color.green : Color.blue)
+                                        .frame(width: geometry.size.width * child.weeklyGoalProgress, height: 10)
                                 }
                             }
-                            .padding(.horizontal)
+                            .frame(height: 10)
+                            
+                            HStack {
+                                Label("\(child.dailyGoalMinutes) min/day goal", systemImage: "target")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Label("\(child.screenTimeLimit) min limit", systemImage: "clock")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
                         }
+                        .padding()
+                        .background(Color(.systemBackground))
+                        .cornerRadius(12)
+                        .padding(.horizontal)
+                    }
+                    
+                    // Learning Summary
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Learning Summary")
+                            .font(.headline)
+                            .padding(.horizontal)
+                        
+                        VStack(spacing: 12) {
+                            summaryRow(icon: "🕌", label: "Pillars Completed", value: "\(child.pillarsCompleted)/5")
+                            Divider()
+                            summaryRow(icon: "🤲", label: "Prayer Steps Learned", value: "\(child.prayerStepsLearned)")
+                            Divider()
+                            summaryRow(icon: "🔥", label: "Longest Streak", value: "\(child.longestStreak) days")
+                            Divider()
+                            summaryRow(icon: "⭐", label: "Total Stars", value: "\(child.totalStars)")
+                            Divider()
+                            summaryRow(icon: "🏅", label: "Total Badges", value: "\(child.totalBadges)")
+                        }
+                        .padding()
+                        .background(Color(.systemBackground))
+                        .cornerRadius(12)
+                        .padding(.horizontal)
+                    }
+                    
+                    // Achievements
+                    if !child.achievements.isEmpty {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Recent Achievements")
+                                .font(.headline)
+                                .padding(.horizontal)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 16) {
+                                    ForEach(child.achievements.prefix(5)) { achievement in
+                                        VStack {
+                                            Text(achievement.icon)
+                                                .font(.system(size: 30))
+                                            Text(achievement.title)
+                                                .font(.caption)
+                                                .multilineTextAlignment(.center)
+                                        }
+                                        .frame(width: 80)
+                                    }
+                                }
+                                .padding(.horizontal)
+                            }
+                        }
+                    }
+                    
+                    // Delete Button
+                    if onDelete != nil {
+                        Button(role: .destructive, action: {
+                            showDeleteConfirmation = true
+                        }) {
+                            HStack {
+                                Image(systemName: "trash")
+                                Text("Remove Child Profile")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.red.opacity(0.1))
+                            .foregroundColor(.red)
+                            .cornerRadius(12)
+                        }
+                        .padding(.horizontal)
+                        .padding(.top, 8)
                     }
                 }
             }
@@ -1168,8 +1354,30 @@ struct ChildDetailSheet: View {
                     Button("Done") { dismiss() }
                 }
             }
+            .alert("Remove Profile?", isPresented: $showDeleteConfirmation) {
+                Button("Cancel", role: .cancel) { }
+                Button("Remove", role: .destructive) {
+                    onDelete?(child.id)
+                    dismiss()
+                }
+            } message: {
+                Text("This will permanently remove \(child.name)'s profile and all their progress data.")
+            }
         }
         .navigationViewStyle(.stack)
+    }
+    
+    private func summaryRow(icon: String, label: String, value: String) -> some View {
+        HStack {
+            Text(icon)
+            Text(label)
+                .font(.subheadline)
+            Spacer()
+            Text(value)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(.primary)
+        }
     }
     
     private func detailStatCard(title: String, value: String, unit: String, color: Color) -> some View {

@@ -954,6 +954,19 @@ struct MemorizationModeView: View {
     @State private var currentLoopIteration = 0
     @ObservedObject private var ttsService = TextToSpeechService.shared
     
+    /// Short surahs available for memorization (all have hardcoded ayah data)
+    static let memorySurahs: [(id: Int, name: String)] = [
+        (1, "Al-Fatiha"),
+        (103, "Al-Asr"),
+        (108, "Al-Kawthar"),
+        (109, "Al-Kafirun"),
+        (110, "An-Nasr"),
+        (111, "Al-Masad"),
+        (112, "Al-Ikhlas"),
+        (113, "Al-Falaq"),
+        (114, "An-Nas"),
+    ]
+    
     var ayahs: [Ayah] {
         Ayah.getAyahs(forSurah: selectedSurah)
     }
@@ -970,12 +983,23 @@ struct MemorizationModeView: View {
                 .padding(.horizontal)
             
             // Surah picker
-            Picker("Surah", selection: $selectedSurah) {
-                Text("Al-Fatiha").tag(1)
-                Text("Al-Ikhlas").tag(112)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(Self.memorySurahs, id: \.id) { surah in
+                        Button(action: { selectedSurah = surah.id }) {
+                            Text(surah.name)
+                                .font(.caption)
+                                .fontWeight(selectedSurah == surah.id ? .bold : .medium)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(selectedSurah == surah.id ? Color(hex: "6B5B95") : Color(.systemGray5))
+                                .foregroundColor(selectedSurah == surah.id ? .white : .primary)
+                                .cornerRadius(16)
+                        }
+                    }
+                }
+                .padding(.horizontal)
             }
-            .pickerStyle(.segmented)
-            .padding(.horizontal)
             .onChange(of: selectedSurah) { _, _ in
                 currentAyahIndex = 0
             }
