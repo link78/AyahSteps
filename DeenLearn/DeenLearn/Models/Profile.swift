@@ -90,7 +90,7 @@ struct UserProfile: Identifiable {
         isParent: true,
         preferredLanguage: .english,
         createdAt: Date().addingTimeInterval(-30 * 24 * 60 * 60),
-        profileImagePath: UserDefaults.standard.string(forKey: profileImagePathKey),
+        profileImagePath: UserDefaults.standard.string(forKey: Self.profileImagePathKey),
         showArabicScript: true,
         showTransliteration: true,
         showTranslation: true,
