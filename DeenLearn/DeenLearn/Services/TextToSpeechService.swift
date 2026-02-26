@@ -53,6 +53,7 @@ final class TextToSpeechService: NSObject, ObservableObject {
                     try self.playGeminiAudio(audioData)
                 } catch {
                     // Fallback to system TTS on failure
+                    print("Gemini AI voice unavailable, using system TTS: \(error.localizedDescription)")
                     self.speakWithSystemTTS(text, language: language, rate: rate)
                 }
             }
