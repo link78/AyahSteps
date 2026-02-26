@@ -59,6 +59,7 @@
 		AAAAAAAAAAAAAAAAAAAAAA48 /* QiblaCompassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111111111111111111111167 /* QiblaCompassView.swift */; };
 		BBBBBBBBBBBBBBBBBBBBB001 /* GeminiServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCCCCCCCCCCCCCCCCCCC001 /* GeminiServiceTests.swift */; };
 		BBBBBBBBBBBBBBBBBBBBB002 /* AITutorServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCCCCCCCCCCCCCCCCCCC002 /* AITutorServiceTests.swift */; };
+		BBBBBBBBBBBBBBBBBBBBB003 /* ProfileManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCCCCCCCCCCCCCCCCCCC003 /* ProfileManagementTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -116,6 +117,7 @@
 		EEEEEEEEEEEEEEEEEEEEE001 /* DeenLearnTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeenLearnTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCCCCCCCCCCCCCCCCCCCC001 /* GeminiServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiServiceTests.swift; sourceTree = "<group>"; };
 		CCCCCCCCCCCCCCCCCCCCC002 /* AITutorServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITutorServiceTests.swift; sourceTree = "<group>"; };
+		CCCCCCCCCCCCCCCCCCCCC003 /* ProfileManagementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManagementTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXContainerItemProxy section */
@@ -258,6 +260,7 @@
 			children = (
 				CCCCCCCCCCCCCCCCCCCCC001 /* GeminiServiceTests.swift */,
 				CCCCCCCCCCCCCCCCCCCCC002 /* AITutorServiceTests.swift */,
+				CCCCCCCCCCCCCCCCCCCCC003 /* ProfileManagementTests.swift */,
 			);
 			path = DeenLearnTests;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 			files = (
 				BBBBBBBBBBBBBBBBBBBBB001 /* GeminiServiceTests.swift in Sources */,
 				BBBBBBBBBBBBBBBBBBBBB002 /* AITutorServiceTests.swift in Sources */,
+				BBBBBBBBBBBBBBBBBBBBB003 /* ProfileManagementTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

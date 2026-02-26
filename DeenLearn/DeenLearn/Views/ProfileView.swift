@@ -12,7 +12,6 @@ struct ProfileView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedSection: ProfileSection = .profile
     @State private var profile = UserProfile.sampleAdult
-    @State private var children = ChildProfile.sampleChildren
     @State private var goals = LearningGoal.sampleGoals
     @State private var achievements = Achievement.sampleAchievements
     @State private var bookmarks = Bookmark.sampleBookmarks
@@ -72,7 +71,9 @@ struct ProfileView: View {
             EditProfileSheet(profile: $profile)
         }
         .sheet(isPresented: $showingAddChild) {
-            AddChildSheet(children: $children)
+            AddChildSheet(onAdd: { child in
+                appState.addChildProfile(child)
+            })
         }
         .sheet(isPresented: $showingAddGoal) {
             AddGoalSheet(goals: $goals)
@@ -720,7 +721,7 @@ struct ProfileView: View {
             }
             
             // Children Cards
-            ForEach(children) { child in
+            ForEach(appState.childProfiles) { child in
                 childProgressCard(child)
             }
             
@@ -966,7 +967,7 @@ struct EditProfileSheet: View {
 
 struct AddChildSheet: View {
     @Environment(\.dismiss) var dismiss
-    @Binding var children: [ChildProfile]
+    var onAdd: (ChildProfile) -> Void
     @State private var name = ""
     @State private var age = 6
     @State private var avatar = "👦"
@@ -1046,7 +1047,7 @@ struct AddChildSheet: View {
                             totalBadges: 0,
                             achievements: []
                         )
-                        children.append(newChild)
+                        onAdd(newChild)
                         dismiss()
                     }
                     .disabled(name.isEmpty)
