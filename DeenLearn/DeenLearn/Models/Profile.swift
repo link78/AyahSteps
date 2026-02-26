@@ -30,6 +30,21 @@ struct UserProfile: Identifiable {
     var reminderTime: Date?
     var remindersEnabled: Bool
     
+    // MARK: - UserDefaults Keys
+    private static let userIdKey = "userProfileId"
+    private static let profileImagePathKey = "userProfileImagePath"
+    
+    /// Returns a stable user UUID that persists across launches
+    static var persistedUserId: UUID {
+        if let idString = UserDefaults.standard.string(forKey: userIdKey),
+           let id = UUID(uuidString: idString) {
+            return id
+        }
+        let newId = UUID()
+        UserDefaults.standard.set(newId.uuidString, forKey: userIdKey)
+        return newId
+    }
+    
     /// Load the saved profile image from documents directory
     var profileImage: UIImage? {
         guard let path = profileImagePath else { return nil }
@@ -49,6 +64,7 @@ struct UserProfile: Identifiable {
         do {
             try data.write(to: url)
             profileImagePath = fileName
+            UserDefaults.standard.set(fileName, forKey: Self.profileImagePathKey)
             return fileName
         } catch {
             return nil
@@ -61,11 +77,12 @@ struct UserProfile: Identifiable {
             let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(path)
             try? FileManager.default.removeItem(at: url)
             profileImagePath = nil
+            UserDefaults.standard.removeObject(forKey: Self.profileImagePathKey)
         }
     }
     
     static let sampleAdult = UserProfile(
-        id: UUID(),
+        id: persistedUserId,
         name: "Abdullah",
         displayName: "Abu Ahmad",
         avatarEmoji: "👨",
@@ -73,6 +90,7 @@ struct UserProfile: Identifiable {
         isParent: true,
         preferredLanguage: .english,
         createdAt: Date().addingTimeInterval(-30 * 24 * 60 * 60),
+        profileImagePath: UserDefaults.standard.string(forKey: profileImagePathKey),
         showArabicScript: true,
         showTransliteration: true,
         showTranslation: true,
