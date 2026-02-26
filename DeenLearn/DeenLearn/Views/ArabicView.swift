@@ -94,7 +94,6 @@ struct ArabicView: View {
 struct AlphabetSectionView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedLetter: ArabicLetter?
-    @State private var showLetterDetail = false
     @ObservedObject private var ttsService = TextToSpeechService.shared
     
     let columns = [
@@ -130,16 +129,13 @@ struct AlphabetSectionView: View {
                             ttsService.speakArabic(letter.isolated, rate: 0.3)
                             
                             selectedLetter = letter
-                            showLetterDetail = true
                         }
                 }
             }
         }
-        .sheet(isPresented: $showLetterDetail) {
-            if let letter = selectedLetter {
-                LetterDetailView(letter: letter)
-                    .environmentObject(appState)
-            }
+        .sheet(item: $selectedLetter) { letter in
+            LetterDetailView(letter: letter)
+                .environmentObject(appState)
         }
     }
 }
@@ -556,7 +552,6 @@ struct VocabularySectionView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedCategory: VocabularyCategory = .salahWords
     @State private var selectedWord: VocabularyWord?
-    @State private var showWordDetail = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -604,16 +599,13 @@ struct VocabularySectionView: View {
                     VocabularyCardView(word: word)
                         .onTapGesture {
                             selectedWord = word
-                            showWordDetail = true
                         }
                 }
             }
         }
-        .sheet(isPresented: $showWordDetail) {
-            if let word = selectedWord {
-                VocabularyDetailView(word: word)
-                    .environmentObject(appState)
-            }
+        .sheet(item: $selectedWord) { word in
+            VocabularyDetailView(word: word)
+                .environmentObject(appState)
         }
     }
 }
@@ -732,7 +724,6 @@ struct VocabularyDetailView: View {
 struct GamesSectionView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedGame: ArabicMiniGameType?
-    @State private var showGame = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -755,15 +746,12 @@ struct GamesSectionView: View {
             ForEach(ArabicMiniGameType.allCases, id: \.self) { gameType in
                 GameCardView(gameType: gameType) {
                     selectedGame = gameType
-                    showGame = true
                 }
             }
         }
-        .sheet(isPresented: $showGame) {
-            if let game = selectedGame {
-                MiniGameView(gameType: game)
-                    .environmentObject(appState)
-            }
+        .sheet(item: $selectedGame) { game in
+            MiniGameView(gameType: game)
+                .environmentObject(appState)
         }
     }
 }
@@ -867,7 +855,12 @@ struct MatchIconGameContent: View {
         ("☀️", "شَمْس", "Sun"),
         ("🌙", "قَمَر", "Moon")
     ]
-    @State private var shuffledArabicItems: [(icon: String, arabic: String, english: String)] = []
+    @State private var shuffledArabicItems: [(icon: String, arabic: String, english: String)] = [
+        ("🦁", "أَسَد", "Lion"),
+        ("🏠", "بَيْت", "House"),
+        ("☀️", "شَمْس", "Sun"),
+        ("🌙", "قَمَر", "Moon")
+    ].shuffled()
     @State private var selectedIcon: String?
     @State private var selectedArabic: String?
     @State private var matchedPairs: Set<String> = []
@@ -1099,7 +1092,7 @@ struct BuildSentenceGameContent: View {
     let isKidsMode: Bool
     @State private var currentGame = SentenceBuildGame.samples[0]
     @State private var selectedWords: [String] = []
-    @State private var availableWords: [String] = []
+    @State private var availableWords: [String] = SentenceBuildGame.samples[0].shuffledWords
     @State private var showFeedback = false
     @State private var isCorrect = false
     
@@ -1223,7 +1216,6 @@ struct BuildSentenceGameContent: View {
 struct ConceptMapsSectionView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedMap: ConceptMap?
-    @State private var showMapDetail = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -1246,15 +1238,12 @@ struct ConceptMapsSectionView: View {
             ForEach(ConceptMap.allMaps) { map in
                 ConceptMapCardView(map: map) {
                     selectedMap = map
-                    showMapDetail = true
                 }
             }
         }
-        .sheet(isPresented: $showMapDetail) {
-            if let map = selectedMap {
-                ConceptMapDetailView(map: map)
-                    .environmentObject(appState)
-            }
+        .sheet(item: $selectedMap) { map in
+            ConceptMapDetailView(map: map)
+                .environmentObject(appState)
         }
     }
 }

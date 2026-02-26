@@ -282,7 +282,8 @@ extension ConceptMap {
 
 // MARK: - Mini Game Models
 
-enum ArabicMiniGameType: String, CaseIterable {
+enum ArabicMiniGameType: String, CaseIterable, Identifiable {
+    var id: String { rawValue }
     case matchIconToWord = "Match Icon → Word"
     case soundRecognition = "Sound Recognition"
     case buildSentence = "Build Sentence"
