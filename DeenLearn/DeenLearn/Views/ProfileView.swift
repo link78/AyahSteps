@@ -194,7 +194,7 @@ struct ProfileView: View {
                 ForEach(ProfileSection.allCases.filter { section in
                     // Filter sections based on mode
                     if appState.isKidsMode {
-                        return section != .parentDashboard && section != .bookmarks
+                        return section != .bookmarks
                     } else {
                         return true
                     }
