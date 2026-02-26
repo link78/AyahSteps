@@ -237,14 +237,24 @@ struct LetterDetailView: View {
                             .font(.headline)
                         
                         HStack {
-                            Image(systemName: "speaker.wave.2.fill")
-                                .foregroundColor(appState.themeColor)
+                            Image(systemName: ttsService.isSpeaking && ttsService.currentText == letter.pronunciation ? "speaker.wave.3.fill" : "speaker.wave.2.fill")
+                                .foregroundColor(ttsService.isSpeaking && ttsService.currentText == letter.pronunciation ? .blue : appState.themeColor)
                             Text(letter.pronunciation)
+                            Spacer()
+                            Text(appState.isKidsMode ? "👆 Tap!" : "Tap to listen")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                         }
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color(.systemGray6))
                         .cornerRadius(12)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            let impact = UIImpactFeedbackGenerator(style: .light)
+                            impact.impactOccurred()
+                            ttsService.speakEnglish(letter.pronunciation, rate: 0.4)
+                        }
                         
                         // Audio button - NOW WORKING
                         Button(action: {
@@ -633,6 +643,11 @@ struct VocabularyDetailView: View {
     let word: VocabularyWord
     @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) var dismiss
+    @ObservedObject private var ttsService = TextToSpeechService.shared
+    
+    private var isPlayingWord: Bool {
+        ttsService.isSpeaking && ttsService.currentText == word.arabic
+    }
     
     var body: some View {
         NavigationView {
@@ -659,23 +674,25 @@ struct VocabularyDetailView: View {
                 .cornerRadius(20)
                 
                 // Audio Button
-                Button(action: { /* Play audio */ }) {
+                Button(action: {
+                    let impact = UIImpactFeedbackGenerator(style: .medium)
+                    impact.impactOccurred()
+                    if isPlayingWord {
+                        ttsService.stop()
+                    } else {
+                        ttsService.speakArabic(word.arabic, rate: 0.35)
+                    }
+                }) {
                     HStack {
-                        Image(systemName: "speaker.wave.2.fill")
-                        Text("Listen to Pronunciation")
+                        Image(systemName: isPlayingWord ? "stop.circle.fill" : "speaker.wave.2.fill")
+                        Text(isPlayingWord ? "Playing..." : "Tap to Listen")
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(appState.themeColor)
+                    .background(isPlayingWord ? Color.orange : appState.themeColor)
                     .foregroundColor(.white)
                     .cornerRadius(12)
                 }
-                .disabled(true)
-                .opacity(0.6)
-                
-                Text("Audio coming soon")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
                 
                 // Category badge
                 HStack {
