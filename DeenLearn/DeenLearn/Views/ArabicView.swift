@@ -849,18 +849,16 @@ struct MiniGameView: View {
 struct MatchIconGameContent: View {
     @Binding var score: Int
     let isKidsMode: Bool
-    @State private var items: [(icon: String, arabic: String, english: String)] = [
+    
+    private static let defaultItems: [(icon: String, arabic: String, english: String)] = [
         ("🦁", "أَسَد", "Lion"),
         ("🏠", "بَيْت", "House"),
         ("☀️", "شَمْس", "Sun"),
         ("🌙", "قَمَر", "Moon")
     ]
-    @State private var shuffledArabicItems: [(icon: String, arabic: String, english: String)] = [
-        ("🦁", "أَسَد", "Lion"),
-        ("🏠", "بَيْت", "House"),
-        ("☀️", "شَمْس", "Sun"),
-        ("🌙", "قَمَر", "Moon")
-    ].shuffled()
+    
+    @State private var items = defaultItems
+    @State private var shuffledArabicItems = defaultItems.shuffled()
     @State private var selectedIcon: String?
     @State private var selectedArabic: String?
     @State private var matchedPairs: Set<String> = []
