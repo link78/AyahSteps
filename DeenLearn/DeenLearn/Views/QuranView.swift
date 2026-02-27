@@ -512,15 +512,13 @@ struct AyahReadingView: View {
                         .foregroundColor(isBookmarked ? .orange : .secondary)
                 }
                 
-                // Play entire ayah button — uses API audio URL if available, TTS as fallback
+                // Play entire ayah button — uses Gemini AI voice
                 Button(action: {
                     let impact = UIImpactFeedbackGenerator(style: .light)
                     impact.impactOccurred()
                     
                     if isPlayingThisAyah {
                         ttsService.stop()
-                    } else if let audioURL = ayah.audioURL, !audioURL.isEmpty {
-                        ttsService.playAudioURL(audioURL, identifier: fullAyahArabic)
                     } else {
                         ttsService.speakArabic(fullAyahArabic, rate: 0.3)
                     }
@@ -1225,6 +1223,7 @@ struct TajweedRuleDetailView: View {
     let isKidsMode: Bool
     
     @Environment(\.dismiss) var dismiss
+    @ObservedObject private var ttsService = TextToSpeechService.shared
     
     var body: some View {
         NavigationStack {
@@ -1272,20 +1271,22 @@ struct TajweedRuleDetailView: View {
                     .background(Color(.systemBackground))
                     .cornerRadius(16)
                     
-                    // Audio placeholder
-                    Button(action: { /* TODO: Play example audio */ }) {
+                    // Hear example with Gemini AI voice
+                    Button(action: {
+                        let impact = UIImpactFeedbackGenerator(style: .light)
+                        impact.impactOccurred()
+                        ttsService.speakArabic(rule.example, rate: 0.3)
+                    }) {
                         HStack {
-                            Image(systemName: "speaker.wave.2.fill")
-                            Text("Hear Example")
+                            Image(systemName: ttsService.isSpeaking && ttsService.currentText == rule.example ? "stop.circle.fill" : "speaker.wave.2.fill")
+                            Text(ttsService.isSpeaking && ttsService.currentText == rule.example ? "Playing..." : "Hear Example")
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color(hex: rule.color))
+                        .background(ttsService.isSpeaking && ttsService.currentText == rule.example ? Color.orange : Color(hex: rule.color))
                         .foregroundColor(.white)
                         .cornerRadius(16)
                     }
-                    .disabled(true)
-                    .opacity(0.5)
                     
                     Spacer(minLength: 40)
                 }

@@ -972,6 +972,11 @@ struct SoundRecognitionGameContent: View {
     @State private var showFeedback = false
     @State private var isCorrect = false
     @State private var isDropTargeted = false
+    @ObservedObject private var ttsService = TextToSpeechService.shared
+    
+    private var isPlayingCurrentLetter: Bool {
+        ttsService.isSpeaking && ttsService.currentText == currentLetter.isolated
+    }
     
     var body: some View {
         VStack(spacing: 20) {
@@ -979,27 +984,29 @@ struct SoundRecognitionGameContent: View {
                 .font(.headline)
                 .multilineTextAlignment(.center)
             
-            // Play sound button
-            Button(action: { /* Play sound */ }) {
+            // Play sound button - uses Gemini AI voice
+            Button(action: {
+                let impact = UIImpactFeedbackGenerator(style: .light)
+                impact.impactOccurred()
+                ttsService.speakArabic(currentLetter.isolated, rate: 0.3)
+            }) {
                 VStack(spacing: 12) {
-                    Image(systemName: "sparkles")
+                    Image(systemName: isPlayingCurrentLetter ? "stop.circle.fill" : "sparkles")
                         .font(.system(size: 50))
-                    Text("AI Voice")
+                    Text(isPlayingCurrentLetter ? "Playing..." : "AI Voice")
                         .font(.headline)
                 }
                 .responsiveFrame(width: 150, height: 150)
-                .background(Color.blue.opacity(0.1))
-                .foregroundColor(.blue)
+                .background(isPlayingCurrentLetter ? Color.orange.opacity(0.1) : Color.blue.opacity(0.1))
+                .foregroundColor(isPlayingCurrentLetter ? .orange : .blue)
                 .cornerRadius(20)
             }
-            .disabled(true)
-            .opacity(0.6)
             
-            Text("Audio coming soon")
+            Text(isKidsMode ? "👆 Tap to hear the letter!" : "Tap to hear, then pick the matching letter")
                 .font(.caption)
                 .foregroundColor(.secondary)
             
-            // Letter to identify (shown for now since audio isn't available)
+            // Letter to identify
             Text("Which letter is: \(currentLetter.name)?")
                 .font(.title3)
             
