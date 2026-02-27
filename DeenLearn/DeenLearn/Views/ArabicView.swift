@@ -859,11 +859,10 @@ struct MatchIconGameContent: View {
     
     @State private var items = defaultItems
     @State private var shuffledArabicItems = defaultItems.shuffled()
-    @State private var selectedIcon: String?
-    @State private var selectedArabic: String?
     @State private var matchedPairs: Set<String> = []
     @State private var showFeedback = false
     @State private var isCorrectMatch = false
+    @State private var targetedArabic: String? = nil
     
     var body: some View {
         VStack(spacing: 20) {
@@ -878,27 +877,16 @@ struct MatchIconGameContent: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     ForEach(items, id: \.icon) { item in
-                        Button(action: {
-                            if !matchedPairs.contains(item.arabic) {
-                                selectedIcon = item.icon
-                                checkMatch()
-                            }
-                        }) {
-                            Text(item.icon)
-                                .font(.system(size: 40))
-                                .frame(width: 70, height: 70)
-                                .background(
-                                    matchedPairs.contains(item.arabic) ? Color.green.opacity(0.2) :
-                                    selectedIcon == item.icon ? Color.blue.opacity(0.2) :
-                                    Color(.systemGray6)
-                                )
-                                .cornerRadius(12)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(selectedIcon == item.icon ? Color.blue : Color.clear, lineWidth: 2)
-                                )
-                        }
-                        .disabled(matchedPairs.contains(item.arabic))
+                        Text(item.icon)
+                            .font(.system(size: 40))
+                            .frame(width: 70, height: 70)
+                            .background(
+                                matchedPairs.contains(item.arabic) ? Color.green.opacity(0.2) :
+                                Color(.systemGray6)
+                            )
+                            .cornerRadius(12)
+                            .draggable(item.icon)
+                            .opacity(matchedPairs.contains(item.arabic) ? 0.5 : 1.0)
                     }
                 }
                 
@@ -908,26 +896,38 @@ struct MatchIconGameContent: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     ForEach(shuffledArabicItems, id: \.arabic) { item in
-                        Button(action: {
-                            if !matchedPairs.contains(item.arabic) {
-                                selectedArabic = item.arabic
-                                checkMatch()
+                        Text(item.arabic)
+                            .font(.title2)
+                            .frame(width: 100, height: 70)
+                            .background(
+                                matchedPairs.contains(item.arabic) ? Color.green.opacity(0.2) :
+                                targetedArabic == item.arabic ? Color.blue.opacity(0.2) :
+                                Color(.systemGray6)
+                            )
+                            .cornerRadius(12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(targetedArabic == item.arabic ? Color.blue : Color.clear, lineWidth: 2)
+                            )
+                            .dropDestination(for: String.self) { droppedItems, _ in
+                                guard let droppedIcon = droppedItems.first,
+                                      !matchedPairs.contains(item.arabic) else { return false }
+                                if item.icon == droppedIcon {
+                                    matchedPairs.insert(item.arabic)
+                                    score += 10
+                                    isCorrectMatch = true
+                                } else {
+                                    isCorrectMatch = false
+                                }
+                                showFeedback = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    showFeedback = false
+                                }
+                                return true
+                            } isTargeted: { targeted in
+                                targetedArabic = targeted ? item.arabic : nil
                             }
-                        }) {
-                            Text(item.arabic)
-                                .font(.title2)
-                                .frame(width: 100, height: 70)
-                                .background(
-                                    selectedArabic == item.arabic ? Color.blue.opacity(0.2) :
-                                    Color(.systemGray6)
-                                )
-                                .cornerRadius(12)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(selectedArabic == item.arabic ? Color.blue : Color.clear, lineWidth: 2)
-                                )
-                        }
-                        .disabled(matchedPairs.contains(item.arabic))
+                            .opacity(matchedPairs.contains(item.arabic) ? 0.5 : 1.0)
                     }
                 }
             }
@@ -962,27 +962,6 @@ struct MatchIconGameContent: View {
             }
         }
     }
-    
-    func checkMatch() {
-        guard let icon = selectedIcon, let arabic = selectedArabic else { return }
-        
-        if let matchingItem = items.first(where: { $0.icon == icon && $0.arabic == arabic }) {
-            // Correct match - track by arabic since that's what we use for the right column
-            matchedPairs.insert(matchingItem.arabic)
-            score += 10
-            isCorrectMatch = true
-        } else {
-            isCorrectMatch = false
-        }
-        
-        showFeedback = true
-        selectedIcon = nil
-        selectedArabic = nil
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            showFeedback = false
-        }
-    }
 }
 
 struct SoundRecognitionGameContent: View {
@@ -992,6 +971,12 @@ struct SoundRecognitionGameContent: View {
     @State private var options: [ArabicLetter] = []
     @State private var showFeedback = false
     @State private var isCorrect = false
+    @State private var isDropTargeted = false
+    @ObservedObject private var ttsService = TextToSpeechService.shared
+    
+    private var isPlayingCurrentLetter: Bool {
+        ttsService.isSpeaking && ttsService.currentText == currentLetter.isolated
+    }
     
     var body: some View {
         VStack(spacing: 20) {
@@ -999,42 +984,66 @@ struct SoundRecognitionGameContent: View {
                 .font(.headline)
                 .multilineTextAlignment(.center)
             
-            // Play sound button
-            Button(action: { /* Play sound */ }) {
+            // Play sound button - uses Gemini AI voice
+            Button(action: {
+                let impact = UIImpactFeedbackGenerator(style: .light)
+                impact.impactOccurred()
+                ttsService.speakArabic(currentLetter.isolated, rate: 0.3)
+            }) {
                 VStack(spacing: 12) {
-                    Image(systemName: "sparkles")
+                    Image(systemName: isPlayingCurrentLetter ? "stop.circle.fill" : "sparkles")
                         .font(.system(size: 50))
-                    Text("AI Voice")
+                    Text(isPlayingCurrentLetter ? "Playing..." : "AI Voice")
                         .font(.headline)
                 }
                 .responsiveFrame(width: 150, height: 150)
-                .background(Color.blue.opacity(0.1))
-                .foregroundColor(.blue)
+                .background(isPlayingCurrentLetter ? Color.orange.opacity(0.1) : Color.blue.opacity(0.1))
+                .foregroundColor(isPlayingCurrentLetter ? .orange : .blue)
                 .cornerRadius(20)
             }
-            .disabled(true)
-            .opacity(0.6)
             
-            Text("Audio coming soon")
+            Text(isKidsMode ? "👆 Tap to hear the letter!" : "Tap to hear, then pick the matching letter")
                 .font(.caption)
                 .foregroundColor(.secondary)
             
-            // Letter to identify (shown for now since audio isn't available)
+            // Letter to identify
             Text("Which letter is: \(currentLetter.name)?")
                 .font(.title3)
+            
+            // Drop target zone
+            VStack(spacing: 8) {
+                Image(systemName: "arrow.down.circle")
+                    .font(.system(size: 30))
+                Text("Drop the correct letter here")
+                    .font(.headline)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 100)
+            .background(isDropTargeted ? Color.blue.opacity(0.2) : Color(.systemGray6))
+            .cornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(isDropTargeted ? Color.blue : Color(.systemGray4), lineWidth: isDropTargeted ? 2 : 1)
+            )
+            .dropDestination(for: String.self) { droppedItems, _ in
+                guard let droppedName = droppedItems.first else { return false }
+                if let letter = options.first(where: { $0.name == droppedName }) {
+                    checkAnswer(letter)
+                }
+                return true
+            } isTargeted: { targeted in
+                isDropTargeted = targeted
+            }
             
             // Options
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 16) {
                 ForEach(getOptions(), id: \.id) { letter in
-                    Button(action: {
-                        checkAnswer(letter)
-                    }) {
-                        Text(letter.isolated)
-                            .font(.system(size: 36))
-                            .frame(width: 80, height: 80)
-                            .background(Color(.systemGray6))
-                            .cornerRadius(12)
-                    }
+                    Text(letter.isolated)
+                        .font(.system(size: 36))
+                        .frame(width: 80, height: 80)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
+                        .draggable(letter.name)
                 }
             }
             
@@ -1093,6 +1102,8 @@ struct BuildSentenceGameContent: View {
     @State private var availableWords: [String] = SentenceBuildGame.samples[0].shuffledWords
     @State private var showFeedback = false
     @State private var isCorrect = false
+    @State private var isSentenceAreaTargeted = false
+    @State private var isAvailableAreaTargeted = false
     
     var body: some View {
         VStack(spacing: 20) {
@@ -1117,36 +1128,40 @@ struct BuildSentenceGameContent: View {
                 
                 HStack(spacing: 8) {
                     ForEach(selectedWords, id: \.self) { word in
-                        Button(action: {
-                            // Remove word
-                            if let index = selectedWords.firstIndex(of: word) {
-                                selectedWords.remove(at: index)
-                                availableWords.append(word)
-                            }
-                        }) {
-                            Text(word)
-                                .font(.title2)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(Color.blue.opacity(0.1))
-                                .cornerRadius(8)
-                        }
+                        Text(word)
+                            .font(.title2)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(Color.blue.opacity(0.1))
+                            .cornerRadius(8)
+                            .draggable(word)
                     }
                     
                     if selectedWords.isEmpty {
-                        Text("Tap words below")
+                        Text("Drop words here")
                             .foregroundColor(.secondary)
                     }
                 }
                 .frame(minHeight: 60)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color(.systemBackground))
+                .background(isSentenceAreaTargeted ? Color.blue.opacity(0.1) : Color(.systemBackground))
                 .cornerRadius(12)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color(.systemGray4), lineWidth: 1)
+                        .stroke(isSentenceAreaTargeted ? Color.blue : Color(.systemGray4), lineWidth: isSentenceAreaTargeted ? 2 : 1)
                 )
+                .dropDestination(for: String.self) { droppedItems, _ in
+                    for word in droppedItems {
+                        if let index = availableWords.firstIndex(of: word) {
+                            availableWords.remove(at: index)
+                            selectedWords.append(word)
+                        }
+                    }
+                    return true
+                } isTargeted: { targeted in
+                    isSentenceAreaTargeted = targeted
+                }
             }
             
             // Available words
@@ -1157,21 +1172,30 @@ struct BuildSentenceGameContent: View {
                 
                 HStack(spacing: 8) {
                     ForEach(availableWords, id: \.self) { word in
-                        Button(action: {
-                            // Add word
-                            if let index = availableWords.firstIndex(of: word) {
-                                availableWords.remove(at: index)
-                                selectedWords.append(word)
-                            }
-                        }) {
-                            Text(word)
-                                .font(.title2)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(Color(.systemGray6))
-                                .cornerRadius(8)
+                        Text(word)
+                            .font(.title2)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(Color(.systemGray6))
+                            .cornerRadius(8)
+                            .draggable(word)
+                    }
+                }
+                .frame(minHeight: 50)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal)
+                .background(isAvailableAreaTargeted ? Color.blue.opacity(0.1) : Color.clear)
+                .cornerRadius(12)
+                .dropDestination(for: String.self) { droppedItems, _ in
+                    for word in droppedItems {
+                        if let index = selectedWords.firstIndex(of: word) {
+                            selectedWords.remove(at: index)
+                            availableWords.append(word)
                         }
                     }
+                    return true
+                } isTargeted: { targeted in
+                    isAvailableAreaTargeted = targeted
                 }
             }
             

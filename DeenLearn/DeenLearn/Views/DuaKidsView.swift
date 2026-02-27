@@ -749,6 +749,7 @@ struct DuaQuizGameView: View {
     @State private var selectedAnswer: Int?
     @State private var showExplanation = false
     @State private var correctCount = 0
+    @State private var isDropTargeted = false
 
     private let quizzes = DuaKidsData.quizzes
 
@@ -772,40 +773,56 @@ struct DuaQuizGameView: View {
                         .multilineTextAlignment(.center)
                         .padding()
 
-                    ForEach(quiz.options.indices, id: \.self) { index in
-                        Button(action: {
-                            if !showExplanation {
-                                selectedAnswer = index
-                                showExplanation = true
-                                if index == quiz.correctAnswer {
-                                    correctCount += 1
-                                    earnedStars += 1
-                                }
+                    // Drop zone
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(isDropTargeted ? Color(hex: "FF6B6B") : Color.gray.opacity(0.4), style: StrokeStyle(lineWidth: 2, dash: [8]))
+                        .frame(height: 60)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(isDropTargeted ? Color(hex: "FF6B6B").opacity(0.1) : Color(.secondarySystemGroupedBackground))
+                        )
+                        .overlay(
+                            Text(showExplanation ? quiz.options[selectedAnswer ?? 0] : "Drop your answer here")
+                                .font(.headline)
+                                .foregroundColor(showExplanation ? .primary : .secondary)
+                        )
+                        .dropDestination(for: String.self) { items, _ in
+                            guard let first = items.first, let index = Int(first), !showExplanation else { return false }
+                            selectedAnswer = index
+                            showExplanation = true
+                            if index == quiz.correctAnswer {
+                                correctCount += 1
+                                earnedStars += 1
                             }
-                        }) {
-                            HStack {
-                                Text(quiz.options[index])
-                                    .font(.body)
-                                    .foregroundColor(.primary)
-                                Spacer()
-                                if showExplanation && index == quiz.correctAnswer {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(.green)
-                                } else if showExplanation && index == selectedAnswer && index != quiz.correctAnswer {
-                                    Image(systemName: "xmark.circle.fill")
-                                        .foregroundColor(.red)
-                                }
-                            }
-                            .padding()
-                            .background(
-                                showExplanation && index == quiz.correctAnswer ? Color.green.opacity(0.1) :
-                                showExplanation && index == selectedAnswer ? Color.red.opacity(0.1) :
-                                Color(.secondarySystemGroupedBackground)
-                            )
-                            .cornerRadius(12)
+                            return true
+                        } isTargeted: { targeted in
+                            isDropTargeted = targeted
                         }
-                        .buttonStyle(PlainButtonStyle())
-                        .disabled(showExplanation)
+                        .padding(.horizontal)
+
+                    // Draggable options
+                    ForEach(quiz.options.indices, id: \.self) { index in
+                        HStack {
+                            Text(quiz.options[index])
+                                .font(.body)
+                                .foregroundColor(.primary)
+                            Spacer()
+                            if showExplanation && index == quiz.correctAnswer {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                            } else if showExplanation && index == selectedAnswer && index != quiz.correctAnswer {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.red)
+                            }
+                        }
+                        .padding()
+                        .background(
+                            showExplanation && index == quiz.correctAnswer ? Color.green.opacity(0.1) :
+                            showExplanation && index == selectedAnswer ? Color.red.opacity(0.1) :
+                            Color(.secondarySystemGroupedBackground)
+                        )
+                        .cornerRadius(12)
+                        .draggable(String(index))
                         .padding(.horizontal)
                     }
 
@@ -881,11 +898,13 @@ struct DuaMiniGameView: View {
     @Environment(\.dismiss) var dismiss
     @State private var score = 0
     @State private var matchedPairs = Set<String>()
-    @State private var selectedDua: String?
     @State private var wordTiles: [String] = []
     @State private var selectedTiles: [String] = []
     @State private var situationIndex = 0
     @State private var showResult = false
+    @State private var targetedDua: String? = nil
+    @State private var isSelectedAreaTargeted = false
+    @State private var isSituationDropTargeted = false
 
     // Dua Match data
     private let duaSituations: [(dua: String, situation: String, emoji: String)] = [
@@ -954,7 +973,7 @@ struct DuaMiniGameView: View {
 
     private var duaMatchGame: some View {
         VStack(spacing: 12) {
-            Text("Match each dua to its situation!")
+            Text("Drag each dua to its matching situation!")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
@@ -962,41 +981,9 @@ struct DuaMiniGameView: View {
                 let isMatched = matchedPairs.contains(item.dua)
 
                 HStack {
-                    // Dua button
-                    Button(action: {
-                        if !isMatched { selectedDua = item.dua }
-                    }) {
-                        Text(item.dua)
-                            .font(.caption.bold())
-                            .foregroundColor(selectedDua == item.dua ? .white : .primary)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .background(
-                                isMatched ? Color.green.opacity(0.3) :
-                                selectedDua == item.dua ? Color(hex: "FF6B6B") :
-                                Color(.secondarySystemGroupedBackground)
-                            )
-                            .cornerRadius(8)
-                    }
-                    .disabled(isMatched)
-
-                    Spacer()
-
-                    // Situation button
-                    Button(action: {
-                        if selectedDua == item.dua && !isMatched {
-                            matchedPairs.insert(item.dua)
-                            selectedDua = nil
-                            score += 1
-                        } else if selectedDua != nil {
-                            selectedDua = nil
-                        }
-                    }) {
-                        HStack(spacing: 4) {
-                            Text(item.emoji)
-                            Text(item.situation)
-                                .font(.caption)
-                        }
+                    // Draggable dua item
+                    Text(item.dua)
+                        .font(.caption.bold())
                         .foregroundColor(.primary)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
@@ -1005,8 +992,37 @@ struct DuaMiniGameView: View {
                             Color(.secondarySystemGroupedBackground)
                         )
                         .cornerRadius(8)
+                        .draggable(item.dua)
+                        .opacity(isMatched ? 0.6 : 1.0)
+
+                    Spacer()
+
+                    // Drop destination situation
+                    HStack(spacing: 4) {
+                        Text(item.emoji)
+                        Text(item.situation)
+                            .font(.caption)
                     }
-                    .disabled(isMatched)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(
+                        isMatched ? Color.green.opacity(0.3) :
+                        targetedDua == item.dua ? Color(hex: "FF6B6B").opacity(0.15) :
+                        Color(.secondarySystemGroupedBackground)
+                    )
+                    .cornerRadius(8)
+                    .dropDestination(for: String.self) { items, _ in
+                        guard let droppedDua = items.first else { return false }
+                        if droppedDua == item.dua && !isMatched {
+                            matchedPairs.insert(item.dua)
+                            score += 1
+                            return true
+                        }
+                        return false
+                    } isTargeted: { targeted in
+                        targetedDua = targeted ? item.dua : nil
+                    }
                 }
             }
 
@@ -1029,55 +1045,76 @@ struct DuaMiniGameView: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
-            Text("Arrange these words in the correct dhikr order:")
+            Text("Drag words into the correct dhikr order:")
                 .font(.caption)
                 .foregroundColor(.secondary)
 
-            // Selected tiles
+            // Selected tiles (drop destination)
             HStack(spacing: 8) {
                 ForEach(selectedTiles, id: \.self) { tile in
-                    Button(action: {
-                        selectedTiles.removeAll { $0 == tile }
-                    }) {
-                        Text(tile)
-                            .font(.subheadline.bold())
-                            .foregroundColor(.white)
+                    Text(tile)
+                        .font(.subheadline.bold())
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(Color(hex: "FF6B6B"))
+                        .cornerRadius(8)
+                        .draggable(tile)
+                }
+            }
+            .frame(minHeight: 44)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isSelectedAreaTargeted ? Color(hex: "FF6B6B").opacity(0.1) : Color(.secondarySystemGroupedBackground))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(isSelectedAreaTargeted ? Color(hex: "FF6B6B") : Color.clear, lineWidth: 2)
+            )
+            .dropDestination(for: String.self) { items, _ in
+                guard let word = items.first else { return false }
+                if !selectedTiles.contains(word) {
+                    selectedTiles.append(word)
+                    if selectedTiles.count == Self.correctWordOrder.count {
+                        if selectedTiles == Self.correctWordOrder {
+                            score += 3
+                            showResult = true
+                        }
+                    }
+                    return true
+                }
+                return false
+            } isTargeted: { targeted in
+                isSelectedAreaTargeted = targeted
+            }
+
+            // Available tiles (drop destination for removing)
+            HStack(spacing: 8) {
+                ForEach(wordTiles, id: \.self) { word in
+                    if !selectedTiles.contains(word) {
+                        Text(word)
+                            .font(.subheadline)
+                            .foregroundColor(.primary)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 8)
-                            .background(Color(hex: "FF6B6B"))
+                            .background(Color(.tertiarySystemGroupedBackground))
                             .cornerRadius(8)
+                            .draggable(word)
                     }
                 }
             }
             .frame(minHeight: 44)
-            .padding()
-            .background(Color(.secondarySystemGroupedBackground))
-            .cornerRadius(12)
-
-            // Available tiles
-            HStack(spacing: 8) {
-                ForEach(wordTiles, id: \.self) { word in
-                    if !selectedTiles.contains(word) {
-                        Button(action: {
-                            selectedTiles.append(word)
-                            if selectedTiles.count == Self.correctWordOrder.count {
-                                if selectedTiles == Self.correctWordOrder {
-                                    score += 3
-                                    showResult = true
-                                }
-                            }
-                        }) {
-                            Text(word)
-                                .font(.subheadline)
-                                .foregroundColor(.primary)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(Color(.tertiarySystemGroupedBackground))
-                                .cornerRadius(8)
-                        }
-                    }
+            .frame(maxWidth: .infinity)
+            .dropDestination(for: String.self) { items, _ in
+                guard let word = items.first else { return false }
+                if selectedTiles.contains(word) {
+                    selectedTiles.removeAll { $0 == word }
+                    return true
                 }
-            }
+                return false
+            } isTargeted: { _ in }
 
             if showResult {
                 Text("✅ Correct! That's the order of dhikr after prayer!")
@@ -1112,22 +1149,41 @@ struct DuaMiniGameView: View {
                     .font(.headline)
                     .multilineTextAlignment(.center)
 
-                ForEach(situation.options, id: \.self) { option in
-                    Button(action: {
-                        if option == situation.correctDua {
+                // Drop zone
+                RoundedRectangle(cornerRadius: 16)
+                    .strokeBorder(isSituationDropTargeted ? Color(hex: "FF6B6B") : Color.gray.opacity(0.4), style: StrokeStyle(lineWidth: 2, dash: [8]))
+                    .frame(height: 60)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(isSituationDropTargeted ? Color(hex: "FF6B6B").opacity(0.1) : Color(.secondarySystemGroupedBackground))
+                    )
+                    .overlay(
+                        Text("Drop the correct dua here")
+                            .font(.headline)
+                            .foregroundColor(.secondary)
+                    )
+                    .dropDestination(for: String.self) { items, _ in
+                        guard let droppedOption = items.first else { return false }
+                        if droppedOption == situation.correctDua {
                             score += 1
                             situationIndex += 1
+                            return true
                         }
-                    }) {
-                        Text(option)
-                            .font(.body)
-                            .foregroundColor(.primary)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color(.secondarySystemGroupedBackground))
-                            .cornerRadius(12)
+                        return false
+                    } isTargeted: { targeted in
+                        isSituationDropTargeted = targeted
                     }
-                    .buttonStyle(PlainButtonStyle())
+
+                // Draggable options
+                ForEach(situation.options, id: \.self) { option in
+                    Text(option)
+                        .font(.body)
+                        .foregroundColor(.primary)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(.secondarySystemGroupedBackground))
+                        .cornerRadius(12)
+                        .draggable(option)
                 }
             } else {
                 VStack(spacing: 12) {

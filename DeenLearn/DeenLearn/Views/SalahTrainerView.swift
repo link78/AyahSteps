@@ -13,6 +13,7 @@ import SwiftUI
 struct SalahTrainerView: View {
     @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) var dismiss
+    @ObservedObject private var ttsService = TextToSpeechService.shared
     
     @State private var currentStepIndex: Int = 0
     @State private var isPlaying: Bool = false
@@ -361,9 +362,9 @@ struct SalahTrainerView: View {
     var audioControlsCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Image(systemName: "speaker.wave.2")
+                Image(systemName: "sparkles")
                     .foregroundColor(.green)
-                Text("Audio")
+                Text("Gemini AI Voice")
                     .font(.headline)
                 Spacer()
             }
@@ -371,18 +372,24 @@ struct SalahTrainerView: View {
             Divider()
             
             HStack(spacing: 16) {
-                // Play button
+                // Play button - uses Gemini AI voice for current recitation
                 Button(action: {
-                    isPlaying.toggle()
-                    // Audio playback would be implemented here
+                    let impact = UIImpactFeedbackGenerator(style: .light)
+                    impact.impactOccurred()
+                    if ttsService.isSpeaking {
+                        ttsService.stop()
+                    } else if let recitation = currentStep.recitation {
+                        ttsService.speakArabic(recitation.arabic, rate: audioSpeed == .slow ? 0.25 : 0.35)
+                    }
                 }) {
                     HStack {
-                        Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                        Image(systemName: ttsService.isSpeaking ? "stop.circle.fill" : "play.circle.fill")
                             .font(.title)
-                        Text(isPlaying ? "Pause" : "Play")
+                        Text(ttsService.isSpeaking ? "Stop" : "Play")
                     }
-                    .foregroundColor(.green)
+                    .foregroundColor(ttsService.isSpeaking ? .orange : .green)
                 }
+                .disabled(currentStep.recitation == nil)
                 
                 Spacer()
                 
@@ -396,7 +403,7 @@ struct SalahTrainerView: View {
                 .frame(width: 150)
             }
             
-            Text("Audio coming soon")
+            Text("Powered by Gemini AI")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
