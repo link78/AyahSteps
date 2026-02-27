@@ -1111,6 +1111,7 @@ struct HadithQuizView: View {
     @State private var score = 0
     @State private var answered = false
     @State private var showResult = false
+    @State private var isDropTargeted = false
 
     var body: some View {
         ZStack {
@@ -1145,36 +1146,52 @@ struct HadithQuizView: View {
                 .foregroundColor(.primary)
                 .padding(.horizontal)
 
+            RoundedRectangle(cornerRadius: 16)
+                .fill(isDropTargeted ? Color.blue.opacity(0.2) : Color.gray.opacity(0.1))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(isDropTargeted ? Color.blue : Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [8]))
+                )
+                .frame(height: 60)
+                .overlay(
+                    Text(answered ? (selectedOption == quiz.correctAnswer ? "✅ Correct!" : "❌ Wrong!") : "Drop your answer here")
+                        .font(.headline)
+                        .foregroundColor(isDropTargeted ? .blue : .secondary)
+                )
+                .dropDestination(for: String.self) { droppedItems, _ in
+                    guard !answered, let first = droppedItems.first, let index = Int(first) else { return false }
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    selectedOption = index
+                    answered = true
+                    if index == quiz.correctAnswer {
+                        score += 1
+                    }
+                    return true
+                } isTargeted: { targeted in
+                    isDropTargeted = targeted
+                }
+                .padding(.horizontal)
+
             VStack(spacing: 12) {
                 ForEach(Array(quiz.options.enumerated()), id: \.offset) { index, option in
-                    Button {
-                        guard !answered else { return }
-                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                        selectedOption = index
-                        answered = true
-                        if index == quiz.correctAnswer {
-                            score += 1
+                    HStack {
+                        Text(option)
+                            .font(.body)
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                        if answered && index == quiz.correctAnswer {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                        } else if answered && index == selectedOption && index != quiz.correctAnswer {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.red)
                         }
-                    } label: {
-                        HStack {
-                            Text(option)
-                                .font(.body)
-                                .multilineTextAlignment(.leading)
-                            Spacer()
-                            if answered && index == quiz.correctAnswer {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
-                            } else if answered && index == selectedOption && index != quiz.correctAnswer {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.red)
-                            }
-                        }
-                        .padding(16)
-                        .foregroundColor(quizOptionColor(index: index, quiz: quiz))
-                        .background(quizOptionBg(index: index, quiz: quiz))
-                        .cornerRadius(12)
                     }
-                    .disabled(answered)
+                    .padding(16)
+                    .foregroundColor(quizOptionColor(index: index, quiz: quiz))
+                    .background(quizOptionBg(index: index, quiz: quiz))
+                    .cornerRadius(12)
+                    .draggable(String(index))
                 }
             }
             .padding(.horizontal)
@@ -1304,6 +1321,7 @@ struct IntentionGlowGame: View {
     @State private var items: [GlowItem] = []
     @State private var gameOver = false
     @State private var timerActive = false
+    @State private var isBasketTargeted = false
 
     struct GlowItem: Identifiable {
         let id = UUID()
@@ -1323,6 +1341,7 @@ struct IntentionGlowGame: View {
             } else {
                 gameHeader
                 gameArea
+                catchBasket
                 startOrStatusView
             }
         }
@@ -1344,29 +1363,49 @@ struct IntentionGlowGame: View {
 
     private var gameArea: some View {
         VStack(spacing: 8) {
-            Text("\u{2728} Tap items with good intentions! \u{2728}")
+            Text("\u{2728} Drag items with good intentions! \u{2728}")
                 .font(.subheadline.bold())
                 .foregroundColor(.secondary)
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 12) {
                 ForEach(items.filter { $0.visible }) { item in
-                    Button {
-                        handleTap(item)
-                    } label: {
-                        Text(item.emoji)
-                            .font(.system(size: 36))
-                            .frame(width: 60, height: 60)
-                            .background(Color.white.opacity(0.8))
-                            .cornerRadius(12)
-                            .shadow(color: .black.opacity(0.1), radius: 3, y: 2)
-                    }
-                    .disabled(!timerActive)
+                    Text(item.emoji)
+                        .font(.system(size: 36))
+                        .frame(width: 60, height: 60)
+                        .background(Color.white.opacity(0.8))
+                        .cornerRadius(12)
+                        .shadow(color: .black.opacity(0.1), radius: 3, y: 2)
+                        .draggable(item.id.uuidString)
+                        .opacity(timerActive ? 1 : 0.5)
                 }
             }
         }
         .padding()
         .background(Color.white.opacity(0.5))
         .cornerRadius(20)
+    }
+
+    private var catchBasket: some View {
+        RoundedRectangle(cornerRadius: 16)
+            .fill(isBasketTargeted ? Color.green.opacity(0.3) : Color.white.opacity(0.8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .strokeBorder(isBasketTargeted ? Color.green : Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [8]))
+            )
+            .frame(height: 70)
+            .overlay(
+                Text("🧺 Drop good intentions here!")
+                    .font(.headline)
+                    .foregroundColor(isBasketTargeted ? .green : .secondary)
+            )
+            .dropDestination(for: String.self) { droppedItems, _ in
+                guard timerActive, let first = droppedItems.first,
+                      let item = items.first(where: { $0.id.uuidString == first && $0.visible }) else { return false }
+                handleTap(item)
+                return true
+            } isTargeted: { targeted in
+                isBasketTargeted = targeted
+            }
     }
 
     private var startOrStatusView: some View {
@@ -1385,7 +1424,7 @@ struct IntentionGlowGame: View {
                         .cornerRadius(25)
                 }
             } else {
-                Text("Tap \u{2764}\u{FE0F} good intentions, avoid \u{1F620} bad ones!")
+                Text("Drag \u{2764}\u{FE0F} good intentions to basket, avoid \u{1F620} bad ones!")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -1501,10 +1540,10 @@ struct HelpNeighborGame: View {
         MatchPair(helper: "\u{1F9F9}", helperLabel: "Cleaning", person: "\u{1F54C}", personLabel: "Masjid")
     ]
 
-    @State private var selectedHelper: Int?
     @State private var matches: Set<UUID> = []
     @State private var score = 0
     @State private var wrongMatch = false
+    @State private var targetedPerson: UUID? = nil
 
     var body: some View {
         VStack(spacing: 20) {
@@ -1535,27 +1574,19 @@ struct HelpNeighborGame: View {
                 Text("Helpers")
                     .font(.caption.bold())
                     .foregroundColor(.secondary)
-                ForEach(Array(pairs.enumerated()), id: \.element.id) { index, pair in
+                ForEach(Array(pairs.enumerated()), id: \.element.id) { _, pair in
                     if !matches.contains(pair.id) {
-                        Button {
-                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                            selectedHelper = index
-                        } label: {
-                            VStack(spacing: 4) {
-                                Text(pair.helper)
-                                    .font(.system(size: 32))
-                                Text(pair.helperLabel)
-                                    .font(.caption2)
-                                    .foregroundColor(.primary)
-                            }
-                            .frame(width: 80, height: 70)
-                            .background(selectedHelper == index ? Color.blue.opacity(0.2) : Color.white.opacity(0.8))
-                            .cornerRadius(12)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(selectedHelper == index ? Color.blue : Color.clear, lineWidth: 2)
-                            )
+                        VStack(spacing: 4) {
+                            Text(pair.helper)
+                                .font(.system(size: 32))
+                            Text(pair.helperLabel)
+                                .font(.caption2)
+                                .foregroundColor(.primary)
                         }
+                        .frame(width: 80, height: 70)
+                        .background(Color.white.opacity(0.8))
+                        .cornerRadius(12)
+                        .draggable(pair.id.uuidString)
                     }
                 }
             }
@@ -1566,21 +1597,45 @@ struct HelpNeighborGame: View {
                     .foregroundColor(.secondary)
                 ForEach(Array(pairs.shuffled().enumerated()), id: \.element.id) { _, pair in
                     if !matches.contains(pair.id) {
-                        Button {
-                            handlePersonTap(pair)
-                        } label: {
-                            VStack(spacing: 4) {
-                                Text(pair.person)
-                                    .font(.system(size: 32))
-                                Text(pair.personLabel)
-                                    .font(.caption2)
-                                    .foregroundColor(.primary)
-                            }
-                            .frame(width: 80, height: 70)
-                            .background(wrongMatch ? Color.red.opacity(0.1) : Color.white.opacity(0.8))
-                            .cornerRadius(12)
+                        VStack(spacing: 4) {
+                            Text(pair.person)
+                                .font(.system(size: 32))
+                            Text(pair.personLabel)
+                                .font(.caption2)
+                                .foregroundColor(.primary)
                         }
-                        .disabled(selectedHelper == nil)
+                        .frame(width: 80, height: 70)
+                        .background(targetedPerson == pair.id ? Color.blue.opacity(0.2) : (wrongMatch ? Color.red.opacity(0.1) : Color.white.opacity(0.8)))
+                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(targetedPerson == pair.id ? Color.blue : Color.clear, lineWidth: 2)
+                        )
+                        .dropDestination(for: String.self) { droppedItems, _ in
+                            guard let first = droppedItems.first else { return false }
+                            if first == pair.id.uuidString {
+                                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                                matches.insert(pair.id)
+                                score += 1
+                                if score == pairs.count {
+                                    appState.completeLesson("minigame_help_neighbor", points: score * 3)
+                                }
+                                return true
+                            } else {
+                                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                                wrongMatch = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    wrongMatch = false
+                                }
+                                return false
+                            }
+                        } isTargeted: { targeted in
+                            if targeted {
+                                targetedPerson = pair.id
+                            } else if targetedPerson == pair.id {
+                                targetedPerson = nil
+                            }
+                        }
                     }
                 }
             }
@@ -1605,27 +1660,6 @@ struct HelpNeighborGame: View {
         .cornerRadius(20)
     }
 
-    private func handlePersonTap(_ pair: MatchPair) {
-        guard let helperIdx = selectedHelper else { return }
-        let selectedPair = pairs[helperIdx]
-
-        if selectedPair.id == pair.id {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-            matches.insert(pair.id)
-            score += 1
-            selectedHelper = nil
-            if score == pairs.count {
-                appState.completeLesson("minigame_help_neighbor", points: score * 3)
-            }
-        } else {
-            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-            wrongMatch = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                wrongMatch = false
-            }
-            selectedHelper = nil
-        }
-    }
 }
 
 // MARK: - Honesty Sorting Game
@@ -1655,6 +1689,8 @@ struct HonestySortingGame: View {
     @State private var score = 0
     @State private var feedback: String?
     @State private var showResult = false
+    @State private var isTruthTargeted = false
+    @State private var isLieTargeted = false
 
     var body: some View {
         VStack(spacing: 20) {
@@ -1678,12 +1714,19 @@ struct HonestySortingGame: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
 
-            Text("\"\(statement.text)\"")
-                .font(.title3)
-                .multilineTextAlignment(.center)
-                .padding(20)
-                .background(Color.white.opacity(0.9))
-                .cornerRadius(16)
+            VStack(spacing: 8) {
+                Text("\"\(statement.text)\"")
+                    .font(.title3)
+                    .multilineTextAlignment(.center)
+                    .padding(20)
+                    .background(Color.white.opacity(0.9))
+                    .cornerRadius(16)
+                    .draggable(statement.id.uuidString)
+
+                Text("👆 Drag to Truth or Lie")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
 
             if let feedback = feedback {
                 Text(feedback)
@@ -1693,35 +1736,50 @@ struct HonestySortingGame: View {
             }
 
             HStack(spacing: 20) {
-                Button {
+                VStack {
+                    Text("\u{2705}")
+                        .font(.system(size: 36))
+                    Text("Truth")
+                        .font(.headline)
+                }
+                .frame(width: 120, height: 80)
+                .background(isTruthTargeted ? Color.green.opacity(0.4) : Color.green.opacity(0.2))
+                .cornerRadius(16)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(isTruthTargeted ? Color.green : Color.clear, lineWidth: 2)
+                )
+                .dropDestination(for: String.self) { droppedItems, _ in
+                    guard feedback == nil, let first = droppedItems.first,
+                          first == statement.id.uuidString else { return false }
                     checkAnswer(isTruth: true)
-                } label: {
-                    VStack {
-                        Text("\u{2705}")
-                            .font(.system(size: 36))
-                        Text("Truth")
-                            .font(.headline)
-                    }
-                    .frame(width: 120, height: 80)
-                    .background(Color.green.opacity(0.2))
-                    .cornerRadius(16)
+                    return true
+                } isTargeted: { targeted in
+                    isTruthTargeted = targeted
                 }
 
-                Button {
+                VStack {
+                    Text("\u{274C}")
+                        .font(.system(size: 36))
+                    Text("Lie")
+                        .font(.headline)
+                }
+                .frame(width: 120, height: 80)
+                .background(isLieTargeted ? Color.red.opacity(0.4) : Color.red.opacity(0.2))
+                .cornerRadius(16)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(isLieTargeted ? Color.red : Color.clear, lineWidth: 2)
+                )
+                .dropDestination(for: String.self) { droppedItems, _ in
+                    guard feedback == nil, let first = droppedItems.first,
+                          first == statement.id.uuidString else { return false }
                     checkAnswer(isTruth: false)
-                } label: {
-                    VStack {
-                        Text("\u{274C}")
-                            .font(.system(size: 36))
-                        Text("Lie")
-                            .font(.headline)
-                    }
-                    .frame(width: 120, height: 80)
-                    .background(Color.red.opacity(0.2))
-                    .cornerRadius(16)
+                    return true
+                } isTargeted: { targeted in
+                    isLieTargeted = targeted
                 }
             }
-            .disabled(feedback != nil)
         }
         .padding(24)
         .background(Color.white.opacity(0.5))
@@ -1790,6 +1848,7 @@ struct PrayerPuzzleGame: View {
     @State private var availableSteps: [String] = []
     @State private var showResult = false
     @State private var isCorrect = false
+    @State private var isOrderTargeted = false
 
     var body: some View {
         VStack(spacing: 16) {
@@ -1811,7 +1870,7 @@ struct PrayerPuzzleGame: View {
                 .font(.headline)
                 .multilineTextAlignment(.center)
 
-            Text("Tap each step in the correct order")
+            Text("Drag each step in the correct order")
                 .font(.caption)
                 .foregroundColor(.secondary)
 
@@ -1821,7 +1880,7 @@ struct PrayerPuzzleGame: View {
                     .foregroundColor(.secondary)
 
                 if selectedSteps.isEmpty {
-                    Text("Tap steps below to begin...")
+                    Text("Drag steps here...")
                         .font(.caption)
                         .foregroundColor(.gray)
                         .padding(8)
@@ -1840,8 +1899,21 @@ struct PrayerPuzzleGame: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(12)
-            .background(Color.white.opacity(0.8))
+            .background(isOrderTargeted ? Color.blue.opacity(0.15) : Color.white.opacity(0.8))
             .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isOrderTargeted ? Color.blue : Color.clear, lineWidth: 2)
+            )
+            .dropDestination(for: String.self) { droppedItems, _ in
+                guard let step = droppedItems.first, availableSteps.contains(step) else { return false }
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                selectedSteps.append(step)
+                availableSteps.removeAll { $0 == step }
+                return true
+            } isTargeted: { targeted in
+                isOrderTargeted = targeted
+            }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text("Available steps:")
@@ -1850,19 +1922,14 @@ struct PrayerPuzzleGame: View {
 
                 LazyVGrid(columns: [GridItem(.flexible())], spacing: 8) {
                     ForEach(availableSteps, id: \.self) { step in
-                        Button {
-                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                            selectedSteps.append(step)
-                            availableSteps.removeAll { $0 == step }
-                        } label: {
-                            Text(step)
-                                .font(.subheadline)
-                                .foregroundColor(.primary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(10)
-                                .background(Color.white.opacity(0.9))
-                                .cornerRadius(10)
-                        }
+                        Text(step)
+                            .font(.subheadline)
+                            .foregroundColor(.primary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(10)
+                            .background(Color.white.opacity(0.9))
+                            .cornerRadius(10)
+                            .draggable(step)
                     }
                 }
             }
@@ -1981,6 +2048,7 @@ struct KindnessCatcherGame: View {
     @State private var timeRemaining = 30
     @State private var gameActive = false
     @State private var gameOver = false
+    @State private var isBasketTargeted = false
 
     var body: some View {
         VStack(spacing: 16) {
@@ -2001,7 +2069,7 @@ struct KindnessCatcherGame: View {
                 .font(.system(size: 64))
             Text("Kindness Catcher")
                 .font(.largeTitle.bold())
-            Text("Tap the falling kindness emojis!\nAvoid the angry ones!")
+            Text("Drag the falling kindness emojis to the basket!\nAvoid the angry ones!")
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -2045,22 +2113,40 @@ struct KindnessCatcherGame: View {
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 5), spacing: 8) {
                 ForEach(items.filter { !$0.caught }) { item in
-                    Button {
-                        catchItem(item)
-                    } label: {
-                        Text(item.emoji)
-                            .font(.system(size: 32))
-                            .frame(width: 56, height: 56)
-                            .background(Color.white.opacity(0.8))
-                            .cornerRadius(12)
-                    }
+                    Text(item.emoji)
+                        .font(.system(size: 32))
+                        .frame(width: 56, height: 56)
+                        .background(Color.white.opacity(0.8))
+                        .cornerRadius(12)
+                        .draggable(item.id.uuidString)
                 }
             }
             .padding()
             .background(Color.white.opacity(0.3))
             .cornerRadius(20)
 
-            Text("Catch \u{2764}\u{FE0F} kindness! Avoid \u{1F620} anger!")
+            RoundedRectangle(cornerRadius: 16)
+                .fill(isBasketTargeted ? Color.pink.opacity(0.3) : Color.white.opacity(0.8))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(isBasketTargeted ? Color.pink : Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 2, dash: [8]))
+                )
+                .frame(height: 60)
+                .overlay(
+                    Text("💝 Drop kindness here!")
+                        .font(.headline)
+                        .foregroundColor(isBasketTargeted ? .pink : .secondary)
+                )
+                .dropDestination(for: String.self) { droppedItems, _ in
+                    guard let first = droppedItems.first,
+                          let item = items.first(where: { $0.id.uuidString == first && !$0.caught }) else { return false }
+                    catchItem(item)
+                    return true
+                } isTargeted: { targeted in
+                    isBasketTargeted = targeted
+                }
+
+            Text("Drag \u{2764}\u{FE0F} kindness to basket! Avoid \u{1F620} anger!")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
