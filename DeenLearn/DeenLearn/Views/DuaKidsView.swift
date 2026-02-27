@@ -902,7 +902,7 @@ struct DuaMiniGameView: View {
     @State private var selectedTiles: [String] = []
     @State private var situationIndex = 0
     @State private var showResult = false
-    @State private var targetedSituation: String? = nil
+    @State private var targetedDua: String? = nil
     @State private var isSelectedAreaTargeted = false
     @State private var isSituationDropTargeted = false
 
@@ -1008,7 +1008,7 @@ struct DuaMiniGameView: View {
                     .padding(.vertical, 8)
                     .background(
                         isMatched ? Color.green.opacity(0.3) :
-                        targetedSituation == item.dua ? Color(hex: "FF6B6B").opacity(0.15) :
+                        targetedDua == item.dua ? Color(hex: "FF6B6B").opacity(0.15) :
                         Color(.secondarySystemGroupedBackground)
                     )
                     .cornerRadius(8)
@@ -1021,7 +1021,7 @@ struct DuaMiniGameView: View {
                         }
                         return false
                     } isTargeted: { targeted in
-                        targetedSituation = targeted ? item.dua : nil
+                        targetedDua = targeted ? item.dua : nil
                     }
                 }
             }

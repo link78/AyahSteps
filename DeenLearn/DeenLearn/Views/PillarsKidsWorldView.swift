@@ -1305,7 +1305,7 @@ struct DragDropGameView: View {
                         }
                         return false
                     } isTargeted: { isTargeted in
-                        targetedDropTarget = isTargeted ? target.id : (targetedDropTarget == target.id ? nil : targetedDropTarget)
+                        targetedDropTarget = isTargeted ? target.id : nil
                     }
                 }
             }
@@ -1444,7 +1444,7 @@ struct FixPillarGameView: View {
                         placePiece(piece)
                         return true
                     } isTargeted: { isTargeted in
-                        targetedSlot = isTargeted ? index : (targetedSlot == index ? nil : targetedSlot)
+                        targetedSlot = isTargeted ? index : nil
                     }
                 }
             }
@@ -1584,7 +1584,7 @@ struct MatchingGameView: View {
                         }
                         return false
                     } isTargeted: { isTargeted in
-                        targetedCard = isTargeted ? card.id : (targetedCard == card.id ? nil : targetedCard)
+                        targetedCard = isTargeted ? card.id : nil
                     }
                 }
             }

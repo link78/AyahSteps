@@ -1630,11 +1630,7 @@ struct HelpNeighborGame: View {
                                 return false
                             }
                         } isTargeted: { targeted in
-                            if targeted {
-                                targetedPerson = pair.id
-                            } else if targetedPerson == pair.id {
-                                targetedPerson = nil
-                            }
+                            targetedPerson = targeted ? pair.id : nil
                         }
                     }
                 }

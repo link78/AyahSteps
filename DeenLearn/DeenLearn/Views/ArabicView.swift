@@ -925,7 +925,7 @@ struct MatchIconGameContent: View {
                                 }
                                 return true
                             } isTargeted: { targeted in
-                                targetedArabic = targeted ? item.arabic : (targetedArabic == item.arabic ? nil : targetedArabic)
+                                targetedArabic = targeted ? item.arabic : nil
                             }
                             .opacity(matchedPairs.contains(item.arabic) ? 0.5 : 1.0)
                     }
