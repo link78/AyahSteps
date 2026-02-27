@@ -1237,6 +1237,7 @@ struct DragDropGameView: View {
     @State private var items: [DragItem] = []
     @State private var targets: [DropTarget] = []
     @State private var matchedPairs: Set<String> = []
+    @State private var targetedDropTarget: String? = nil
     
     struct DragItem: Identifiable {
         let id: String
@@ -1269,9 +1270,7 @@ struct DragDropGameView: View {
                         .frame(maxWidth: .infinity)
                         .background(Color.white)
                         .cornerRadius(12)
-                        .onTapGesture {
-                            checkMatch(item: item)
-                        }
+                        .draggable(item.id)
                     }
                 }
             }
@@ -1295,8 +1294,19 @@ struct DragDropGameView: View {
                         }
                     }
                     .padding()
-                    .background(Color.white.opacity(0.2))
+                    .background(targetedDropTarget == target.id ? Color.white.opacity(0.4) : Color.white.opacity(0.2))
                     .cornerRadius(12)
+                    .dropDestination(for: String.self) { droppedItems, _ in
+                        guard let droppedId = droppedItems.first else { return false }
+                        if target.matchId == droppedId {
+                            matchedPairs.insert(droppedId)
+                            onScoreUpdate(1)
+                            return true
+                        }
+                        return false
+                    } isTargeted: { isTargeted in
+                        targetedDropTarget = isTargeted ? target.id : (targetedDropTarget == target.id ? nil : targetedDropTarget)
+                    }
                 }
             }
         }
@@ -1305,18 +1315,6 @@ struct DragDropGameView: View {
         .cornerRadius(16)
         .onAppear {
             setupGame()
-        }
-    }
-    
-    @State private var selectedItem: DragItem?
-    
-    func checkMatch(item: DragItem) {
-        if selectedItem == nil {
-            selectedItem = item
-        } else if let target = targets.first(where: { $0.matchId == item.id }) {
-            matchedPairs.insert(item.id)
-            onScoreUpdate(1)
-            selectedItem = nil
         }
     }
     
@@ -1401,6 +1399,7 @@ struct FixPillarGameView: View {
     
     @State private var pieces: [PillarPiece] = []
     @State private var placedPieces: [String] = []
+    @State private var targetedSlot: Int? = nil
     
     struct PillarPiece: Identifiable {
         let id: String
@@ -1420,7 +1419,7 @@ struct FixPillarGameView: View {
                 ForEach(0..<3, id: \.self) { index in
                     ZStack {
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.white.opacity(0.3))
+                            .fill(targetedSlot == index ? Color.white.opacity(0.5) : Color.white.opacity(0.3))
                             .frame(height: 50)
                         
                         if index < placedPieces.count,
@@ -1432,10 +1431,20 @@ struct FixPillarGameView: View {
                             }
                             .foregroundColor(.white)
                         } else {
-                            Text("Tap a piece to place here")
+                            Text("Drop a piece here")
                                 .font(.caption)
                                 .foregroundColor(.white.opacity(0.6))
                         }
+                    }
+                    .dropDestination(for: String.self) { droppedItems, _ in
+                        guard let droppedId = droppedItems.first,
+                              let piece = pieces.first(where: { $0.id == droppedId }),
+                              !placedPieces.contains(droppedId),
+                              index == placedPieces.count else { return false }
+                        placePiece(piece)
+                        return true
+                    } isTargeted: { isTargeted in
+                        targetedSlot = isTargeted ? index : (targetedSlot == index ? nil : targetedSlot)
                     }
                 }
             }
@@ -1450,19 +1459,16 @@ struct FixPillarGameView: View {
             
             HStack(spacing: 12) {
                 ForEach(pieces.filter { !placedPieces.contains($0.id) }) { piece in
-                    Button(action: {
-                        placePiece(piece)
-                    }) {
-                        VStack {
-                            Text(piece.emoji)
-                                .font(.title2)
-                            Text(piece.text)
-                                .font(.caption2)
-                        }
-                        .padding(8)
-                        .background(Color.white)
-                        .cornerRadius(8)
+                    VStack {
+                        Text(piece.emoji)
+                            .font(.title2)
+                        Text(piece.text)
+                            .font(.caption2)
                     }
+                    .padding(8)
+                    .background(Color.white)
+                    .cornerRadius(8)
+                    .draggable(piece.id)
                 }
             }
         }
@@ -1539,8 +1545,8 @@ struct MatchingGameView: View {
     let onComplete: () -> Void
     
     @State private var cards: [MatchCard] = []
-    @State private var flippedCards: [String] = []
     @State private var matchedCards: Set<String> = []
+    @State private var targetedCard: String? = nil
     
     struct MatchCard: Identifiable {
         let id: String
@@ -1550,7 +1556,7 @@ struct MatchingGameView: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            Text("Find matching pairs!")
+            Text("Drag matching pairs together!")
                 .font(.headline)
                 .foregroundColor(.white)
             
@@ -1558,10 +1564,27 @@ struct MatchingGameView: View {
                 ForEach(cards) { card in
                     CardView(
                         card: card,
-                        isFlipped: flippedCards.contains(card.id) || matchedCards.contains(card.id),
-                        isMatched: matchedCards.contains(card.id)
-                    ) {
-                        flipCard(card)
+                        isMatched: matchedCards.contains(card.id),
+                        isTargeted: targetedCard == card.id
+                    )
+                    .draggable(card.id)
+                    .dropDestination(for: String.self) { droppedItems, _ in
+                        guard let droppedId = droppedItems.first,
+                              droppedId != card.id,
+                              !matchedCards.contains(card.id),
+                              !matchedCards.contains(droppedId),
+                              let droppedCard = cards.first(where: { $0.id == droppedId }) else { return false }
+                        if droppedCard.pairId == card.pairId {
+                            matchedCards.insert(card.id)
+                            matchedCards.insert(droppedId)
+                            if matchedCards.count == cards.count {
+                                onComplete()
+                            }
+                            return true
+                        }
+                        return false
+                    } isTargeted: { isTargeted in
+                        targetedCard = isTargeted ? card.id : (targetedCard == card.id ? nil : targetedCard)
                     }
                 }
             }
@@ -1622,56 +1645,24 @@ struct MatchingGameView: View {
         cards = allCards.shuffled()
     }
     
-    func flipCard(_ card: MatchCard) {
-        guard !matchedCards.contains(card.id), !flippedCards.contains(card.id) else { return }
-        
-        flippedCards.append(card.id)
-        
-        if flippedCards.count == 2 {
-            let firstCard = cards.first { $0.id == flippedCards[0] }
-            let secondCard = cards.first { $0.id == flippedCards[1] }
-            
-            if firstCard?.pairId == secondCard?.pairId {
-                matchedCards.insert(flippedCards[0])
-                matchedCards.insert(flippedCards[1])
-                
-                if matchedCards.count == cards.count {
-                    onComplete()
-                }
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                flippedCards = []
-            }
-        }
-    }
 }
 
 struct CardView: View {
     let card: MatchingGameView.MatchCard
-    let isFlipped: Bool
     let isMatched: Bool
-    let action: () -> Void
+    let isTargeted: Bool
     
     var body: some View {
-        Button(action: action) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(isMatched ? Color.green : (isFlipped ? Color.white : Color.blue))
-                    .frame(height: 60)
-                
-                if isFlipped || isMatched {
-                    Text(card.content)
-                        .font(card.content.count == 1 ? .title : .caption)
-                        .foregroundColor(isMatched ? .white : .black)
-                } else {
-                    Text("?")
-                        .font(.title2.bold())
-                        .foregroundColor(.white)
-                }
-            }
+        ZStack {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(isMatched ? Color.green : (isTargeted ? Color.white.opacity(0.8) : Color.white))
+                .frame(height: 60)
+            
+            Text(card.content)
+                .font(card.content.count == 1 ? .title : .caption)
+                .foregroundColor(isMatched ? .white : .black)
         }
-        .disabled(isMatched)
+        .opacity(isMatched ? 0.6 : 1.0)
     }
 }
 
